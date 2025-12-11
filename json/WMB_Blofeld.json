@@ -1,0 +1,181 @@
+{
+  "WMB_module_Blofeld": {
+    "instrument": "Blofeld",
+    "controller": "PreSonus FP8",
+    "cc": {
+      "OSC_Wave": { "display": "OSC Wave", "cc": 70, "minmax": [0, 127], "page": 1, "target": "FP_Fader_1" },
+      "Pulse_Width": { "display": "OSC PW", "cc": 12, "minmax": [0, 127], "page": 1, "target": "FP_Fader_2" },
+      "Chord_Selector": { "display": "OSC Chord", "cc": 16, "minmax": [0, 127], "page": 1, "target": "FP_Fader_3" },
+      "Glide": { "display": "OSC Glide", "cc": 5, "minmax": [0, 127], "page": 1, "target": "FP_Fader_4" },
+      "Detune": { "display": "OSC Detune", "cc": 15, "minmax": [0, 127], "page": 1, "target": "FP_Fader_5" },
+      "LFO_Pitch_Depth": { "display": "OSC LFO", "cc": 13, "minmax": [0, 127], "page": 1, "target": "FP_Fader_6" },
+      "EG_Pitch_Depth": { "display": "OSC Env", "cc": 14, "minmax": [0, 127], "page": 1, "target": "FP_Fader_7" },
+
+      "OSC_level": { "display": "Volume OSC", "cc": 9, "minmax": [0, 127], "page": 2, "target": "FP_Fader_1" },
+      "Sub_level": { "display": "Volume Sub", "cc": 10, "minmax": [0, 127], "page": 2, "target": "FP_Fader_2" },
+      "Noise_level": { "display": "Volume Noise", "cc": 11, "minmax": [0, 127], "page": 2, "target": "FP_Fader_3" },
+      "AMP_level": { "display": "Volume AMP", "cc": 7, "minmax": [0, 127], "page": 2, "target": "FP_Fader_4" },
+      "AMP_EG_Attack": { "display": "AMP_Env Attack", "cc": 73, "minmax": [0, 127], "page": 2, "target": "FP_Fader_5" },
+      "AMP_EG_Decay": { "display": "AMP_Env Decay", "cc": 84, "minmax": [0, 127], "page": 2, "target": "FP_Fader_6" },
+      "AMP_EG_Sustain": {
+        "display": "AMP_Env Sustain",
+        "cc": 85,
+        "minmax": [0, 127],
+        "page": 2,
+        "target": "FP_Fader_7"
+      },
+      "AMP_EG_Release": {
+        "display": "AMP_Env Release",
+        "cc": 72,
+        "minmax": [0, 127],
+        "page": 2,
+        "target": "FP_Fader_8"
+      },
+      "Play_Mode": {
+        "display": "Play_Mode",
+        "cc": 17,
+        "minmax": [0, 5],
+        "page": 1,
+        "target": ["FP_Button_1", "FP_Button_2", "FP_Button_3", "FP_Button_4", "FP_Button_5", "FP_Button_6"],
+        "comment": ["Poly", "Uni-A", "Uni-B", "TRI", "DUO", "MONO"]
+      },
+      "legato": {
+        "display": "legato",
+        "cc": 68,
+        "minmax": [0, 1],
+        "page": 1,
+        "target": "FP_Button_1",
+        "comment": " Off/On"
+      },
+      "Filter": "",
+      "LPF_Cutoff": { "display": "LPF_Cutoff", "cc": 74, "minmax": [0, 127], "page": 3, "target": "FP_Fader_1" },
+      "Resonance": { "display": "Resonance", "cc": 71, "minmax": [0, 127], "page": 3, "target": "FP_Fader_2" },
+      "LPF_EG_depth": { "display": "LPF_EG_depth", "cc": 3, "minmax": [0, 127], "page": 3, "target": "FP_Fader_3" },
+      "HPF_Cutoff": { "display": "HPF_Cutoff", "cc": 81, "minmax": [0, 127], "page": 3, "target": "FP_Fader_4" },
+      "Filter_EG_Attack": {
+        "display": "Filter_EG_Attack",
+        "cc": 79,
+        "minmax": [0, 127],
+        "page": 3,
+        "target": "FP_Fader_5"
+      },
+      "Filter_EG_Decay": {
+        "display": "Filter_EG_Decay",
+        "cc": 80,
+        "minmax": [0, 127],
+        "page": 3,
+        "target": "FP_Fader_6"
+      },
+      "Filter_EG_Sustain": {
+        "display": "Filter_EG_Sustain",
+        "cc": 82,
+        "minmax": [0, 127],
+        "page": 3,
+        "target": "FP_Fader_7"
+      },
+      "Filter_EG_Release": {
+        "display": "Filter_EG_Release",
+        "cc": 83,
+        "minmax": [0, 127],
+        "page": 3,
+        "target": "FP_Fader_8"
+      },
+
+      "LPF_Tracking": { "display": "LPF_Tracking", "cc": 4, "minmax": [0, 127], "page": 4, "target": "FP_Fader_1" },
+      "LFO_Cutoff_Depth": {
+        "display": "LFO_Cutoff_Depth",
+        "cc": 8,
+        "minmax": [0, 127],
+        "page": 4,
+        "target": "FP_Fader_2"
+      },
+      "Reverb": "",
+      "Reverb_Size": { "display": "Reverb_Size", "cc": 75, "minmax": [0, 127], "page": 4, "target": "FP_Fader_5" },
+      "Reverb_Decay": { "display": "Reverb_Decay", "cc": 76, "minmax": [0, 127], "page": 4, "target": "FP_Fader_6" },
+      "Reverb_Filter": { "display": "Reverb_Filter", "cc": 77, "minmax": [0, 127], "page": 4, "target": "FP_Fader_7" },
+      "Reverb_Mix": { "display": "Reverb_Mix", "cc": 78, "minmax": [0, 127], "page": 4, "target": "FP_Fader_8" },
+      "LFOs": "",
+      "LFO_1_Rate": { "display": "LFO_1 Rate", "cc": 18, "minmax": [0, 127], "page": 5, "target": "FP_Fader_1" },
+      "LFO_1_Wave": { "display": "LFO_1 Wave", "cc": 19, "minmax": [0, 127], "page": 5, "target": "FP_Fader_2" },
+      "LFO_1_Delay": { "display": "LFO_1 Delay", "cc": 20, "minmax": [0, 127], "page": 5, "target": "FP_Fader_3" },
+      "LFO_1_Fade": { "display": "LFO_1 Fade", "cc": 21, "minmax": [0, 127], "page": 5, "target": "FP_Fader_4" },
+      "LFO_1_Type": {
+        "display": "LFO_1 Type",
+        "cc": 22,
+        "minmax": [0, 3],
+        "page": 5,
+        "target": ["FP_Button_1", "FP_Button_2", "FP_Button_3", "FP_Button_4"],
+        "comment": ["BPM", "Low", "High", "Track"]
+      },
+      "LFO_1_Key_Sync": {
+        "display": "LFO_1 KeySync",
+        "cc": 23,
+        "minmax": [0, 1],
+        "page": 5,
+        "target": "FP_Button_4s",
+        "comment": " Off/On"
+      },
+      "LFO_2_Rate": { "display": "LFO_2 Rate", "cc": 24, "minmax": [0, 127], "page": 5, "target": "FP_Fader_5" },
+      "LFO_2_Wave": { "display": "LFO_2 Wave", "cc": 25, "minmax": [0, 127], "page": 5, "target": "FP_Fader_6" },
+      "LFO_2_Delay": { "display": "LFO_2 Delay", "cc": 26, "minmax": [0, 127], "page": 5, "target": "FP_Fader_7" },
+      "LFO_2_Fade": { "display": "LFO_2 Fade", "cc": 27, "minmax": [0, 127], "page": 5, "target": "FP_Fader_8" },
+      "LFO_2_Type": {
+        "display": "LFO_2 Type",
+        "cc": 28,
+        "minmax": [0, 3],
+        "page": 5,
+        "target": ["FP_Button_5", "FP_Button_6", "FP_Button_7", "FP_Button_8"],
+        "comment": ["BPM", "Low", "High", "Track"]
+      },
+      "LFO_2_Key_Sync": {
+        "display": "LFO_2 KeySync",
+        "cc": 29,
+        "minmax": [0, 1],
+        "page": 5,
+        "target": "FP_Button_8s",
+        "comment": " Off/On"},
+      "Targets": "",
+      "Mod_Source_OSC_Wave_Depth": {"display": "Mod_Source_OSC_Wave_Depth", "cc": 31, "minmax": [0, 127], "page": 6, "target": "FP_Fader_1"},
+      "Mod_Source_PulseWidth_Depth": {"display": "Mod_Source_PulseWidth_Depth", "cc": 36, "minmax": [0, 127], "page": 6, "target":"FP_Fader_2"},
+      "Mod_Source_Chord_Selector_Depth": {"display": "Mod_Source_Chord_Selector_Depth", "cc": 40, "minmax": [0, 127], "page": 6, "target":"FP_Fader_3"},
+      "Mod_Source_Glide_Depth": {"display": "Mod_Source_Glide_Depth", "cc": 37, "minmax": [0, 127], "page": 6, "target": "FP_Fader_4"},
+      "Mod_Source_Detune_Depth": {"display": "Mod_Source_Detune_Depth", "cc": 39, "minmax": [0, 127], "page": 6, "target": "FP_Fader_5"},
+      "Mod_Source_LFO_Pitch_Depth_Depth": {"display": "Mod_Source_LFO_Pitch_Depth_Depth", "cc": 35, "minmax": [0, 127], "page": 6, "target":"FP_Fader_6"},
+      "Mod_Source_EG_Pitch_Depth_Depth": {"display": "Mod_Source_EG_Pitch_Depth_Depth", "cc": 41, "minmax": [0, 127], "page": 6, "target":"FP_Fader_7"},
+
+      "Mod_Source_OSC_Level_Depth": {"display": "Mod_Source_OSC_Level_Depth", "cc": 32, "minmax": [0, 127], "page": 7, "target": "FP_Fader_1"},
+      "Mod_Source_Sub_Level_Depth": {"display": "Mod_Source_Sub_Level_Depth", "cc": 33, "minmax": [0, 127], "page": 7, "target": "FP_Fader_2"},
+      "Mod_Source_Noise_Level_Depth": {"display": "Mod_Source_Noise_Level_Depth", "cc": 34, "minmax": [0, 127], "page": 7, "target":"FP_Fader_3"},
+      "Mod_Source_AMP_Attack_Depth": {"display": "Mod_Source_AMP_Attack_Depth", "cc": 52, "minmax": [0, 127], "page": 7, "target":"FP_Fader_4"},
+      "Mod_Source_AMP_Decay_Depth": {"display": "Mod_Source_AMP_Decay_Depth", "cc": 53, "minmax": [0, 127], "page": 7, "target": "FP_Fader_5"},
+      "Mod_Source_AMP_Sustain_Depth": {"display": "Mod_Source_AMP_Sustain_Depth", "cc": 54, "minmax": [0, 127], "page": 7, "target":"FP_Fader_6"},
+      "Mod_Source_AMP_Release_Depth": {"display": "Mod_Source_AMP_Release_Depth", "cc": 55, "minmax": [0, 127], "page": 7, "target":"FP_Fader_7"},
+
+      "Mod_Source_LPF_Cutoff_Depth": {"display": "Mod_Source_LPF_Cutoff_Depth", "cc": 42, "minmax": [0, 127], "page": 8, "target": "FP_Fader_1"},
+      "Mod_Source_Resonance_Depth": {"display": "Mod_Source_Resonance_Depth", "cc": 43, "minmax": [0, 127], "page": 8, "target": "FP_Fader_2"},
+      "Mod_Source_LPF_EG_Depth_Depth": {"display": "Mod_Source_LPF_EG_Depth_Depth", "cc": 44, "minmax": [0, 127], "page": 8, "target": "FP_Fader_3"},
+      "Mod_Source_HPF_Cutoff_Depth": {"display": "Mod_Source_HPF_Cutoff_Depth", "cc": 45, "minmax": [0, 127], "page": 8, "target": "FP_Fader_4"},
+      "Mod_Source_Filter_EG_Attack_Depth": {"display": "Mod_Source_Filter_EG_Attack_Depth", "cc": 48, "minmax": [0, 127], "page": 8, "target": "FP_Fader_5"},
+      "Mod_Source_Filter_EG_Decay_Depth": {"display": "Mod_Source_Filter_EG_Decay_Depth", "cc": 49, "minmax": [0, 127], "page": 8, "target": "FP_Fader_6"},
+      "Mod_Source_Filter_EG_Sustain_Depth": {"display": "Mod_Source_Filter_EG_Sustain_Depth", "cc": 50, "minmax": [0, 127], "page": 8, "target": "FP_Fader_7"},
+      "Mod_Source_Filter_EG_Release_Depth": {"display": "Mod_Source_Filter_EG_Release_Depth", "cc": 51, "minmax": [0, 12723], "page": 8, "target": "FP_Fader_8"},
+
+      "Mod_Source_LPF_Tracking_Depth": {"display": "Mod_Source_LPF_Tracking_Depth", "cc": 46, "minmax": [0, 127], "page": 9, "target": "FP_Fader_1"},
+      "Mod_Source_LPF_Cutoff_LFO_Depth_Depth": {"display": "Mod_Source_LPF_Cutoff_LFO_Depth_Depth", "cc": 47, "minmax": [0, 127], "page": 9, "target": "FP_Fader_2"},
+      "Mod_Source_Reverb_Size_Depth": {"display": "Mod_Source_Reverb_Size_Depth", "cc": 86, "minmax": [0, 127], "page": 9, "target": "FP_Fader_5"},
+      "Mod_Source_Reverb_Decay_Depth": {"display": "Mod_Source_Reverb_Decay_Depth", "cc": 87, "minmax": [0, 127], "page": 9, "target": "FP_Fader_6"},
+      "Mod_Source_Reverb_Filter_Depth": {"display": "Mod_Source_Reverb_Filter_Depth", "cc": 88, "minmax": [0, 127], "page": 9, "target": "FP_Fader_7"},
+      "Mod_Source_Reverb_Mix_Depth": {"display": "Mod_Source_Reverb_Mix_Depth", "cc": 89, "minmax": [0, 127], "page": 9, "target": "FP_Fader_8"},
+
+      "Mod_Source_LFO_1_Rate_Depth": {"display": "Mod_Source_LFO_1_Rate_Depth", "cc": 56, "minmax": [0, 127], "page": 10, "target": "FP_Fader_1"},
+      "Mod_Source_LFO_1_Wave_Depth": {"display": "Mod_Source_LFO_1_Wave_Depth", "cc": 57, "minmax": [0, 127], "page": 10, "target": "FP_Fader_2"},
+      "Mod_Source_LFO_1_Delay_Depth": {"display": "Mod_Source_LFO_1_Delay_Depth", "cc": 58, "minmax": [0, 127], "page": 10, "target": "FP_Fader_3"},
+      "Mod_Source_LFO_1_Fade_Depth": {"display": "Mod_Source_LFO_1_Fade_Depth", "cc": 59, "minmax": [0, 127], "page": 10, "target": "FP_Fader_4"},
+      "Mod_Source_LFO_2_Rate_Depth": {"display": "Mod_Source_LFO_2_Rate_Depth", "cc": 60, "minmax": [0, 127], "page": 10, "target": "FP_Fader_5"},
+      "Mod_Source_LFO_2_Wave_Depth": {"display": "Mod_Source_LFO_2_Wave_Depth", "cc": 61, "minmax": [0, 127], "page": 10, "target": "FP_Fader_6"},
+      "Mod_Source_LFO_2_Delay_Depth": {"display": "Mod_Source_LFO_2_Delay_Depth", "cc": 62, "minmax": [0, 127], "page": 10, "target": "FP_Fader_7"},
+      "Mod_Source_LFO_2_Fade_Depth": {"display": "Mod_Source_LFO_2_Fade_Depth", "cc": 63, "minmax": [0, 127], "page": 10, "target": "FP_Fader_8"},
+      "Mod_Source_Selector": {"display": "Mod_Source_Selector", "cc": 30, "minmax": [0, 3], "page": 0, "target": ["Track", "Edit_Plugins", "Send", "Pan"], "comment": ["LFO 2", "ModWheel", "Velocity", "Aftertouch "]}
+    }
+  }
+}

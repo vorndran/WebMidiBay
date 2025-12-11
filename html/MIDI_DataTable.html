@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/tables.css" />
+
+    <title>MIDI Controller Table</title>
+  </head>
+  <body>
+    <div class="table_container">
+      <header id="core" class="">
+        <menu>
+          <h1 class="inline_block">WebMidiBay</h1>
+          <ul id="menu" class="inline_block">
+            <li class="menu routing_menu">
+              <a href="../index.html" data-menuitem_target_id="back">back to WebMidiBay</a>
+            </li>
+            <!-- <li class="menu filter_menu">
+              <a href="#" data-menuitem_target_id="2">filter</a>
+            </li> -->
+            <!-- <li class="menu monitor_menu">
+              <a href="#" data-menuitem_target_id="3">monitor</a>
+            </li> -->
+            <!-- <li class="clock"><a href="#">clock</a></li> -->
+          </ul>
+          <p class="size"></p>
+        </menu>
+        <!-- <h2>
+      <a href="../index.html" style="color: inherit; text-decoration: none">Back to WebMidiBay</a>
+       </h2> -->
+      </header>
+      <div id="tables" class="">
+        <h2>MIDI Data Table</h2>
+
+        <h3>Status Bytes</h3>
+        <table id="status_bytes">
+          <thead>
+            <tr>
+              <th>Dec</th>
+              <th>Hex</th>
+              <th>Binary</th>
+              <th>Message Type</th>
+              <th>Channel</th>
+              <th>Data Bytes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="headline">
+              <td colspan="6">
+                <strong>Channel Voice Messages</strong> (Click line to view all channels)
+              </td>
+            </tr>
+            <tr class="clickable" onclick="toggleChannelDetails('note-off')">
+              <td>128-143</td>
+              <td>80-8FH</td>
+              <td>1000nnnn</td>
+              <td>Note Off</td>
+              <td>1-16</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-1" class="channel-details">
+              <td>128</td>
+              <td>80H</td>
+              <td>10000000</td>
+              <td>Note Off</td>
+              <td>1</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-2" class="channel-details">
+              <td>129</td>
+              <td>81H</td>
+              <td>10000001</td>
+              <td>Note Off</td>
+              <td>2</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-3" class="channel-details">
+              <td>130</td>
+              <td>82H</td>
+              <td>10000010</td>
+              <td>Note Off</td>
+              <td>3</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-4" class="channel-details">
+              <td>131</td>
+              <td>83H</td>
+              <td>10000011</td>
+              <td>Note Off</td>
+              <td>4</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-5" class="channel-details">
+              <td>132</td>
+              <td>84H</td>
+              <td>10000100</td>
+              <td>Note Off</td>
+              <td>5</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-6" class="channel-details">
+              <td>133</td>
+              <td>85H</td>
+              <td>10000101</td>
+              <td>Note Off</td>
+              <td>6</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-7" class="channel-details">
+              <td>134</td>
+              <td>86H</td>
+              <td>10000110</td>
+              <td>Note Off</td>
+              <td>7</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-8" class="channel-details">
+              <td>135</td>
+              <td>87H</td>
+              <td>10000111</td>
+              <td>Note Off</td>
+              <td>8</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-9" class="channel-details">
+              <td>136</td>
+              <td>88H</td>
+              <td>10001000</td>
+              <td>Note Off</td>
+              <td>9</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-10" class="channel-details">
+              <td>137</td>
+              <td>89H</td>
+              <td>10001001</td>
+              <td>Note Off</td>
+              <td>10</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-11" class="channel-details">
+              <td>138</td>
+              <td>8AH</td>
+              <td>10001010</td>
+              <td>Note Off</td>
+              <td>11</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-12" class="channel-details">
+              <td>139</td>
+              <td>8BH</td>
+              <td>10001011</td>
+              <td>Note Off</td>
+              <td>12</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-13" class="channel-details">
+              <td>140</td>
+              <td>8CH</td>
+              <td>10001100</td>
+              <td>Note Off</td>
+              <td>13</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-14" class="channel-details">
+              <td>141</td>
+              <td>8DH</td>
+              <td>10001101</td>
+              <td>Note Off</td>
+              <td>14</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-15" class="channel-details">
+              <td>142</td>
+              <td>8EH</td>
+              <td>10001110</td>
+              <td>Note Off</td>
+              <td>15</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-off-16" class="channel-details">
+              <td>143</td>
+              <td>8FH</td>
+              <td>10001111</td>
+              <td>Note Off</td>
+              <td>16</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr class="clickable" onclick="toggleChannelDetails('note-on')">
+              <td>144-159</td>
+              <td>90-9FH</td>
+              <td>1001nnnn</td>
+              <td>Note On</td>
+              <td>1-16</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-1" class="channel-details">
+              <td>144</td>
+              <td>90H</td>
+              <td>10010000</td>
+              <td>Note On</td>
+              <td>1</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-2" class="channel-details">
+              <td>145</td>
+              <td>91H</td>
+              <td>10010001</td>
+              <td>Note On</td>
+              <td>2</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-3" class="channel-details">
+              <td>146</td>
+              <td>92H</td>
+              <td>10010010</td>
+              <td>Note On</td>
+              <td>3</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-4" class="channel-details">
+              <td>147</td>
+              <td>93H</td>
+              <td>10010011</td>
+              <td>Note On</td>
+              <td>4</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-5" class="channel-details">
+              <td>148</td>
+              <td>94H</td>
+              <td>10010100</td>
+              <td>Note On</td>
+              <td>5</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-6" class="channel-details">
+              <td>149</td>
+              <td>95H</td>
+              <td>10010101</td>
+              <td>Note On</td>
+              <td>6</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-7" class="channel-details">
+              <td>150</td>
+              <td>96H</td>
+              <td>10010110</td>
+              <td>Note On</td>
+              <td>7</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-8" class="channel-details">
+              <td>151</td>
+              <td>97H</td>
+              <td>10010111</td>
+              <td>Note On</td>
+              <td>8</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-9" class="channel-details">
+              <td>152</td>
+              <td>98H</td>
+              <td>10011000</td>
+              <td>Note On</td>
+              <td>9</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-10" class="channel-details">
+              <td>153</td>
+              <td>99H</td>
+              <td>10011001</td>
+              <td>Note On</td>
+              <td>10</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-11" class="channel-details">
+              <td>154</td>
+              <td>9AH</td>
+              <td>10011010</td>
+              <td>Note On</td>
+              <td>11</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-12" class="channel-details">
+              <td>155</td>
+              <td>9BH</td>
+              <td>10011011</td>
+              <td>Note On</td>
+              <td>12</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-13" class="channel-details">
+              <td>156</td>
+              <td>9CH</td>
+              <td>10011100</td>
+              <td>Note On</td>
+              <td>13</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-14" class="channel-details">
+              <td>157</td>
+              <td>9DH</td>
+              <td>10011101</td>
+              <td>Note On</td>
+              <td>14</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-15" class="channel-details">
+              <td>158</td>
+              <td>9EH</td>
+              <td>10011110</td>
+              <td>Note On</td>
+              <td>15</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr id="note-on-16" class="channel-details">
+              <td>159</td>
+              <td>9FH</td>
+              <td>10011111</td>
+              <td>Note On</td>
+              <td>16</td>
+              <td>2: Note, Velocity</td>
+            </tr>
+            <tr class="clickable" onclick="toggleChannelDetails('poly-at')">
+              <td>160-175</td>
+              <td>A0-AFH</td>
+              <td>1010nnnn</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>1-16</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-1" class="channel-details">
+              <td>160</td>
+              <td>A0H</td>
+              <td>10100000</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>1</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-2" class="channel-details">
+              <td>161</td>
+              <td>A1H</td>
+              <td>10100001</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>2</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-3" class="channel-details">
+              <td>162</td>
+              <td>A2H</td>
+              <td>10100010</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>3</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-4" class="channel-details">
+              <td>163</td>
+              <td>A3H</td>
+              <td>10100011</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>4</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-5" class="channel-details">
+              <td>164</td>
+              <td>A4H</td>
+              <td>10100100</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>5</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-6" class="channel-details">
+              <td>165</td>
+              <td>A5H</td>
+              <td>10100101</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>6</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-7" class="channel-details">
+              <td>166</td>
+              <td>A6H</td>
+              <td>10100110</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>7</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-8" class="channel-details">
+              <td>167</td>
+              <td>A7H</td>
+              <td>10100111</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>8</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-9" class="channel-details">
+              <td>168</td>
+              <td>A8H</td>
+              <td>10101000</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>9</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-10" class="channel-details">
+              <td>169</td>
+              <td>A9H</td>
+              <td>10101001</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>10</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-11" class="channel-details">
+              <td>170</td>
+              <td>AAH</td>
+              <td>10101010</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>11</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-12" class="channel-details">
+              <td>171</td>
+              <td>ABH</td>
+              <td>10101011</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>12</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-13" class="channel-details">
+              <td>172</td>
+              <td>ACH</td>
+              <td>10101100</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>13</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-14" class="channel-details">
+              <td>173</td>
+              <td>ADH</td>
+              <td>10101101</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>14</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-15" class="channel-details">
+              <td>174</td>
+              <td>AEH</td>
+              <td>10101110</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>15</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr id="poly-at-16" class="channel-details">
+              <td>175</td>
+              <td>AFH</td>
+              <td>10101111</td>
+              <td>Polyphonic Aftertouch</td>
+              <td>16</td>
+              <td>2: Note, Pressure</td>
+            </tr>
+            <tr class="clickable" onclick="toggleChannelDetails('cc')">
+              <td>176-191</td>
+              <td>B0-BFH</td>
+              <td>1011nnnn</td>
+              <td>Control Change (CC)</td>
+              <td>1-16</td>
+              <td>2: Controller&#10038;, Value</td>
+            </tr>
+            <tr id="cc-1" class="channel-details">
+              <td>176</td>
+              <td>B0H</td>
+              <td>10110000</td>
+              <td>Control Change (CC)</td>
+              <td>1</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-2" class="channel-details">
+              <td>177</td>
+              <td>B1H</td>
+              <td>10110001</td>
+              <td>Control Change (CC)</td>
+              <td>2</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-3" class="channel-details">
+              <td>178</td>
+              <td>B2H</td>
+              <td>10110010</td>
+              <td>Control Change (CC)</td>
+              <td>3</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-4" class="channel-details">
+              <td>179</td>
+              <td>B3H</td>
+              <td>10110011</td>
+              <td>Control Change (CC)</td>
+              <td>4</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-5" class="channel-details">
+              <td>180</td>
+              <td>B4H</td>
+              <td>10110100</td>
+              <td>Control Change (CC)</td>
+              <td>5</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-6" class="channel-details">
+              <td>181</td>
+              <td>B5H</td>
+              <td>10110101</td>
+              <td>Control Change (CC)</td>
+              <td>6</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-7" class="channel-details">
+              <td>182</td>
+              <td>B6H</td>
+              <td>10110110</td>
+              <td>Control Change (CC)</td>
+              <td>7</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-8" class="channel-details">
+              <td>183</td>
+              <td>B7H</td>
+              <td>10110111</td>
+              <td>Control Change (CC)</td>
+              <td>8</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-9" class="channel-details">
+              <td>184</td>
+              <td>B8H</td>
+              <td>10111000</td>
+              <td>Control Change (CC)</td>
+              <td>9</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-10" class="channel-details">
+              <td>185</td>
+              <td>B9H</td>
+              <td>10111001</td>
+              <td>Control Change (CC)</td>
+              <td>10</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-11" class="channel-details">
+              <td>186</td>
+              <td>BAH</td>
+              <td>10111010</td>
+              <td>Control Change (CC)</td>
+              <td>11</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-12" class="channel-details">
+              <td>187</td>
+              <td>BBH</td>
+              <td>10111011</td>
+              <td>Control Change (CC)</td>
+              <td>12</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-13" class="channel-details">
+              <td>188</td>
+              <td>BCH</td>
+              <td>10111100</td>
+              <td>Control Change (CC)</td>
+              <td>13</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-14" class="channel-details">
+              <td>189</td>
+              <td>BDH</td>
+              <td>10111101</td>
+              <td>Control Change (CC)</td>
+              <td>14</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-15" class="channel-details">
+              <td>190</td>
+              <td>BEH</td>
+              <td>10111110</td>
+              <td>Control Change (CC)</td>
+              <td>15</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr id="cc-16" class="channel-details">
+              <td>191</td>
+              <td>BFH</td>
+              <td>10111111</td>
+              <td>Control Change (CC)</td>
+              <td>16</td>
+              <td>2: Controller, Value</td>
+            </tr>
+            <tr class="clickable" onclick="toggleChannelDetails('pc')">
+              <td>192-207</td>
+              <td>C0-CFH</td>
+              <td>1100nnnn</td>
+              <td>Program Change</td>
+              <td>1-16</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-1" class="channel-details">
+              <td>192</td>
+              <td>C0H</td>
+              <td>11000000</td>
+              <td>Program Change</td>
+              <td>1</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-2" class="channel-details">
+              <td>193</td>
+              <td>C1H</td>
+              <td>11000001</td>
+              <td>Program Change</td>
+              <td>2</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-3" class="channel-details">
+              <td>194</td>
+              <td>C2H</td>
+              <td>11000010</td>
+              <td>Program Change</td>
+              <td>3</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-4" class="channel-details">
+              <td>195</td>
+              <td>C3H</td>
+              <td>11000011</td>
+              <td>Program Change</td>
+              <td>4</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-5" class="channel-details">
+              <td>196</td>
+              <td>C4H</td>
+              <td>11000100</td>
+              <td>Program Change</td>
+              <td>5</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-6" class="channel-details">
+              <td>197</td>
+              <td>C5H</td>
+              <td>11000101</td>
+              <td>Program Change</td>
+              <td>6</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-7" class="channel-details">
+              <td>198</td>
+              <td>C6H</td>
+              <td>11000110</td>
+              <td>Program Change</td>
+              <td>7</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-8" class="channel-details">
+              <td>199</td>
+              <td>C7H</td>
+              <td>11000111</td>
+              <td>Program Change</td>
+              <td>8</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-9" class="channel-details">
+              <td>200</td>
+              <td>C8H</td>
+              <td>11001000</td>
+              <td>Program Change</td>
+              <td>9</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-10" class="channel-details">
+              <td>201</td>
+              <td>C9H</td>
+              <td>11001001</td>
+              <td>Program Change</td>
+              <td>10</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-11" class="channel-details">
+              <td>202</td>
+              <td>CAH</td>
+              <td>11001010</td>
+              <td>Program Change</td>
+              <td>11</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-12" class="channel-details">
+              <td>203</td>
+              <td>CBH</td>
+              <td>11001011</td>
+              <td>Program Change</td>
+              <td>12</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-13" class="channel-details">
+              <td>204</td>
+              <td>CCH</td>
+              <td>11001100</td>
+              <td>Program Change</td>
+              <td>13</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-14" class="channel-details">
+              <td>205</td>
+              <td>CDH</td>
+              <td>11001101</td>
+              <td>Program Change</td>
+              <td>14</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-15" class="channel-details">
+              <td>206</td>
+              <td>CEH</td>
+              <td>11001110</td>
+              <td>Program Change</td>
+              <td>15</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr id="pc-16" class="channel-details">
+              <td>207</td>
+              <td>CFH</td>
+              <td>11001111</td>
+              <td>Program Change</td>
+              <td>16</td>
+              <td>1: Program Number</td>
+            </tr>
+            <tr class="clickable" onclick="toggleChannelDetails('chan-at')">
+              <td>208-223</td>
+              <td>D0-DFH</td>
+              <td>1101nnnn</td>
+              <td>Channel Aftertouch</td>
+              <td>1-16</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-1" class="channel-details">
+              <td>208</td>
+              <td>D0H</td>
+              <td>11010000</td>
+              <td>Channel Aftertouch</td>
+              <td>1</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-2" class="channel-details">
+              <td>209</td>
+              <td>D1H</td>
+              <td>11010001</td>
+              <td>Channel Aftertouch</td>
+              <td>2</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-3" class="channel-details">
+              <td>210</td>
+              <td>D2H</td>
+              <td>11010010</td>
+              <td>Channel Aftertouch</td>
+              <td>3</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-4" class="channel-details">
+              <td>211</td>
+              <td>D3H</td>
+              <td>11010011</td>
+              <td>Channel Aftertouch</td>
+              <td>4</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-5" class="channel-details">
+              <td>212</td>
+              <td>D4H</td>
+              <td>11010100</td>
+              <td>Channel Aftertouch</td>
+              <td>5</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-6" class="channel-details">
+              <td>213</td>
+              <td>D5H</td>
+              <td>11010101</td>
+              <td>Channel Aftertouch</td>
+              <td>6</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-7" class="channel-details">
+              <td>214</td>
+              <td>D6H</td>
+              <td>11010110</td>
+              <td>Channel Aftertouch</td>
+              <td>7</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-8" class="channel-details">
+              <td>215</td>
+              <td>D7H</td>
+              <td>11010111</td>
+              <td>Channel Aftertouch</td>
+              <td>8</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-9" class="channel-details">
+              <td>216</td>
+              <td>D8H</td>
+              <td>11011000</td>
+              <td>Channel Aftertouch</td>
+              <td>9</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-10" class="channel-details">
+              <td>217</td>
+              <td>D9H</td>
+              <td>11011001</td>
+              <td>Channel Aftertouch</td>
+              <td>10</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-11" class="channel-details">
+              <td>218</td>
+              <td>DAH</td>
+              <td>11011010</td>
+              <td>Channel Aftertouch</td>
+              <td>11</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-12" class="channel-details">
+              <td>219</td>
+              <td>DBH</td>
+              <td>11011011</td>
+              <td>Channel Aftertouch</td>
+              <td>12</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-13" class="channel-details">
+              <td>220</td>
+              <td>DCH</td>
+              <td>11011100</td>
+              <td>Channel Aftertouch</td>
+              <td>13</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-14" class="channel-details">
+              <td>221</td>
+              <td>DDH</td>
+              <td>11011101</td>
+              <td>Channel Aftertouch</td>
+              <td>14</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-15" class="channel-details">
+              <td>222</td>
+              <td>DEH</td>
+              <td>11011110</td>
+              <td>Channel Aftertouch</td>
+              <td>15</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr id="chan-at-16" class="channel-details">
+              <td>223</td>
+              <td>DFH</td>
+              <td>11011111</td>
+              <td>Channel Aftertouch</td>
+              <td>16</td>
+              <td>1: Pressure</td>
+            </tr>
+            <tr class="clickable" onclick="toggleChannelDetails('pb')">
+              <td>224-239</td>
+              <td>E0-EFH</td>
+              <td>1110nnnn</td>
+              <td>Pitch Bend</td>
+              <td>1-16</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-1" class="channel-details">
+              <td>224</td>
+              <td>E0H</td>
+              <td>11100000</td>
+              <td>Pitch Bend</td>
+              <td>1</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-2" class="channel-details">
+              <td>225</td>
+              <td>E1H</td>
+              <td>11100001</td>
+              <td>Pitch Bend</td>
+              <td>2</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-3" class="channel-details">
+              <td>226</td>
+              <td>E2H</td>
+              <td>11100010</td>
+              <td>Pitch Bend</td>
+              <td>3</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-4" class="channel-details">
+              <td>227</td>
+              <td>E3H</td>
+              <td>11100011</td>
+              <td>Pitch Bend</td>
+              <td>4</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-5" class="channel-details">
+              <td>228</td>
+              <td>E4H</td>
+              <td>11100100</td>
+              <td>Pitch Bend</td>
+              <td>5</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-6" class="channel-details">
+              <td>229</td>
+              <td>E5H</td>
+              <td>11100101</td>
+              <td>Pitch Bend</td>
+              <td>6</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-7" class="channel-details">
+              <td>230</td>
+              <td>E6H</td>
+              <td>11100110</td>
+              <td>Pitch Bend</td>
+              <td>7</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-8" class="channel-details">
+              <td>231</td>
+              <td>E7H</td>
+              <td>11100111</td>
+              <td>Pitch Bend</td>
+              <td>8</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-9" class="channel-details">
+              <td>232</td>
+              <td>E8H</td>
+              <td>11101000</td>
+              <td>Pitch Bend</td>
+              <td>9</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-10" class="channel-details">
+              <td>233</td>
+              <td>E9H</td>
+              <td>11101001</td>
+              <td>Pitch Bend</td>
+              <td>10</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-11" class="channel-details">
+              <td>234</td>
+              <td>EAH</td>
+              <td>11101010</td>
+              <td>Pitch Bend</td>
+              <td>11</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-12" class="channel-details">
+              <td>235</td>
+              <td>EBH</td>
+              <td>11101011</td>
+              <td>Pitch Bend</td>
+              <td>12</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-13" class="channel-details">
+              <td>236</td>
+              <td>ECH</td>
+              <td>11101100</td>
+              <td>Pitch Bend</td>
+              <td>13</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-14" class="channel-details">
+              <td>237</td>
+              <td>EDH</td>
+              <td>11101101</td>
+              <td>Pitch Bend</td>
+              <td>14</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-15" class="channel-details">
+              <td>238</td>
+              <td>EEH</td>
+              <td>11101110</td>
+              <td>Pitch Bend</td>
+              <td>15</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr id="pb-16" class="channel-details">
+              <td>239</td>
+              <td>EFH</td>
+              <td>11101111</td>
+              <td>Pitch Bend</td>
+              <td>16</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr class="headline">
+              <td colspan="6"><strong>System Common Messages</strong></td>
+            </tr>
+            <tr>
+              <td>240</td>
+              <td>F0H</td>
+              <td>11110000</td>
+              <td>System Exclusive (SysEx) Start</td>
+              <td>-</td>
+              <td>Variable</td>
+            </tr>
+            <tr>
+              <td>241</td>
+              <td>F1H</td>
+              <td>11110001</td>
+              <td>MIDI Time Code Quarter Frame</td>
+              <td>-</td>
+              <td>1</td>
+            </tr>
+            <tr>
+              <td>242</td>
+              <td>F2H</td>
+              <td>11110010</td>
+              <td>Song Position Pointer</td>
+              <td>-</td>
+              <td>2: LSB, MSB</td>
+            </tr>
+            <tr>
+              <td>243</td>
+              <td>F3H</td>
+              <td>11110011</td>
+              <td>Song Select</td>
+              <td>-</td>
+              <td>1: Song Number</td>
+            </tr>
+            <tr>
+              <td>244-245</td>
+              <td>F4-F5H</td>
+              <td>11110100-101</td>
+              <td>Undefined</td>
+              <td>-</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>246</td>
+              <td>F6H</td>
+              <td>11110110</td>
+              <td>Tune Request</td>
+              <td>-</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>247</td>
+              <td>F7H</td>
+              <td>11110111</td>
+              <td>End of SysEx (EOX)</td>
+              <td>-</td>
+              <td>0</td>
+            </tr>
+            <tr class="headline">
+              <td colspan="6"><strong>System Real-Time Messages</strong></td>
+            </tr>
+            <tr>
+              <td>248</td>
+              <td>F8H</td>
+              <td>11111000</td>
+              <td>Timing Clock</td>
+              <td>-</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>249</td>
+              <td>F9H</td>
+              <td>11111001</td>
+              <td>Undefined</td>
+              <td>-</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>250</td>
+              <td>FAH</td>
+              <td>11111010</td>
+              <td>Start</td>
+              <td>-</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>251</td>
+              <td>FBH</td>
+              <td>11111011</td>
+              <td>Continue</td>
+              <td>-</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>252</td>
+              <td>FCH</td>
+              <td>11111100</td>
+              <td>Stop</td>
+              <td>-</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>253</td>
+              <td>FDH</td>
+              <td>11111101</td>
+              <td>Undefined</td>
+              <td>-</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>254</td>
+              <td>FEH</td>
+              <td>11111110</td>
+              <td>Active Sensing</td>
+              <td>-</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>255</td>
+              <td>FFH</td>
+              <td>11111111</td>
+              <td>System Reset</td>
+              <td>-</td>
+              <td>0</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>&#10038; Controller Numbers for Control Change Messages (CC)</h3>
+        <table id="control_change_messages">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Hex</th>
+              <th>Bezeichnung</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>0</td>
+              <td>00H</td>
+              <td>Bank Select</td>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>01H</td>
+              <td>Modulation wheel or lever</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>02H</td>
+              <td>Breath Controller</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>03H</td>
+              <td>Undefined</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>04H</td>
+              <td>Foot controller</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>05H</td>
+              <td>Portamento time</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>06H</td>
+              <td>Data entry MSB</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>07H</td>
+              <td>Channel Volume (formerly Main Volume)</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>08H</td>
+              <td>Balance</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>09H</td>
+              <td>Undefined</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>0AH</td>
+              <td>Pan</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>0BH</td>
+              <td>Expression Controller</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>0CH</td>
+              <td>Effect Control 1</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>0DH</td>
+              <td>Effect Control 2</td>
+            </tr>
+            <tr>
+              <td>14-15</td>
+              <td>0E-0FH</td>
+              <td>Undefined</td>
+            </tr>
+            <tr>
+              <td>16-19</td>
+              <td>10-13H</td>
+              <td>General Purpose Controllers (#'s 1-4)</td>
+            </tr>
+            <tr>
+              <td>20-31</td>
+              <td>14-1FH</td>
+              <td>Undefined</td>
+            </tr>
+            <tr>
+              <td>32-63</td>
+              <td>20-3FH</td>
+              <td>LSB for values 0-31</td>
+            </tr>
+            <tr>
+              <td>64</td>
+              <td>40H</td>
+              <td>Damper pedal (sustain)</td>
+            </tr>
+            <tr>
+              <td>65</td>
+              <td>41H</td>
+              <td>Portamento On/Off</td>
+            </tr>
+            <tr>
+              <td>66</td>
+              <td>42H</td>
+              <td>Sostenuto</td>
+            </tr>
+            <tr>
+              <td>67</td>
+              <td>43H</td>
+              <td>Soft pedal</td>
+            </tr>
+            <tr>
+              <td>68</td>
+              <td>44H</td>
+              <td>Legato Footswitch (vv = 00-3F:Normal, 40-7F=Legatto)</td>
+            </tr>
+            <tr>
+              <td>69</td>
+              <td>45H</td>
+              <td>Hold 2</td>
+            </tr>
+            <tr>
+              <td>70</td>
+              <td>46H</td>
+              <td>Sound Controller 1 (default: Sound Variation)</td>
+            </tr>
+            <tr>
+              <td>71</td>
+              <td>47H</td>
+              <td>Sound Controller 2 (default: Timbre/Harmonic Intensity)</td>
+            </tr>
+            <tr>
+              <td>72</td>
+              <td>48H</td>
+              <td>Sound Controller 3 (default: Release Time)</td>
+            </tr>
+            <tr>
+              <td>73</td>
+              <td>49H</td>
+              <td>Sound Controller 4 (default: Attack Time)</td>
+            </tr>
+            <tr>
+              <td>74</td>
+              <td>4AH</td>
+              <td>Sound Controller 5 (default: Brightness)</td>
+            </tr>
+            <tr>
+              <td>75-79</td>
+              <td>4BH-4FH</td>
+              <td>Sound Controllers 6-10 (no defaults)</td>
+            </tr>
+            <tr>
+              <td>80-83</td>
+              <td>50-53H</td>
+              <td>General Purpose Controllers (#'s 5-8)</td>
+            </tr>
+            <tr>
+              <td>84</td>
+              <td>54H</td>
+              <td>Portamento Control</td>
+            </tr>
+            <tr>
+              <td>85-90</td>
+              <td>55-5AH</td>
+              <td>Undefined</td>
+            </tr>
+            <tr>
+              <td>91</td>
+              <td>5BH</td>
+              <td>Effects 1 Depth (formerly External Effects Depth)</td>
+            </tr>
+            <tr>
+              <td>92</td>
+              <td>5CH</td>
+              <td>Effects 2 Depth (formerly Tremolo Depth)</td>
+            </tr>
+            <tr>
+              <td>93</td>
+              <td>5DH</td>
+              <td>Effects 3 Depth (formerly Chorus Depth)</td>
+            </tr>
+            <tr>
+              <td>94</td>
+              <td>5EH</td>
+              <td>Effects 4 Depth (formerly Celeste (Detune) Depth)</td>
+            </tr>
+            <tr>
+              <td>95</td>
+              <td>5FH</td>
+              <td>Effects 5 Depth (formerly Phaser Depth)</td>
+            </tr>
+            <tr>
+              <td>96</td>
+              <td>60H</td>
+              <td>Data increment</td>
+            </tr>
+            <tr>
+              <td>97</td>
+              <td>61H</td>
+              <td>Data decrement</td>
+            </tr>
+            <tr>
+              <td>98</td>
+              <td>62H</td>
+              <td>Non-Registered Parameter Number LSB</td>
+            </tr>
+            <tr>
+              <td>99</td>
+              <td>63H</td>
+              <td>Non-Registered Parameter Number MSB</td>
+            </tr>
+            <tr>
+              <td>100</td>
+              <td>64H</td>
+              <td>Registered Parameter Number LSB</td>
+            </tr>
+            <tr>
+              <td>101</td>
+              <td>65H</td>
+              <td>Registered Parameter Number MSB</td>
+            </tr>
+            <tr>
+              <td>102-119</td>
+              <td>66-77H</td>
+              <td>Undefined</td>
+            </tr>
+            <tr>
+              <td>120-127</td>
+              <td>78-7FH</td>
+              <td>Reserved for Channel Mode Messages</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <script>
+      function toggleChannelDetails(id) {
+        const rows = document.querySelectorAll(`[id^="${id}-"]`);
+        rows.forEach((row) => {
+          if (row.style.display === 'none') {
+            row.style.display = 'table-row';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

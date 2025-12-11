@@ -1,0 +1,35 @@
+{
+  "name": "midi",
+  "version": "1.0.0",
+  "description": "Eine Web-MIDI-Anwendung zur Verwaltung und Routing von MIDI-Geräten im Browser.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "http-server",
+    "test": "playwright test tests/basic.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vorndran/midi.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/vorndran/midi/issues"
+  },
+  "homepage": "https://github.com/vorndran/midi#readme",
+  "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@playwright/test": "^1.56.1",
+    "@types/node": "^24.10.0",
+    "babel-jest": "^30.2.0",
+    "http-server": "^14.1.1",
+    "jest": "^30.2.0",
+    "jest-environment-jsdom": "^30.2.0"
+  }
+}

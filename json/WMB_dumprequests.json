@@ -1,0 +1,35 @@
+{
+  "WMB_midi_dump_requests": {
+    "blofeld": {
+      "info": "Waldorf Blofeld - current patch",
+      "defaultport": "Blofeld",
+      "request": [240, 62, 19, 0, 0, 127, 0, 127, 247]
+    },
+    "nymphes single": {
+      "info": "Dreadbox Nymphes - first patch",
+      "defaultport": "Nymphes",
+      "request": [240, 0, 33, 53, 0, 6, 2, 247]
+    },
+    "nymphes": {
+      "info": "Dreadbox Nymphes - all patches",
+      "defaultport": "Nymphes",
+      "request": [240, 0, 33, 53, 0, 6, 2, 247]
+    },
+    "vocaFM": {
+      "info": "Korg Volca FM",
+      "defaultport": "XpandR",
+      "request": [240, 66, 48, 0, 1, 47, 18, 247]
+    },
+    "miniloguexd": {
+      "info": "Korg Minilogue XD",
+      "defaultport": "Minilogue XD",
+      "request": [240, 66, 63, 0, 1, 81, 16, 247]
+    },
+    "miniloguexd1": {
+      "info": "Korg Minilogue XD",
+      "defaultport": "Minilogue XD",
+      "request": [240, 66, 48, 0, 1, 44, 16, 247]
+    },
+    "minilogue": { "info": "Korg Minilogue", "defaultport": "Minilogue", "request": [240, 66, 48, 0, 1, 81, 16, 247] }
+  }
+}

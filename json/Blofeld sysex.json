@@ -1,0 +1,1614 @@
+{
+  "Osc 1 Octave": {
+    "target": "Select_2",
+    "display": ["OSC_1", "", "", "oct"],
+    "page": 1,
+    "screen_id": 1,
+    "info": " 128',1/2'"
+  },
+  "Osc 1 Semitone": {
+    "target": "Select_3",
+    "display": ["OSC_1", "semi", "", ""],
+    "page": 1,
+    "screen_id": 2,
+    "info": "-12,12"
+  },
+  "Osc 1 Detune": {
+    "target": "Fader__3",
+    "display": ["", "", "OSC_1", "det"],
+    "page": 1,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Osc 1 Bend Range": {
+    "target": "Select_7",
+    "display": ["OSC_1", "", "", "bend"],
+    "page": 1,
+    "screen_id": 6,
+    "info": "-24,24"
+  },
+  "Osc 1 Keytrack": {
+    "target": "Fader__7",
+    "display": ["", "", "OSC_1", "key"],
+    "page": 1,
+    "screen_id": 6,
+    "info": "-200%,196%"
+  },
+  "Osc 1 FM Source": {
+    "target": "Select_6",
+    "display": ["OSC_1", "", "", ""],
+    "page": 1,
+    "screen_id": 5,
+    "info": "4.2"
+  },
+  "Osc 1 FM Amount": {
+    "target": "Fader__6",
+    "display": ["", "", "OSC_1", ""],
+    "page": 1,
+    "screen_id": 5,
+    "info": "0,127"
+  },
+  "Osc 1 Shape": { "target": "Select_1", "display": ["OSC_1", "", "", ""], "page": 1, "screen_id": 0, "info": "4.1" },
+  "Osc 1 Pulsewidth": {
+    "target": "Fader__4",
+    "display": ["", "", "OSC_1", "pw"],
+    "page": 1,
+    "screen_id": 3,
+    "info": "0,127"
+  },
+  "Osc 1 PWM Source": {
+    "target": "Select_5",
+    "display": ["OSC_1", "", "", ""],
+    "page": 1,
+    "screen_id": 4,
+    "info": "4.7"
+  },
+  "Osc 1 PWM Amount": {
+    "target": "Fader__5",
+    "display": ["", "", "OSC_1", "pwm"],
+    "page": 1,
+    "screen_id": 4,
+    "info": "-64,63"
+  },
+  "Osc 1 Limit WT": {
+    "target": "Select_8",
+    "display": ["OSC_1", "", "", ""],
+    "page": 1,
+    "screen_id": 7,
+    "info": "on,off"
+  },
+  "Osc 1 Brilliance": {
+    "target": "Fader__8",
+    "display": ["", "", "OSC_1", "bril"],
+    "page": 1,
+    "screen_id": 7,
+    "info": "0,127"
+  },
+  "Osc 2 Octave": {
+    "target": "Select_2",
+    "display": ["OSC_2", "", "", "oct"],
+    "page": 2,
+    "screen_id": 1,
+    "info": " 128',1/2'"
+  },
+  "Osc 2 Semitone": {
+    "target": "Select_3",
+    "display": ["OSC_2", "semi", "", ""],
+    "page": 2,
+    "screen_id": 2,
+    "info": "-12,12"
+  },
+  "Osc 2 Detune": {
+    "target": "Fader__3",
+    "display": ["", "", "OSC_2", "det"],
+    "page": 2,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Osc 2 Bend Range": {
+    "target": "Select_7",
+    "display": ["OSC_2", "", "", "bend"],
+    "page": 2,
+    "screen_id": 6,
+    "info": "-24,24"
+  },
+  "Osc 2 Keytrack": {
+    "target": "Fader__7",
+    "display": ["", "", "OSC_2", "key"],
+    "page": 2,
+    "screen_id": 6,
+    "info": "-200%,196%"
+  },
+  "Osc 2 FM Source": {
+    "target": "Select_6",
+    "display": ["OSC_2", "", "", ""],
+    "page": 2,
+    "screen_id": 5,
+    "info": "4.2"
+  },
+  "Osc 2 FM Amount": {
+    "target": "Fader__6",
+    "display": ["", "", "OSC_2", ""],
+    "page": 2,
+    "screen_id": 5,
+    "info": "0,127"
+  },
+  "Osc 2 Shape": { "target": "Select_1", "display": ["OSC_2", "", "", ""], "page": 2, "screen_id": 0, "info": "4.1" },
+  "Osc 2 Pulsewidth": {
+    "target": "Fader__4",
+    "display": ["", "", "OSC_2", "pw"],
+    "page": 2,
+    "screen_id": 3,
+    "info": "0,127"
+  },
+  "Osc 2 PWM Source": {
+    "target": "Select_5",
+    "display": ["OSC_2", "", "", ""],
+    "page": 2,
+    "screen_id": 4,
+    "info": "4.7"
+  },
+  "Osc 2 PWM Amount": {
+    "target": "Fader__5",
+    "display": ["", "", "OSC_2", "pwm"],
+    "page": 2,
+    "screen_id": 4,
+    "info": "-64,63"
+  },
+  "Osc 2 Limit WT": {
+    "target": "Select_8",
+    "display": ["OSC_2", "", "", ""],
+    "page": 2,
+    "screen_id": 7,
+    "info": "on,off"
+  },
+  "Osc 2 Brilliance": {
+    "target": "Fader__8",
+    "display": ["", "", "OSC_2", "bril"],
+    "page": 2,
+    "screen_id": 7,
+    "info": "0,127"
+  },
+  "Osc 3 Octave": {
+    "target": "Fader__2",
+    "display": ["OSC_3", "", "", "oct"],
+    "page": 3,
+    "screen_id": 1,
+    "info": " 128',1/2'"
+  },
+  "Osc 3 Semitone": {
+    "target": "Select_3",
+    "display": ["OSC_3", "semi", "", ""],
+    "page": 3,
+    "screen_id": 2,
+    "info": "-12,12"
+  },
+  "Osc 3 Detune": {
+    "target": "Fader__3",
+    "display": ["", "", "OSC_3", "det"],
+    "page": 3,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Osc 3 Bend Range": {
+    "target": "Select_7",
+    "display": ["OSC_3", "", "", "bend"],
+    "page": 3,
+    "screen_id": 6,
+    "info": "-24,24"
+  },
+  "Osc 3 Keytrack": {
+    "target": "Fader__7",
+    "display": ["", "", "OSC_3", "key"],
+    "page": 3,
+    "screen_id": 6,
+    "info": "-200%,196%"
+  },
+  "Osc 3 FM Source": {
+    "target": "Select_6",
+    "display": ["OSC_3", "", "", ""],
+    "page": 3,
+    "screen_id": 5,
+    "info": "4.2"
+  },
+  "Osc 3 FM Amount": {
+    "target": "Fader__6",
+    "display": ["", "", "OSC_3", ""],
+    "page": 3,
+    "screen_id": 5,
+    "info": "0,127"
+  },
+  "Osc 3 Shape": { "target": "Select_1", "display": ["OSC_3", "", "", ""], "page": 3, "screen_id": 0, "info": "4.1" },
+  "Osc 3 Pulsewidth": {
+    "target": "Fader__4",
+    "display": ["", "", "OSC_3", "pw"],
+    "page": 3,
+    "screen_id": 3,
+    "info": "0,127"
+  },
+  "Osc 3 PWM Source": {
+    "target": "Select_5",
+    "display": ["OSC_3", "", "", ""],
+    "page": 3,
+    "screen_id": 4,
+    "info": "4.7"
+  },
+  "Osc 3 PWM Amount": {
+    "target": "Fader__5",
+    "display": ["", "", "OSC_3", "pwm"],
+    "page": 3,
+    "screen_id": 4,
+    "info": "-64,63"
+  },
+  "Osc 3 Brilliance": {
+    "target": "Fader__8",
+    "display": ["", "", "OSC_3", "bril"],
+    "page": 3,
+    "screen_id": 7,
+    "info": "0,127"
+  },
+  "Osc 2 Sync to O3": {
+    "target": "Select_8",
+    "display": ["OSC_3", "", "", ""],
+    "page": 3,
+    "screen_id": 7,
+    "info": "off,on"
+  },
+  "Osc Pitch Source": { "target": "Fader__4", "display": ["", "", "", ""], "page": 5, "screen_id": 3, "info": "4.7" },
+  "Osc Pitch Amount": {
+    "target": "Select_4",
+    "display": ["", "", "", ""],
+    "page": 5,
+    "screen_id": 3,
+    "info": "-64,63"
+  },
+  "Glide": { "target": "Select_1", "display": ["glide", "", "", ""], "page": 5, "screen_id": 0, "info": "off,on" },
+  "Glide Mode": { "target": "Select_2", "display": ["gMode", "", "", ""], "page": 5, "screen_id": 1, "info": "4.3" },
+  "Glide Rate": { "target": "Fader__2", "display": ["gRate", "", "", ""], "page": 5, "screen_id": 1, "info": "0,127" },
+  "Alloc. Mode and Uni.": {
+    "target": "Select_7",
+    "display": ["uni", "", "", ""],
+    "page": 5,
+    "screen_id": 6,
+    "info": "4.10"
+  },
+  "Unisono Uni Detune": {
+    "target": "Fader__7",
+    "display": ["uDet", "", "", ""],
+    "page": 5,
+    "screen_id": 6,
+    "info": "0,127"
+  },
+  "Mixer Osc 1 Level": {
+    "target": "Fader__1",
+    "display": ["", "", "OSC_1", "vol"],
+    "page": [1, 4],
+    "screen_id": 0,
+    "info": "0,127"
+  },
+  "Mixer Osc 1 Balance": {
+    "target": "Select_1",
+    "display": ["bal", "", "", ""],
+    "page": 4,
+    "screen_id": 0,
+    "info": "F1 64,F2 63"
+  },
+  "Mixer Osc 2 Level": {
+    "target": "Fader__2",
+    "display": ["", "", "OSC_2", "vol"],
+    "page": [2, 4],
+    "screen_id": 1,
+    "info": "0,127"
+  },
+  "Mixer Osc 2 Balance": {
+    "target": "Select_2",
+    "display": ["bal", "", "", ""],
+    "page": 4,
+    "screen_id": 1,
+    "info": "F1 64,F2 63"
+  },
+  "Mixer Osc 3 Level": {
+    "target": "Fader__3",
+    "display": ["", "", "OSC_3", "vol"],
+    "page": [3, 4],
+    "screen_id": 2,
+    "info": "0,127"
+  },
+  "Mixer Osc 3 Balance": {
+    "target": "Select_3",
+    "display": ["bal", "", "", ""],
+    "page": 4,
+    "screen_id": 2,
+    "info": "F1 64,F2 63"
+  },
+  "Mixer Noise Level": {
+    "target": "Fader__5",
+    "display": ["", "", "NOISE", "vol"],
+    "page": 4,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "Mixer Noise Balance": {
+    "target": "Select_5",
+    "display": ["bal", "", "", ""],
+    "page": 4,
+    "screen_id": 4,
+    "info": "F1 64,F2 63"
+  },
+  "Mixer Noise Colour": {
+    "target": "Fader__6",
+    "display": ["", "", "NOISE", "color"],
+    "page": 4,
+    "screen_id": 5,
+    "info": "-64,63"
+  },
+  "Mixer RingMod Level": {
+    "target": "Fader__4",
+    "display": ["", "", "RING", "vol"],
+    "page": 4,
+    "screen_id": 3,
+    "info": "0,127"
+  },
+  "Mixer RingMod Balance": {
+    "target": "Select_4",
+    "display": ["bal", "", "", ""],
+    "page": 4,
+    "screen_id": 3,
+    "info": "F1 64,F2 63"
+  },
+  "Filter 1 Type": { "target": "Select_1", "display": ["type", "", "", ""], "page": 6, "screen_id": 0, "info": "4.4" },
+  "Filter 1 Cutoff": {
+    "target": "Fader__1",
+    "display": ["", "", "F1", "cut"],
+    "page": 6,
+    "screen_id": 0,
+    "info": "0,127"
+  },
+  "Filter 1 Resonance": {
+    "target": "Fader__2",
+    "display": ["", "", "F1", "res"],
+    "page": 6,
+    "screen_id": 1,
+    "info": "0,127"
+  },
+  "Filter 1 Drive": {
+    "target": "Fader__5",
+    "display": ["", "", "F1", "drv"],
+    "page": 6,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "Filter 1 Drive Curve": {
+    "target": "Select_5",
+    "display": ["crv", "", "", ""],
+    "page": 6,
+    "screen_id": 4,
+    "info": "4.11"
+  },
+  "Filter 1 Keytrack": {
+    "target": "Select_4",
+    "display": ["key", "", "", ""],
+    "page": 6,
+    "screen_id": 3,
+    "info": "-200%,196%"
+  },
+  "Filter 1 Env Amount": {
+    "target": "Fader__3",
+    "display": ["", "", "F1", "env"],
+    "page": 6,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Filter 1 Env Velocity": {
+    "target": "Fader__4",
+    "display": ["", "", "F1", "vel"],
+    "page": 6,
+    "screen_id": 3,
+    "info": "-64,63"
+  },
+  "Filter 1 Mod Source": {
+    "target": "Select_6",
+    "display": ["src", "", "", ""],
+    "page": 6,
+    "screen_id": 5,
+    "info": "4.7"
+  },
+  "Filter 1 Mod Amount": {
+    "target": "Fader__6",
+    "display": ["", "", "F1", "mod"],
+    "page": 6,
+    "screen_id": 5,
+    "info": "-64,63"
+  },
+  "Filter 1 FM Source": {
+    "target": "Select_7",
+    "display": ["src", "", "", ""],
+    "page": 6,
+    "screen_id": 6,
+    "info": "4.2"
+  },
+  "Filter 1 FM Amount": {
+    "target": "Fader__7",
+    "display": ["", "", "F1", "fm"],
+    "page": 6,
+    "screen_id": 6,
+    "info": "off,127"
+  },
+  "Filter 1 Pan": {
+    "target": "Select_2",
+    "display": ["pan", "", "", ""],
+    "page": 6,
+    "screen_id": 1,
+    "info": "left 64,right 63"
+  },
+  "Filter 1 Pan Source": {
+    "target": "Select_8",
+    "display": ["src", "", "", ""],
+    "page": 6,
+    "screen_id": 7,
+    "info": "4.7"
+  },
+  "Filter 1 Pan Amount": {
+    "target": "Fader__8",
+    "display": ["", "", "F1", "pan"],
+    "page": 6,
+    "screen_id": 7,
+    "info": "-64,63"
+  },
+  "Filter 2 Type": { "target": "Select_1", "display": ["type", "", "", ""], "page": 7, "screen_id": 0, "info": "4.4" },
+  "Filter 2 Cutoff": {
+    "target": "Fader__1",
+    "display": ["", "", "F2", "cut"],
+    "page": 7,
+    "screen_id": 0,
+    "info": "0,127"
+  },
+  "Filter 2 Resonance": {
+    "target": "Fader__2",
+    "display": ["", "", "F2", "res"],
+    "page": 7,
+    "screen_id": 1,
+    "info": "0,127"
+  },
+  "Filter 2 Drive": {
+    "target": "Fader__5",
+    "display": ["", "", "F2", "drv"],
+    "page": 7,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "Filter 2 Drive Curve": {
+    "target": "Select_5",
+    "display": ["crv", "", "", ""],
+    "page": 7,
+    "screen_id": 4,
+    "info": "4.11"
+  },
+  "Filter 2 Keytrack": {
+    "target": "Select_4",
+    "display": ["key", "", "", ""],
+    "page": 7,
+    "screen_id": 3,
+    "info": "-200%,196%"
+  },
+  "Filter 2 Env Amount": {
+    "target": "Fader__3",
+    "display": ["", "", "F2", "env"],
+    "page": 7,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Filter 2 Env Velocity": {
+    "target": "Fader__4",
+    "display": ["", "", "F2", "vel"],
+    "page": 7,
+    "screen_id": 3,
+    "info": "-64,63"
+  },
+  "Filter 2 Mod Source": {
+    "target": "Select_6",
+    "display": ["src", "", "", ""],
+    "page": 7,
+    "screen_id": 5,
+    "info": "4.7"
+  },
+  "Filter 2 Mod Amount": {
+    "target": "Fader__6",
+    "display": ["", "", "F2", "mod"],
+    "page": 7,
+    "screen_id": 5,
+    "info": "-64,63"
+  },
+  "Filter 2 FM Source": {
+    "target": "Select_7",
+    "display": ["src", "", "", ""],
+    "page": 7,
+    "screen_id": 6,
+    "info": "4.2"
+  },
+  "Filter 2 FM Amount": {
+    "target": "Fader__7",
+    "display": ["", "", "F2", "fm"],
+    "page": 7,
+    "screen_id": 6,
+    "info": "off,127"
+  },
+  "Filter 2 Pan": {
+    "target": "Select_2",
+    "display": ["pan", "", "", ""],
+    "page": 7,
+    "screen_id": 1,
+    "info": "left 64,right 63"
+  },
+  "Filter 2 Pan Source": {
+    "target": "Select_8",
+    "display": ["src", "", "", ""],
+    "page": 7,
+    "screen_id": 7,
+    "info": "4.7"
+  },
+  "Filter 2 Pan Amount": {
+    "target": "Fader__8",
+    "display": ["", "", "F2", "pan"],
+    "page": 7,
+    "screen_id": 7,
+    "info": "-64,63"
+  },
+  "Filter Routing": {
+    "target": "Select_1",
+    "display": ["routing", "", "F", ""],
+    "page": 5,
+    "screen_id": 0,
+    "info": "parallel,serial"
+  },
+  "Amplifier Volume": {
+    "target": "Fader__7",
+    "display": ["", "", "AMP", "vol"],
+    "page": 4,
+    "screen_id": 6,
+    "info": "0,127"
+  },
+  "Amplifier Velocity": {
+    "target": "Fader__8",
+    "display": ["", "", "AMP", "vel"],
+    "page": 4,
+    "screen_id": 7,
+    "info": "-64,63"
+  },
+  "Amplifier Mod Source": {
+    "target": "Select_5",
+    "display": ["src", "", "", ""],
+    "page": 5,
+    "screen_id": 4,
+    "info": "4.7"
+  },
+  "Amplifier Mod Amount": {
+    "target": "Fader__5",
+    "display": ["", "", "AMP", "mod"],
+    "page": 5,
+    "screen_id": 4,
+    "info": "-64,63"
+  },
+  "Effect 1 Type": { "target": "Select_1", "display": ["type", "", "", ""], "page": 20, "screen_id": 0, "info": "5" },
+  "Effect 1 Mix": {
+    "target": "Fader__1",
+    "display": ["", "", "FX1", "mix"],
+    "page": 20,
+    "screen_id": 0,
+    "info": "0,127"
+  },
+  "Effect 1 Parameter 1": {
+    "target": "Fader__2",
+    "display": ["", "", "FX1", ""],
+    "page": 20,
+    "screen_id": 1,
+    "info": "5"
+  },
+  "Effect 1 Parameter 2": {
+    "target": "Fader__3",
+    "display": ["", "", "FX1", ""],
+    "page": 20,
+    "screen_id": 2,
+    "info": "5"
+  },
+  "Effect 1 Parameter 3": {
+    "target": "Fader__4",
+    "display": ["", "", "FX1", ""],
+    "page": 20,
+    "screen_id": 3,
+    "info": "5"
+  },
+  "Effect 1 Parameter 4": {
+    "target": "Fader__5",
+    "display": ["", "", "FX1", ""],
+    "page": 20,
+    "screen_id": 4,
+    "info": "5"
+  },
+  "Effect 1 Parameter 5": {
+    "target": "Fader__6",
+    "display": ["", "", "FX1", ""],
+    "page": 20,
+    "screen_id": 5,
+    "info": "5"
+  },
+  "Effect 1 Parameter 6": {
+    "target": "Fader__7",
+    "display": ["", "", "FX1", ""],
+    "page": 20,
+    "screen_id": 6,
+    "info": "5"
+  },
+  "Effect 1 Parameter 7": {
+    "target": "Fader__8",
+    "display": ["", "", "FX1", ""],
+    "page": 20,
+    "screen_id": 7,
+    "info": "5"
+  },
+  "Effect 1 Parameter 8": {
+    "target": "Fader__1",
+    "display": ["", "", "FX1", ""],
+    "page": 21,
+    "screen_id": 0,
+    "info": "5"
+  },
+  "Effect 1 Parameter 9": {
+    "target": "Fader__2",
+    "display": ["", "", "FX1", ""],
+    "page": 21,
+    "screen_id": 1,
+    "info": "5"
+  },
+  "Effect 1 Parameter 10": {
+    "target": "Fader__3",
+    "display": ["", "", "FX1", ""],
+    "page": 21,
+    "screen_id": 2,
+    "info": "5"
+  },
+  "Effect 1 Parameter 11": {
+    "target": "Fader__4",
+    "display": ["", "", "FX1", ""],
+    "page": 21,
+    "screen_id": 3,
+    "info": "5"
+  },
+  "Effect 1 Parameter 12": {
+    "target": "Fader__5",
+    "display": ["", "", "FX1", ""],
+    "page": 21,
+    "screen_id": 4,
+    "info": "5"
+  },
+  "Effect 1 Parameter 13": {
+    "target": "Fader__6",
+    "display": ["", "", "FX1", ""],
+    "page": 21,
+    "screen_id": 5,
+    "info": "5"
+  },
+  "Effect 1 Parameter 14": {
+    "target": "Fader__7",
+    "display": ["", "", "FX1", ""],
+    "page": 21,
+    "screen_id": 6,
+    "info": "5"
+  },
+  "Effect 2 Type": {
+    "target": "Select_1",
+    "display": ["type", "", "FX2", ""],
+    "page": 22,
+    "screen_id": 0,
+    "info": "5"
+  },
+  "Effect 2 Mix": {
+    "target": "Fader__1",
+    "display": ["", "", "FX2", "mix"],
+    "page": 22,
+    "screen_id": 0,
+    "info": "0,127"
+  },
+  "Effect 2 Parameter 1": {
+    "target": "Fader__2",
+    "display": ["", "", "FX2", ""],
+    "page": 22,
+    "screen_id": 1,
+    "info": "5"
+  },
+  "Effect 2 Parameter 2": {
+    "target": "Fader__3",
+    "display": ["", "", "FX2", ""],
+    "page": 22,
+    "screen_id": 2,
+    "info": "5"
+  },
+  "Effect 2 Parameter 3": {
+    "target": "Fader__4",
+    "display": ["", "", "FX2", ""],
+    "page": 22,
+    "screen_id": 3,
+    "info": "5"
+  },
+  "Effect 2 Parameter 4": {
+    "target": "Fader__5",
+    "display": ["", "", "FX2", ""],
+    "page": 22,
+    "screen_id": 4,
+    "info": "5"
+  },
+  "Effect 2 Parameter 5": {
+    "target": "Fader__6",
+    "display": ["", "", "FX2", ""],
+    "page": 22,
+    "screen_id": 5,
+    "info": "5"
+  },
+  "Effect 2 Parameter 6": {
+    "target": "Fader__7",
+    "display": ["", "", "FX2", ""],
+    "page": 22,
+    "screen_id": 6,
+    "info": "5"
+  },
+  "Effect 2 Parameter 7": {
+    "target": "Fader__8",
+    "display": ["", "", "FX2", ""],
+    "page": 22,
+    "screen_id": 7,
+    "info": "5"
+  },
+  "Effect 2 Parameter 8": {
+    "target": "Fader__1",
+    "display": ["", "", "FX2", ""],
+    "page": 23,
+    "screen_id": 0,
+    "info": "5"
+  },
+  "Effect 2 Parameter 9": {
+    "target": "Fader__2",
+    "display": ["", "", "FX2", ""],
+    "page": 23,
+    "screen_id": 1,
+    "info": "5"
+  },
+  "Effect 2 Parameter 10": {
+    "target": "Fader__3",
+    "display": ["", "", "FX2", ""],
+    "page": 23,
+    "screen_id": 2,
+    "info": "5"
+  },
+  "Effect 2 Parameter 11": {
+    "target": "Fader__4",
+    "display": ["", "", "FX2", ""],
+    "page": 23,
+    "screen_id": 3,
+    "info": "5"
+  },
+  "Effect 2 Parameter 12": {
+    "target": "Fader__5",
+    "display": ["", "", "FX2", ""],
+    "page": 23,
+    "screen_id": 4,
+    "info": "5"
+  },
+  "Effect 2 Parameter 13": {
+    "target": "Fader__6",
+    "display": ["", "", "FX2", ""],
+    "page": 23,
+    "screen_id": 5,
+    "info": "5"
+  },
+  "Effect 2 Parameter 14": {
+    "target": "Fader__7",
+    "display": ["", "", "FX2", ""],
+    "page": 23,
+    "screen_id": 6,
+    "info": "5"
+  },
+  "LFO 1 Shape": { "target": "Select_1", "display": ["type", "", "", ""], "page": 12, "screen_id": 0, "info": "4.5" },
+  "LFO 1 Speed": {
+    "target": "Fader__1",
+    "display": ["", "", "LFO1", "freq"],
+    "page": 12,
+    "screen_id": 0,
+    "info": "4.6"
+  },
+  "LFO 1 Sync": { "target": "Select_2", "display": ["sync", "", "", ""], "page": 12, "screen_id": 1, "info": "off,on" },
+  "LFO 1 Clocked": {
+    "target": "Select_3",
+    "display": ["clock", "", "", ""],
+    "page": 12,
+    "screen_id": 2,
+    "info": "off,on"
+  },
+  "LFO 1 Start Phase": {
+    "target": "Fader__4",
+    "display": ["", "", "LFO1", "phase"],
+    "page": 12,
+    "screen_id": 3,
+    "info": "free,355 degree"
+  },
+  "LFO 1 Delay": {
+    "target": "Fader__5",
+    "display": ["", "", "LFO1", "delay"],
+    "page": 12,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "LFO 1 Fade": {
+    "target": "Fader__6",
+    "display": ["", "", "LFO1", "fade"],
+    "page": 12,
+    "screen_id": 5,
+    "info": "-64,63"
+  },
+  "LFO 1 Keytrack": {
+    "target": "Fader__7",
+    "display": ["", "", "LFO1", "key"],
+    "page": 12,
+    "screen_id": 6,
+    "info": "-200%,196%"
+  },
+  "LFO 2 Shape": { "target": "Select_1", "display": ["type", "", "", ""], "page": 13, "screen_id": 0, "info": "4.5" },
+  "LFO 2 Speed": {
+    "target": "Fader__1",
+    "display": ["", "", "LFO2", "freq"],
+    "page": 13,
+    "screen_id": 0,
+    "info": "4.6"
+  },
+  "LFO 2 Sync": { "target": "Select_2", "display": ["sync", "", "", ""], "page": 13, "screen_id": 1, "info": "off,on" },
+  "LFO 2 Clocked": {
+    "target": "Select_3",
+    "display": ["clock", "", "", ""],
+    "page": 13,
+    "screen_id": 2,
+    "info": "off,on"
+  },
+  "LFO 2 Start Phase": {
+    "target": "Fader__4",
+    "display": ["", "", "LFO2", "phase"],
+    "page": 13,
+    "screen_id": 3,
+    "info": "free,355 degree"
+  },
+  "LFO 2 Delay": {
+    "target": "Fader__5",
+    "display": ["", "", "LFO2", "delay"],
+    "page": 13,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "LFO 2 Fade": {
+    "target": "Fader__6",
+    "display": ["", "", "LFO2", "fade"],
+    "page": 13,
+    "screen_id": 5,
+    "info": "-64,63"
+  },
+  "LFO 2 Keytrack": {
+    "target": "Fader__7",
+    "display": ["", "", "LFO2", "key"],
+    "page": 13,
+    "screen_id": 6,
+    "info": "-200%,196%"
+  },
+  "LFO 3 Shape": { "target": "Select_1", "display": ["type", "", "", ""], "page": 14, "screen_id": 0, "info": "4.5" },
+  "LFO 3 Speed": {
+    "target": "Fader__1",
+    "display": ["", "", "LFO3", "freq"],
+    "page": 14,
+    "screen_id": 0,
+    "info": "4.6"
+  },
+  "LFO 3 Sync": { "target": "Select_2", "display": ["sync", "", "", ""], "page": 14, "screen_id": 1, "info": "off,on" },
+  "LFO 3 Clocked": {
+    "target": "Select_3",
+    "display": ["clock", "", "", ""],
+    "page": 14,
+    "screen_id": 2,
+    "info": "off,on"
+  },
+  "LFO 3 Start Phase": {
+    "target": "Fader__4",
+    "display": ["", "", "LFO3", "phase"],
+    "page": 14,
+    "screen_id": 3,
+    "info": "free,355 degree"
+  },
+  "LFO 3 Delay": {
+    "target": "Fader__5",
+    "display": ["", "", "LFO3", "delay"],
+    "page": 14,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "LFO 3 Fade": {
+    "target": "Fader__6",
+    "display": ["", "", "LFO3", "fade"],
+    "page": 14,
+    "screen_id": 5,
+    "info": "-64,63"
+  },
+  "LFO 3 Keytrack": {
+    "target": "Fader__7",
+    "display": ["", "", "LFO3", "key"],
+    "page": 14,
+    "screen_id": 6,
+    "info": "-200%,196%"
+  },
+  "Filter Env Mode": {
+    "target": "Select_1",
+    "display": ["type", "", "", ""],
+    "page": 8,
+    "screen_id": 0,
+    "info": "4.12"
+  },
+  "Filter Env Attack": {
+    "target": "Fader__2",
+    "display": ["", "", "F_ENV", "att"],
+    "page": 8,
+    "screen_id": 1,
+    "info": "0,127"
+  },
+  "Filter Env Att Lev": {
+    "target": "Fader__3",
+    "display": ["", "", "F_ENV", "aLev"],
+    "page": 8,
+    "screen_id": 2,
+    "info": "0,127"
+  },
+  "Filter Env Decay": {
+    "target": "Fader__4",
+    "display": ["", "", "F_ENV", "dec"],
+    "page": 8,
+    "screen_id": 3,
+    "info": "0,127"
+  },
+  "Filter Env Sustain": {
+    "target": "Fader__5",
+    "display": ["", "", "F_ENV", "sus"],
+    "page": 8,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "Filter Env Decay 2": {
+    "target": "Fader__6",
+    "display": ["", "", "F_ENV", "dec2"],
+    "page": 8,
+    "screen_id": 5,
+    "info": "0,127"
+  },
+  "Filter Env Sustain 2": {
+    "target": "Fader__7",
+    "display": ["", "", "F_ENV", "sus2"],
+    "page": 8,
+    "screen_id": 6,
+    "info": "0,127"
+  },
+  "Filter Env Release": {
+    "target": "Fader__8",
+    "display": ["", "", "F_ENV", "rel"],
+    "page": 8,
+    "screen_id": 7,
+    "info": "0,127"
+  },
+  "Amplifier Env Mode": {
+    "target": "Select_1",
+    "display": ["type", "", "", ""],
+    "page": 9,
+    "screen_id": 0,
+    "info": "4.12"
+  },
+  "Amplifier Env Attack": {
+    "target": "Fader__2",
+    "display": ["", "", "A_ENV", "att"],
+    "page": 9,
+    "screen_id": 1,
+    "info": "0,127"
+  },
+  "Amplifier Env Att. Lev": {
+    "target": "Fader__3",
+    "display": ["", "", "A_ENV", "aLev"],
+    "page": 9,
+    "screen_id": 2,
+    "info": "0,127"
+  },
+  "Amplifier Env Decay": {
+    "target": "Fader__4",
+    "display": ["", "", "A_ENV", "dec"],
+    "page": 9,
+    "screen_id": 3,
+    "info": "0,127"
+  },
+  "Amplifier Env Sustain": {
+    "target": "Fader__5",
+    "display": ["", "", "A_ENV", "sus"],
+    "page": 9,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "Amplifier Env Decay 2": {
+    "target": "Fader__6",
+    "display": ["", "", "A_ENV", "dec2"],
+    "page": 9,
+    "screen_id": 5,
+    "info": "0,127"
+  },
+  "Amplifier Env Sustain 2": {
+    "target": "Fader__7",
+    "display": ["", "", "A_ENV", "sus2"],
+    "page": 9,
+    "screen_id": 6,
+    "info": "0,127"
+  },
+  "Amplifier Env Release": {
+    "target": "Fader__8",
+    "display": ["", "", "A_ENV", "rel"],
+    "page": 9,
+    "screen_id": 7,
+    "info": "0,127"
+  },
+  "Envelope 3 Mode": {
+    "target": "Select_1",
+    "display": ["type", "", "", ""],
+    "page": 10,
+    "screen_id": 0,
+    "info": "4.12"
+  },
+  "Envelope 3 Attack": {
+    "target": "Fader__2",
+    "display": ["", "", "ENV_3", "att"],
+    "page": 10,
+    "screen_id": 1,
+    "info": "0,127"
+  },
+  "Envelope 3 Attack Level": {
+    "target": "Fader__3",
+    "display": ["", "", "ENV_3", "aLev"],
+    "page": 10,
+    "screen_id": 2,
+    "info": "0,127"
+  },
+  "Envelope 3 Decay": {
+    "target": "Fader__4",
+    "display": ["", "", "ENV_3", "dec"],
+    "page": 10,
+    "screen_id": 3,
+    "info": "0,127"
+  },
+  "Envelope 3 Sustain": {
+    "target": "Fader__5",
+    "display": ["", "", "ENV_3", "sus"],
+    "page": 10,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "Envelope 3 Decay 2": {
+    "target": "Fader__6",
+    "display": ["", "", "ENV_3", "dec2"],
+    "page": 10,
+    "screen_id": 5,
+    "info": "0,127"
+  },
+  "Envelope 3 Sustain 2": {
+    "target": "Fader__7",
+    "display": ["", "", "ENV_3", "sus2"],
+    "page": 10,
+    "screen_id": 6,
+    "info": "0,127"
+  },
+  "Envelope 3 Release": {
+    "target": "Fader__8",
+    "display": ["", "", "ENV_3", "rel"],
+    "page": 10,
+    "screen_id": 7,
+    "info": "0,127"
+  },
+  "Envelope 4 Mode": {
+    "target": "Select_1",
+    "display": ["type", "", "", ""],
+    "page": 11,
+    "screen_id": 0,
+    "info": "4.12"
+  },
+  "Envelope 4 Attack": {
+    "target": "Fader__2",
+    "display": ["", "", "ENV_4", "att"],
+    "page": 11,
+    "screen_id": 1,
+    "info": "0,127"
+  },
+  "Envelope 4 Attack Level": {
+    "target": "Fader__3",
+    "display": ["", "", "ENV_4", "aLev"],
+    "page": 11,
+    "screen_id": 2,
+    "info": "0,127"
+  },
+  "Envelope 4 Decay": {
+    "target": "Fader__4",
+    "display": ["", "", "ENV_4", "dec"],
+    "page": 11,
+    "screen_id": 3,
+    "info": "0,127"
+  },
+  "Envelope 4 Sustain": {
+    "target": "Fader__5",
+    "display": ["", "", "ENV_4", "sus"],
+    "page": 11,
+    "screen_id": 4,
+    "info": "0,127"
+  },
+  "Envelope 4 Decay 2": {
+    "target": "Fader__6",
+    "display": ["", "", "ENV_4", "dec2"],
+    "page": 11,
+    "screen_id": 5,
+    "info": "0,127"
+  },
+  "Envelope 4 Sustain 2": {
+    "target": "Fader__7",
+    "display": ["", "", "ENV_4", "sus2"],
+    "page": 11,
+    "screen_id": 6,
+    "info": "0,127"
+  },
+  "Envelope 4 Release": {
+    "target": "Fader__8",
+    "display": ["", "", "ENV_4", "rel"],
+    "page": 11,
+    "screen_id": 7,
+    "info": "0,127"
+  },
+  "Modifier 1 Source A": {
+    "target": "Select_1",
+    "display": ["srcA", "", "", ""],
+    "page": 15,
+    "screen_id": 0,
+    "info": "4.7"
+  },
+  "Modifier 1 Source B": {
+    "target": "Select_2",
+    "display": ["srcB", "", "", ""],
+    "page": 15,
+    "screen_id": 1,
+    "info": "4.7"
+  },
+  "Modifier 1 Operation": {
+    "target": "Fader__2",
+    "display": ["", "", "MOD1", "op"],
+    "page": 15,
+    "screen_id": 1,
+    "info": "4.9"
+  },
+  "Modifier 1 Constant": {
+    "target": "Fader__1",
+    "display": ["", "", "MOD1", "const"],
+    "page": 15,
+    "screen_id": 0,
+    "info": "-64,63"
+  },
+  "Modifier 2 Source A": {
+    "target": "Select_3",
+    "display": ["srcA", "", "", ""],
+    "page": 15,
+    "screen_id": 2,
+    "info": "4.7"
+  },
+  "Modifier 2 Source B": {
+    "target": "Select_4",
+    "display": ["srcB", "", "", ""],
+    "page": 15,
+    "screen_id": 3,
+    "info": "4.7"
+  },
+  "Modifier 2 Operation": {
+    "target": "Fader__4",
+    "display": ["", "", "MOD2", "op"],
+    "page": 15,
+    "screen_id": 3,
+    "info": "4.9"
+  },
+  "Modifier 2 Constant": {
+    "target": "Fader__3",
+    "display": ["", "", "MOD2", "const"],
+    "page": 15,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Modifier 3 Source A": {
+    "target": "Select_5",
+    "display": ["srcA", "", "", ""],
+    "page": 15,
+    "screen_id": 4,
+    "info": "4.7"
+  },
+  "Modifier 3 Source B": {
+    "target": "Select_6",
+    "display": ["srcB", "", "", ""],
+    "page": 15,
+    "screen_id": 5,
+    "info": "4.7"
+  },
+  "Modifier 3 Operation": {
+    "target": "Fader__6",
+    "display": ["", "", "MOD3", "op"],
+    "page": 15,
+    "screen_id": 5,
+    "info": "4.9"
+  },
+  "Modifier 3 Constant": {
+    "target": "Fader__5",
+    "display": ["", "", "MOD3", "const"],
+    "page": 15,
+    "screen_id": 4,
+    "info": "-64,63"
+  },
+  "Modifier 4 Source A": {
+    "target": "Select_7",
+    "display": ["srcA", "", "", ""],
+    "page": 15,
+    "screen_id": 6,
+    "info": "4.7"
+  },
+  "Modifier 4 Source B": {
+    "target": "Select_8",
+    "display": ["srcB", "", "", ""],
+    "page": 15,
+    "screen_id": 7,
+    "info": "4.7"
+  },
+  "Modifier 4 Operation": {
+    "target": "Fader__8",
+    "display": ["", "", "MOD4", "op"],
+    "page": 15,
+    "screen_id": 7,
+    "info": "4.9"
+  },
+  "Modifier 4 Constant": {
+    "target": "Fader__7",
+    "display": ["", "", "MOD4", "const"],
+    "page": 15,
+    "screen_id": 6,
+    "info": "-64,63"
+  },
+  "Modulation 1 Source": {
+    "target": "Select_1",
+    "display": ["src", "", "", ""],
+    "page": 16,
+    "screen_id": 0,
+    "info": "4.7"
+  },
+  "Modulation 1 Dest.": {
+    "target": "Select_2",
+    "display": ["dest", "", "", ""],
+    "page": 16,
+    "screen_id": 1,
+    "info": "4.8"
+  },
+  "Modulation 1 Amount": {
+    "target": "Fader__1",
+    "display": ["", "", "MOD", "lev"],
+    "page": 16,
+    "screen_id": 0,
+    "info": "-64,63"
+  },
+  "Modulation 2 Source": {
+    "target": "Select_3",
+    "display": ["src", "", "", ""],
+    "page": 16,
+    "screen_id": 2,
+    "info": "4.7"
+  },
+  "Modulation 2 Dest.": {
+    "target": "Select_4",
+    "display": ["dest", "", "", ""],
+    "page": 16,
+    "screen_id": 3,
+    "info": "4.8"
+  },
+  "Modulation 2 Amount": {
+    "target": "Fader__3",
+    "display": ["", "", "MOD", "lev"],
+    "page": 16,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Modulation 3 Source": {
+    "target": "Select_5",
+    "display": ["src", "", "", ""],
+    "page": 16,
+    "screen_id": 4,
+    "info": "4.7"
+  },
+  "Modulation 3 Dest.": {
+    "target": "Select_6",
+    "display": ["dest", "", "", ""],
+    "page": 16,
+    "screen_id": 5,
+    "info": "4.8"
+  },
+  "Modulation 3 Amount": {
+    "target": "Fader__5",
+    "display": ["", "", "MOD", "lev"],
+    "page": 16,
+    "screen_id": 4,
+    "info": "-64,63"
+  },
+  "Modulation 4 Source": {
+    "target": "Select_7",
+    "display": ["src", "", "", ""],
+    "page": 16,
+    "screen_id": 6,
+    "info": "4.7"
+  },
+  "Modulation 4 Dest.": {
+    "target": "Select_8",
+    "display": ["dest", "", "", ""],
+    "page": 16,
+    "screen_id": 7,
+    "info": "4.8"
+  },
+  "Modulation 4 Amount": {
+    "target": "Fader__7",
+    "display": ["", "", "MOD", "lev"],
+    "page": 16,
+    "screen_id": 6,
+    "info": "-64,63"
+  },
+  "Modulation 5 Source": {
+    "target": "Select_1",
+    "display": ["src", "", "", ""],
+    "page": 17,
+    "screen_id": 0,
+    "info": "4.7"
+  },
+  "Modulation 5 Dest.": {
+    "target": "Select_2",
+    "display": ["dest", "", "", ""],
+    "page": 17,
+    "screen_id": 1,
+    "info": "4.8"
+  },
+  "Modulation 5 Amount": {
+    "target": "Fader__1",
+    "display": ["", "", "MOD", "lev"],
+    "page": 17,
+    "screen_id": 0,
+    "info": "-64,63"
+  },
+  "Modulation 6 Source": {
+    "target": "Select_3",
+    "display": ["src", "", "", ""],
+    "page": 17,
+    "screen_id": 2,
+    "info": "4.7"
+  },
+  "Modulation 6 Dest.": {
+    "target": "Select_4",
+    "display": ["dest", "", "", ""],
+    "page": 17,
+    "screen_id": 3,
+    "info": "4.8"
+  },
+  "Modulation 6 Amount": {
+    "target": "Fader__3",
+    "display": ["", "", "MOD", "lev"],
+    "page": 17,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Modulation 7 Source": {
+    "target": "Select_5",
+    "display": ["src", "", "", ""],
+    "page": 17,
+    "screen_id": 4,
+    "info": "4.7"
+  },
+  "Modulation 7 Dest.": {
+    "target": "Select_6",
+    "display": ["dest", "", "", ""],
+    "page": 17,
+    "screen_id": 5,
+    "info": "4.8"
+  },
+  "Modulation 7 Amount": {
+    "target": "Fader__5",
+    "display": ["", "", "MOD", "lev"],
+    "page": 17,
+    "screen_id": 4,
+    "info": "-64,63"
+  },
+  "Modulation 8 Source": {
+    "target": "Select_7",
+    "display": ["src", "", "", ""],
+    "page": 17,
+    "screen_id": 6,
+    "info": "4.7"
+  },
+  "Modulation 8 Dest.": {
+    "target": "Select_8",
+    "display": ["dest", "", "", ""],
+    "page": 17,
+    "screen_id": 7,
+    "info": "4.8"
+  },
+  "Modulation 8 Amount": {
+    "target": "Fader__7",
+    "display": ["", "", "MOD", "lev"],
+    "page": 17,
+    "screen_id": 6,
+    "info": "-64,63"
+  },
+  "Modulation 9 Source": {
+    "target": "Select_1",
+    "display": ["src", "", "", ""],
+    "page": 18,
+    "screen_id": 0,
+    "info": "4.7"
+  },
+  "Modulation 9 Dest.": {
+    "target": "Select_2",
+    "display": ["dest", "", "", ""],
+    "page": 18,
+    "screen_id": 1,
+    "info": "4.8"
+  },
+  "Modulation 9 Amount": {
+    "target": "Fader__1",
+    "display": ["", "", "MOD", "lev"],
+    "page": 18,
+    "screen_id": 0,
+    "info": "-64,63"
+  },
+  "Modulation 10 Source": {
+    "target": "Select_3",
+    "display": ["src", "", "", ""],
+    "page": 18,
+    "screen_id": 2,
+    "info": "4.7"
+  },
+  "Modulation 10 Dest.": {
+    "target": "Select_4",
+    "display": ["dest", "", "", ""],
+    "page": 18,
+    "screen_id": 3,
+    "info": "4.8"
+  },
+  "Modulation 10 Amount": {
+    "target": "Fader__3",
+    "display": ["", "", "MOD", "lev"],
+    "page": 18,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Modulation 11 Source": {
+    "target": "Select_5",
+    "display": ["src", "", "", ""],
+    "page": 18,
+    "screen_id": 4,
+    "info": "4.7"
+  },
+  "Modulation 11 Dest.": {
+    "target": "Select_6",
+    "display": ["dest", "", "", ""],
+    "page": 18,
+    "screen_id": 5,
+    "info": "4.8"
+  },
+  "Modulation 11 Amount": {
+    "target": "Fader__5",
+    "display": ["", "", "MOD", "lev"],
+    "page": 18,
+    "screen_id": 4,
+    "info": "-64,63"
+  },
+  "Modulation 12 Source": {
+    "target": "Select_7",
+    "display": ["src", "", "", ""],
+    "page": 18,
+    "screen_id": 6,
+    "info": "4.7"
+  },
+  "Modulation 12 Dest.": {
+    "target": "Select_8",
+    "display": ["dest", "", "", ""],
+    "page": 18,
+    "screen_id": 7,
+    "info": "4.8"
+  },
+  "Modulation 12 Amount": {
+    "target": "Fader__7",
+    "display": ["", "", "MOD", "lev"],
+    "page": 18,
+    "screen_id": 6,
+    "info": "-64,63"
+  },
+  "Modulation 13 Source": {
+    "target": "Select_1",
+    "display": ["src", "", "", ""],
+    "page": 19,
+    "screen_id": 0,
+    "info": "4.7"
+  },
+  "Modulation 13 Dest.": {
+    "target": "Select_2",
+    "display": ["dest", "", "", ""],
+    "page": 19,
+    "screen_id": 1,
+    "info": "4.8"
+  },
+  "Modulation 13 Amount": {
+    "target": "Fader__1",
+    "display": ["", "", "MOD", "lev"],
+    "page": 19,
+    "screen_id": 0,
+    "info": "-64,63"
+  },
+  "Modulation 14 Source": {
+    "target": "Select_3",
+    "display": ["src", "", "", ""],
+    "page": 19,
+    "screen_id": 2,
+    "info": "4.7"
+  },
+  "Modulation 14 Dest.": {
+    "target": "Select_4",
+    "display": ["dest", "", "", ""],
+    "page": 19,
+    "screen_id": 3,
+    "info": "4.8"
+  },
+  "Modulation 14 Amount": {
+    "target": "Fader__3",
+    "display": ["", "", "MOD", "lev"],
+    "page": 19,
+    "screen_id": 2,
+    "info": "-64,63"
+  },
+  "Modulation 15 Source": {
+    "target": "Select_5",
+    "display": ["src", "", "", ""],
+    "page": 19,
+    "screen_id": 4,
+    "info": "4.7"
+  },
+  "Modulation 15 Dest.": {
+    "target": "Select_6",
+    "display": ["dest", "", "", ""],
+    "page": 19,
+    "screen_id": 5,
+    "info": "4.8"
+  },
+  "Modulation 15 Amount": {
+    "target": "Fader__5",
+    "display": ["", "", "MOD", "lev"],
+    "page": 19,
+    "screen_id": 4,
+    "info": "-64,63"
+  },
+  "Modulation 16 Source": {
+    "target": "Select_7",
+    "display": ["src", "", "", ""],
+    "page": 19,
+    "screen_id": 6,
+    "info": "4.7"
+  },
+  "Modulation 16 Dest.": {
+    "target": "Select_8",
+    "display": ["dest", "", "", ""],
+    "page": 19,
+    "screen_id": 7,
+    "info": "4.8"
+  },
+  "Modulation 16 Amount": {
+    "target": "Fader__7",
+    "display": ["", "", "MOD", "lev"],
+    "page": 19,
+    "screen_id": 6,
+    "info": "-64,63"
+  }
+}

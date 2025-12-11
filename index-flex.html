@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="./css/style.css" />
+    <script type="module" defer src="./js/main.js"></script>
+    <title>WebMidiBay</title>
+    <link rel="shortcut icon" href="./icon/favicon.ico" />
+    <link rel="icon" type="image/png" href="./icon/favicon.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="./icon/favicon.png" sizes="96x96" />
+    <link rel="apple-touch-icon" sizes="180x180" href="./icon/apple-touch-icon.png" />
+    <meta name="msapplication-TileColor" content="#e6fbf7" />
+    <meta name="msapplication-TileImage" content="./mstile-144x144.png" />
+  </head>
+  <body>
+    <div class="container columns2">
+      <div class="left-column flex-column">
+        <div class="main-content flex-item">
+          <header>
+            <menu>
+              <h1 class="inline_block">WebMidiBay</h1>
+              <ul id="menu" class="inline_block">
+                <!-- <li class="menu routing"><a href="#">routing</a></li> -->
+                <li class="menu filter_menu">
+                  <a href="#" data-menuitem_target_id="filter">filter</a>
+                </li>
+                <li class="menu monitor_menu">
+                  <a href="#" data-menuitem_target_id="monitor">monitor</a>
+                </li>
+                <li class="menu sysex_menu">
+                  <a href="#" data-menuitem_target_id="sysex">sysex</a>
+                </li>
+                <li class="menu settings_menu">
+                  <a href="#" data-menuitem_target_id="settings">info/settings</a>
+                </li>
+                <!-- <li class="clock"><a href="#">clock</a></li> -->
+              </ul>
+              <p class="size"></p>
+            </menu>
+            <aside id="settings">
+              <h2>Settings:</h2>
+              <form id="form_settings">
+                <ul>
+                  <li class="settings inline_block">
+                    <span class="clear_routing form_buttons">reset routing</span>
+                  </li>
+                  <li class="settings inline_block">
+                    <span class="clear_filter form_buttons">reset filter</span>
+                  </li>
+                  <li class="settings inline_block">
+                    <span class="reset_port_names form_buttons">reset portnames</span>
+                  </li>
+                  <li class="settings">
+                    <span class="clear_settings form_buttons">reset all settings</span> (routing,
+                    filter, portnames)
+                  </li>
+                  <li class="settings">
+                    <span class="custom_settings_file_upload form_buttons">load settings</span>
+                    (upload)
+                    <input type="file" id="settings_file_upload" multiple />
+                  </li>
+                  <li class="settings inline_block filename">
+                    <span class="settings_file_download form_buttons">save settings</span>
+                    (download)
+                  </li>
+                  <li class="settings inline_block">
+                    -&gt; filename: "<span
+                      id="settings_file_rename"
+                      contenteditable="true"
+                      class="settings form_input"
+                      >WMB_Storage</span
+                    >.json"
+                  </li>
+                </ul>
+              </form>
+            </aside>
+          </header>
+          <main id="midiports">
+            <header id="portmenu">
+              <div>
+                <h2 class="inline_block">Midiports:</h2>
+                <ul class="inline_block">
+                  <li class="portmenu select active"><a href="#">select</a></li>
+                  <li class="portmenu rename"><a href="#">rename</a></li>
+                  <li class="portmenu routing"><a href="#">routing</a></li>
+                  <li class="portmenu openclose"><a href="#">open/close</a></li>
+                  <li class="clock"><a href="#">clock</a></li>
+                </ul>
+              </div>
+            </header>
+            <div class="sections-container">
+              <section id="inputs">
+                <h2 id="inputs_head">MIDI Inputs:</h2>
+                <!-- <p class="inputs"></p> -->
+                <ul id="input_list"></ul>
+              </section>
+              <section id="routing">
+                <!-- <h2>routing</h2> -->
+                <svg id="graph"></svg>
+              </section>
+              <section id="outputs">
+                <h2 id="outputs_head">MIDI Outputs:</h2>
+                <ul id="output_list"></ul>
+              </section>
+            </div>
+          </main>
+        </div>
+
+        <div id="filter" class="flex-item">
+          <h2 id="filter_head">Filter: <span class="filterportinfo">all inports</span></h2>
+          <section id="filter_cc">
+            <h2 id="filter_head">Filter CC:</h2>
+            <ul class="filter-list">
+              <li class="filter" data-statusbyte="144">Note On</li>
+              <li class="filter" data-statusbyte="128">Note Off</li>
+              <li class="filter" data-statusbyte="160">Poly Aftertouch</li>
+              <li class="filter" data-statusbyte="176">Control Change</li>
+              <li class="filter" data-statusbyte="192">Program Change</li>
+              <li class="filter" data-statusbyte="208">Channel Aftertouch</li>
+              <li class="filter" data-statusbyte="224">Pitch Wheel</li>
+              <li class="filter" data-statusbyte="240">SysEx</li>
+              <li class="filter" data-statusbyte="241">MIDI Time Code</li>
+              <li class="filter" data-statusbyte="248">Timing clock</li>
+              <li class="filter" data-statusbyte="250">Start</li>
+              <li class="filter" data-statusbyte="251">Continue</li>
+              <li class="filter" data-statusbyte="252">Stop</li>
+              <li class="filter" data-statusbyte="254">Active Sensing</li>
+            </ul>
+          </section>
+          <!-- </div>
+            <div id="column_2_3"> -->
+
+          <section id="channel">
+            <div id="filter_channel">
+              <h2 id="filter_channel_head">Filter Channel:</h2>
+              <ul class="filter_channel_list">
+                <li
+                  class="channel channel_filter all_channel"
+                  data-channeltype="filter"
+                  data-channelvalue="0"
+                >
+                  all channels
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="1">
+                  1
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="2">
+                  2
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="3">
+                  3
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="4">
+                  4
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="5">
+                  5
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="6">
+                  6
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="7">
+                  7
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="8">
+                  8
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="9">
+                  9
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="10">
+                  10
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="11">
+                  11
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="12">
+                  12
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="13">
+                  13
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="14">
+                  14
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="15">
+                  15
+                </li>
+                <li class="channel channel_filter" data-channeltype="filter" data-channelvalue="16">
+                  16
+                </li>
+              </ul>
+            </div>
+            <div id="reset_channel">
+              <h2 id="reset_channel_head">Reset Channel:</h2>
+              <ul class="reset_channel_list">
+                <li
+                  class="channel channel_reset all_channel"
+                  data-channeltype="reset"
+                  data-channelvalue="0"
+                >
+                  all channels
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="1">
+                  1
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="2">
+                  2
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="3">
+                  3
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="4">
+                  4
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="5">
+                  5
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="6">
+                  6
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="7">
+                  7
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="8">
+                  8
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="9">
+                  9
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="10">
+                  10
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="11">
+                  11
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="12">
+                  12
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="13">
+                  13
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="14">
+                  14
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="15">
+                  15
+                </li>
+                <li class="channel channel_reset" data-channeltype="reset" data-channelvalue="16">
+                  16
+                </li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </div>
+      <div class="right-column flex-column">
+        <section id="monitor" class="flex-item">
+          <h2 id="message_head">
+            <!-- MIDI Message: <span class="filterportinfo">all inports</span> -->
+            MIDI Message:
+            <div class="message_buttons">
+              <span class="message_filter">
+                <!-- show -->
+                <select id="filtered_message">
+                  <option value="all">all</option>
+                  <option value="filtered">filtered</option>
+                  <option value="unfiltered">unfiltered</option>
+                </select>
+                <!-- messages from -->
+                <select id="filtered_ports">
+                  <option value="all">all MIDI ports</option>
+                  <option value="inputs">MIDI inputs</option>
+                  <option value="outputs">MIDI outputs</option>
+                  <option value="selection">selected port</option>
+                </select></span
+              >
+              <span id="clear_message" class="menu">clear all</span>
+            </div>
+          </h2>
+          <section id="message_text" class="message"></section>
+        </section>
+        <aside id="sysex" class="flex-item">
+          <form id="form_sysex">
+            <h2>Sysex:</h2>
+            <ul id="sysex_file">
+              <!-- <button id="settings_file_download" name="save_settings">Download Settings</button> -->
+              <li class="sysex">
+                <span class="custom_sysex_file_upload form_buttons">load sysex files</span> (upload)
+                <input type="file" id="sysex_file_upload" multiple />
+              </li>
+              <li class="sysex">
+                <span class="auto_save_sysex form_buttons">auto-download sysex</span>
+              </li>
+              <li class="sysex inline_block filename">
+                <span class="sysex_file_download form_buttons">save sysex as file</span> (download)
+              </li>
+              <li class="sysex inline_block">
+                -&gt; filename: "<span
+                  id="sysex_file_rename"
+                  contenteditable="true"
+                  class="form_input"
+                  >sysex</span
+                >.syx"
+              </li>
+              <li class="sysex dumprequest">
+                <span class="sysex_send_dump form_buttons">send sysex: </span
+                ><select id="dumprequest">
+                  <!-- <option value="blofeld">Waldorf Blofeld</option> -->
+                  <!-- <option value="minilogue">Korg Minilogue XD</option> -->
+                  <!-- <option value="nymphes">Dreadbox Nymphes</option> -->
+                </select>
+              </li>
+            </ul>
+            <!-- <button id="blodump" name="dump">Blofeld Dump</button> -->
+            <!-- <button id="minidump" name="dump">Minilogue Dump</button> -->
+            <!-- <button id="microdump" name="dump">MicroFreak Dump</button> -->
+            <!-- <a id="file_download" href=""></a> -->
+            <!-- <p id="file_rename" contenteditable="true">SysexMidiFile</p> -->
+            <div class="sysex"></div>
+          </form>
+        </aside>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var src = '//cdn.jsdelivr.net/npm/eruda';
+        if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true')
+          return;
+        document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
+        document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
+      })();
+    </script>
+  </body>
+</html>
