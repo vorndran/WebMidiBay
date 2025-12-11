@@ -9,3 +9,6 @@ node_modules/
 
 # Ignore local backup folder
 .Backup/
+
+# VS Code settings (enthält sensible Daten wie Passwörter)
+.vscode/

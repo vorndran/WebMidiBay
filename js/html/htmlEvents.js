@@ -8,7 +8,7 @@
 export { setEventListener };
 
 import { midiBay } from '../main.js';
-import { sendDumpRequest, autoSaveSysex } from '../sysex/sysex.js';
+import { autoSaveSysex } from '../sysex/sysex.js';
 import { clickedMidiPort } from './htmlPorts.js';
 import {
   clickedMessage,
@@ -81,7 +81,6 @@ function setEventListener() {
     '.settings_file_download': clickDownloadSettingsFile,
     '.custom_settings_file_upload': clickSettingsFileUploadInput,
     '.custom_sysex_file_upload': clickSysexFileUploadInput,
-    '.sysex_send_dump': sendDumpRequest,
     '.auto_save_sysex': autoSaveSysex,
     body: clickedWindow,
   };

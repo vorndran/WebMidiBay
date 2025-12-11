@@ -4,17 +4,11 @@ export {
   sysexToSyxFile,
   sysexToSyxFileUrl,
   listSysexFilesToSendList,
-  sendSysexDataToModule,
   resetViewContentButtons,
-  getInstrumentNameFromSysexArray,
 };
-import { compareSysexArray } from '../__tests__/helpers/compareSysexArray.js';
 import { extractSysex, clearSysexTable, showSysexTable } from './sysex.js';
-import { sysexFileHead, sysexFileTail, soundDataHead, soundCategories } from './BlofelSyntax.js';
-import { midiMessageFromInstrument } from '../modules/moduleMsg.js';
 import { logger } from '../utils/logger.js';
 import { addClass } from '../html/domStyles.js';
-
 import { midiBay, soundMap } from '../main.js';
 const sysex_start_byte = 240;
 const sysex_end_byte = 247;
@@ -142,7 +136,6 @@ function sendSysexFileData(eClick) {
   eClick.stopPropagation();
   const filename = eClick.target.dataset.filename;
   const sysexArray = midiBay.sysexFileMap.get(filename);
-  sendSysexDataToModule(sysexArray);
   sendSysexFileDataToSelectedOutput(sysexArray);
 }
 // ##############################################
@@ -177,50 +170,7 @@ function resetViewContentButtons() {
     span.textContent = 'view content';
   });
 }
-// ##############################################
-function sendSysexDataToModule(sysexArray) {
-  logger.debug('sendSysexDataToModule', midiBay.moduleMap, sysexArray);
-  if (midiBay.collectingSysEx) return;
-  if (!midiBay.selectedModuleName) return;
-  const instrumentName = getInstrumentNameFromSysexArray(sysexArray);
-  const moduleName = instrumentInModules(instrumentName);
-  logger.debug('sendSysexDataToModule', moduleName, instrumentName);
-  if (moduleName) sendSysexDataToBelongingModule(moduleName, instrumentName, sysexArray);
-}
-// ####  ToDo!!! muss modulspezifisch zugeordnet werden!!!
-function sendSysexDataToBelongingModule(moduleName, instrumentName, sysexArray) {
-  if (instrumentName != 'blofeld') return;
-  const module = midiBay.moduleMap.get(moduleName);
-  const sysexDataArray = sysexArray.slice(7, 390);
-  for (let byte = 0; byte < sysexDataArray.length; byte++) {
-    logger.debug('yyy sendSysexDataToBelongingModule', null, 240, byte, sysexDataArray[byte]);
-    midiMessageFromInstrument(module, null, 240, byte, sysexDataArray[byte]);
-  }
-  compareSysexArray(module, sysexDataArray);
-  compareSysexArray(module, module.moduleValues);
-}
-// ##############################################
-function getInstrumentNameFromSysexArray(sysexArray) {
-  if (midiBay.moduleMap.size == 0) return 'no instrumentmodule installed!';
-  switch (true) {
-    case sysexArray.slice(5, 7).compareSlice([66, 81]):
-      return 'minilogue_xd';
-    case sysexArray.slice(1, 6).compareSlice([0, 33, 53, 0, 6]):
-      return 'nymphes';
-    case sysexArray.slice(1, 3).compareSlice([62, 19]):
-      return 'blofeld';
-  }
-  return 'unknown instrument';
-}
-// ##############################################
-function instrumentInModules(instrumentName) {
-  let moduleName = false;
-  midiBay.moduleMap.forEach((module) => {
-    if (midiBay.selectedModuleName == module.name)
-      if (module.instrument.name == instrumentName) moduleName = module.name;
-  });
-  return moduleName;
-}
+
 // ##############################################
 function sendSysexFileDataToSelectedOutput(sysexArray) {
   logger.debug('send Sysex File Data To Selected Output');
@@ -246,42 +196,5 @@ function sendSysexFileDataToSelectedOutput(sysexArray) {
 //   return btoa(String.fromCharCode(...uInt8ArrayView));
 //   //console.log(downloadString);
 // }
-
-// ################################################################
-// function safeBlofeldSoundDumpAsFile(midiData) {
-//   console.log('safe Blofeld SoundDump As File ');
-
-//   const sysexData = extractSysex(midiData);
-//   if (sysexData) {
-//     if ([...sysexData].splice(0, 7).join() == soundDataHead.join() && sysexData.length == 392) {
-//       const sndCategory = soundCategories[sysexData[386]];
-//       const soundName = String.fromCharCode(...sysexData.slice(370, 386));
-//       const fileName = `${sndCategory}.${soundName}.mid`;
-//       //  const downloadString = sysexToMidFile(sysexData);
-//       createSoundDownloadTag(fileName, sysexToMidFile(sysexData));
-//     }
-//   }
-// }
-// ################################################################
-// function safeMinilogueSoundDumpAsFile(midiData) {
-//   console.log('safe Minilogue SoundDump As File ');
-
-//   const sysexData = extractSysex(midiData);
-//   if (sysexData) {
-//     if ([...sysexData].splice(0, 7).join() == soundDataHead.join() && sysexData.length == 392) {
-//       const sndCategory = soundCategories[sysexData[386]];
-//       const soundName = String.fromCharCode(...sysexData.slice(370, 386));
-//       const fileName = `${sndCategory}.${soundName}.mid`;
-//       //  const downloadString = sysexToMidFile(sysexData);
-//       createSoundDownloadTag(fileName, sysexToMidFile(sysexData));
-//     }
-//   }
-// }
-// ################################################
-// obsolet?
-// function sendSysexFromFile(midiArray) {
-//   console.log('send Sysex From File');
-
-//   const sysexData = extractSysex(midiArray); // routing.js
-//   midiBay.outNameMap.get('Blofeld')?.send(sysexData);
-// }
+// ##############################################################
+// EOF

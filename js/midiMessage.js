@@ -1,7 +1,6 @@
 export { receiveMIDIMessage, getChannel };
 import { midiBay } from './main.js';
 import { getPortProperties } from './utils/helpers.js';
-import { sendMidiMessageToModules } from './modules/moduleMsg.js';
 import { showMidiMessageAsText, getLoopMessageHtml } from './html/htmlMessage.js';
 import { logger } from './utils/logger.js';
 import { midiInFilter, midiFilter, getStatusByte, getChannel } from './core/midiMessageFilter.js';
@@ -14,15 +13,7 @@ import { sendCollectedSysexToSysexForm } from './sysex/sysex.js';
 function receiveMIDIMessage(midiMessage) {
   const format = 'background-color: orange; color: darkblue;text-decoration: underline;';
   const format2 = 'background-color: darkblue ; color:orange;text-decoration: underline;';
-  // logger.debug('%c receive MIDIMessage *** %c %s ', format, format2, midiMessage.target.name, [
-  //   ...midiMessage.data,
-  // ]);
 
-  // test: ##############################################
-  // if (!midiBay.initialized) {
-  //   logger.warn('MIDI Message received but MIDI Port not initialized yet!');
-  //   return;
-  // }
   // #####################################################
 
   const inPort = midiMessage.target;
@@ -30,24 +21,10 @@ function receiveMIDIMessage(midiMessage) {
   midiMessage.isFiltered = false;
   if (!inPort || !statusByte) return;
 
-  sendMidiMessageToModules(inPort.name, statusByte, [...midiMessage.data]);
   if (getMIDIInputMessage(midiMessage, statusByte, inPort)) {
     setMIDIOutputMessage(midiMessage, statusByte, inPort);
   }
-  // logger.debug(
-  //   '%c done MIDIMessage *** %c %s ',
-  //   format,
-  //   format2,
-  //   midiMessage.target.name,
-  //   midiBay.portPropertiesManager
-  // );
 }
-// #########################################################################
-// const messageData = extractSysex(sended.data) || sended.data; // sysex.js
-// showMidiMessageAsText(messageData, inPort); // html.js
-
-// async:
-// safeBlofeldSoundDumpAsFile(sended.data); //  sysex/sysexFile.js
 // #########################################################
 function getMIDIInputMessage(midiMessage, statusByte, inPort) {
   // set text-messages and signals of Input Port inPort:
@@ -153,11 +130,4 @@ function isMidiLoop(outPort, midiMessage) {
   return false;
 }
 // ###########################################
-
-// ###########################################
-// function sendMidiMessageToModules(inPort, statusByte, midiData) {
-// console.log('send Midi Message To Modules', inPort.name, statusByte, midiData.length);
-// if (midiData.length != 3 || statusByte != 176) return;
-
-//   midiMessageToModules(inPort, getChannel(midiData[0]), statusByte, midiData[1], midiData[2]);
-// }
+// EOF

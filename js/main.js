@@ -1,10 +1,5 @@
 'use strict';
 
-// ToDo:
-// sysex verarbeitung
-// show / hide modules
-// user changes colors
-
 export {
   // midiAccessData,
   // getFiles,
@@ -14,7 +9,6 @@ export {
   // timingClockStillActive,
 };
 import { receiveMIDIMessage } from './midiMessage.js';
-import { setModules } from './modules/modules.js';
 import { initFilter } from './filter/filter.js';
 import { initRouting } from './routing/routingPorts.js';
 import { initHtml, showMidiAccessStateChange } from './html/html.js';
@@ -24,7 +18,6 @@ import { getNameMap, getFilteredNameMap } from './html/htmlBlacklist.js';
 
 const midiBay = {
   portPropertiesManager: new PortPropertiesManager(),
-  moduleMap: new Map(),
   sysexFileMap: new Map(),
   sysexMessage: [],
   dumpRequestObj: {},
@@ -80,7 +73,6 @@ const soundMap = new Map();
     midiAccess.onstatechange = (stateEvent) => {
       showMidiAccessStateChange(stateEvent.port); // html.js
     };
-    setModules();
 
     midiBay.inNameMap.forEach((input) => {
       input.onmidimessage = receiveMIDIMessage; // send msg to output!!! -> midiMessage.js

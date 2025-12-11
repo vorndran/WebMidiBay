@@ -46,18 +46,18 @@
           <aside id="settings" class="menu-member">
             <div id="info">
               <h2>Info</h2>
+              <p>DISCAIMER: WebMidiBay is still in beta stage. Use at your own risk!</p>
               <p>
                 WebMidiBay is a MIDI router and monitor running in your web browser. It uses the
                 WebMIDI API to access connected MIDI devices.
               </p>
               <p>
                 Developed by Michael Vorndran -
-                <!-- <a href="https://michaelvorndran.de" target="_blank">https://michaelvorndran.de</a> -->
+                <a href="https://webmidibay.net" target="_blank">https://webmidibay.net</a>
               </p>
               <p>
                 Source code available on
-                <!-- <a href="https://github.com/michaelgehring/WebMidiBay" target="_blank">GitHub</a> -->
-                <a href="https://github.com/vorndran/midi" target="_blank">GitHub</a>
+                <a href="https://github.com/vorndran/webmidibay" target="_blank">GitHub</a>
               </p>
               <h3>MIDI Data Infos</h3>
               <p class="button">
@@ -126,16 +126,6 @@
                   </select>
                   in MIDI monitor
                 </li>
-                <!-- </li>
-                <li class="settings">
-  <input type="checkbox" id="port1" name="port1" value="Bike">
-  <label for="port1"> I have a bike</label><br>
-  <input type="checkbox" id="port2" name="port2" value="Car">
-  <label for="port2"> I have a car</label><br>
-  <input type="checkbox" id="port3" name="port3" value="Boat">
-  <label for="port3"> I have a boat</label><br><br>
-  <input type="submit" value="Submit">
-                </li> -->
               </ul>
             </form>
           </aside>
@@ -342,20 +332,7 @@
                   >sysex</span
                 >.syx"
               </li>
-              <li class="sysex dumprequest">
-                <span class="sysex_send_dump form_buttons">send sysex: </span
-                ><select id="dumprequest">
-                  <!-- <option value="blofeld">Waldorf Blofeld</option> -->
-                  <!-- <option value="minilogue">Korg Minilogue XD</option> -->
-                  <!-- <option value="nymphes">Dreadbox Nymphes</option> -->
-                </select>
-              </li>
             </ul>
-            <!-- <button id="blodump" name="dump">Blofeld Dump</button> -->
-            <!-- <button id="minidump" name="dump">Minilogue Dump</button> -->
-            <!-- <button id="microdump" name="dump">MicroFreak Dump</button> -->
-            <!-- <a id="file_download" href=""></a> -->
-            <!-- <p id="file_rename" contenteditable="true">SysexMidiFile</p> -->
             <div class="sysex"></div>
           </form>
         </section>
@@ -391,14 +368,5 @@
         </aside>
       </div>
     </div>
-    <!-- <script>
-      (function () {
-        var src = '//cdn.jsdelivr.net/npm/eruda';
-        if (!/eruda=true/.test(window.location) && localStorage.getItem('active-eruda') != 'true')
-          return;
-        document.write('<scr' + 'ipt src="' + src + '"></scr' + 'ipt>');
-        document.write('<scr' + 'ipt>eruda.init();</scr' + 'ipt>');
-      })();
-    </script> -->
   </body>
 </html>
