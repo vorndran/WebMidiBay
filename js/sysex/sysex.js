@@ -27,8 +27,6 @@ function sendCollectedSysexToSysexForm(midiData, port) {
   resetViewContentButtons();
   if (midiBay.collectingSysEx) return;
 
-  document.getElementById(`sysex_file_rename`).innerText = fileName || 'sysex';
-
   if (midiBay.autoSaveSysex) downloadSysexFile();
   return;
 }
