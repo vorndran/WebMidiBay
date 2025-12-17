@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+    <link rel="stylesheet" type="text/css" href="../css/info.css" />
+    <title>WebMidiBay - Info & Documentation</title>
+    <link rel="shortcut icon" href="../icon/favicon.ico" />
+    <link rel="icon" type="image/png" href="../icon/favicon.png" sizes="32x32" />
+  </head>
+  <body>
+    <div class="info_container">
+      <header id="core" class="">
+        <menu>
+          <h1>WebMidiBay</h1>
+          <ul id="menu" class="inline_block">
+            <li class="menu info_menu">
+              <a href="./MIDI_DataTable.html" class="active">MIDI Data Specs</a>
+            </li>
+            <li class="menu routing_menu">
+              <a href="../index.html" data-menuitem_target_id="back">back to WebMidiBay</a>
+            </li>
+            <!-- <li class="menu filter_menu">
+              <a href="#" data-menuitem_target_id="2">filter</a>
+            </li> -->
+            <!-- <li class="menu monitor_menu">
+              <a href="#" data-menuitem_target_id="3">monitor</a>
+            </li> -->
+            <!-- <li class="clock"><a href="#">clock</a></li> -->
+          </ul>
+          <!-- <a href="index.html">Home</a> -->
+          <!-- <a href="index.html" class="back-link">← Back to WebMidiBay</a> -->
+        </menu>
+      </header>
+      <main>
+        <h2>WebMidiBay Documentation</h2>
+
+        <p class="center">
+          <strong
+            >A browser-based MIDI routing and monitoring tool using the
+            <a href="https://www.w3.org/TR/webmidi/" target="_blank">Web MIDI API</a></strong
+          >
+        </p>
+        <div class="update-link note">
+          📚 For the latest version of this documentation, visit our
+          <a href="https://github.com/vorndran/WebMidiBay#readme" target="_blank">GitHub README</a>
+        </div>
+
+        <h2 class="features">Features</h2>
+        <ul class="features">
+          <li>
+            🎹 <strong>MIDI Routing</strong>: Connect any MIDI input to multiple outputs with visual
+            feedback
+          </li>
+          <li>
+            📊 <strong>Message Monitor</strong>: Real-time display of MIDI messages with filtering
+            options
+          </li>
+          <li>
+            💡 <strong>Signal Visualization</strong>: Visual indicators for MIDI activity, Clock,
+            and Active Sensing
+          </li>
+          <li>🎛️ <strong>Channel Filtering</strong>: Filter messages by MIDI channel</li>
+          <li>📝 <strong>SysEx Support</strong>: View and export, upload an send System Exclusive messages</li>
+          <li>
+            💾 <strong>Storage</strong>: Save and restore routing configurations, filters, and
+            website settings
+          </li>
+          <li>🎨 <strong>Port Aliases</strong>: Customize port names for better organization</li>
+          <li>⚡ <strong>Performance</strong>: Optimizable for low latency and high throughput</li>
+        </ul>
+
+        <h2 class="browser">Browser Support</h2>
+        <p>
+          WebMidiBay requires a browser with
+          <a href="https://www.w3.org/TR/webmidi/" target="_blank">Web MIDI API</a> support:
+        </p>
+        <ul class="browser">
+          <li>Chrome/Chromium</li>
+          <li>Edge</li>
+          <li>Opera</li>
+          <li>Firefox (Desktop only, version 108+)</li>
+        </ul>
+        <div class="note">
+          <strong>Note:</strong> Safari and Firefox on mobile devices (Android/iOS) do not currently
+          support the <a href="https://www.w3.org/TR/webmidi/" target="_blank">Web MIDI API</a>.
+        </div>
+
+        <h2 class="usage">Usage</h2>
+        <ol class="usage">
+          <li>Connect your MIDI devices</li>
+          <li>
+            Open <code>index.html</code> in a supported browser (if already open, reload the page)
+          </li>
+          <li>Grant MIDI access permission when prompted</li>
+          <li>Start routing and monitoring!</li>
+        </ol>
+
+        <h2 class="key-concepts">Key Concepts</h2>
+
+        <h3 class="visibility">Visibility</h3>
+        <p>
+          Show or hide page sections (filter, monitor, sysex, and info/settings) by clicking in the
+          main menu or using keyboard keys <strong>1-4</strong>.
+        </p>
+
+        <h3 class="routing">Routing</h3>
+        <p><strong>Click-based routing:</strong></p>
+        <ol class="routing">
+          <li>Select <strong>"routing"</strong> in the routing menu</li>
+          <li>Click on an input port to select it</li>
+          <li>Click on output ports to create routing connections</li>
+          <li>Messages from the input will be sent to all connected outputs</li>
+        </ol>
+
+        <p>
+          <strong>Drag and drop routing:</strong><br />
+          When the window width allows inputs and outputs to be displayed side by side, you can drag
+          connections directly from input ports to output ports.
+        </p>
+
+        <p>
+          <h3 class="signals">Signals:</h3><br />
+          Click the lightbulb icon in the routing menu to toggle MIDI event visibility:
+        </p>
+        <ul class="routing">
+          <li><strong>Blink Signals</strong>: Brief flashes indicate MIDI activity</li>
+          <li>
+            <strong>Clock Active</strong>: Persistent indicator for continuous MIDI Clock signals
+          </li>
+          <li>
+            <strong>Multiple Clock Sources</strong>: Warning when an output receives Clock from
+            multiple inputs (output ports show red background)
+          </li>
+          <li>
+            <strong>Clock Display</strong>: Show/hide MIDI Clock and Active Sensing messages (click
+            the clock icon on the right in the routing menu when MIDI event visibility is active)
+          </li>
+        </ul>
+
+        <h3 class="filters">Filter</h3>
+        <p>You can:</p>
+        <ul class="filters">
+          <li>Filter specific MIDI data for all ports</li>
+          <li>Filter specific MIDI data for individual in- or output ports only</li>
+          <li>Filter all MIDI channels except a selected one</li>
+          <li>Set all MIDI channels to a specific channel</li>
+        </ul>
+
+        <h3 class="monitor">Monitor</h3>
+        <ul class="monitor">
+          <li>
+            <strong>Channel Filter</strong>: Display messages from specific sources (inputs only,
+            outputs only, selected channel, or all)
+          </li>
+          <li>
+            <strong>Message Filter</strong>: Toggle visibility of message types (filtered/unfiltered
+            messages, text format, raw data, or both)
+          </li>
+        </ul>
+
+        <h3 class="sysex">SysEx</h3>
+        <ul class="sysex">
+          <li>
+            <strong>Capture</strong>: Incoming SysEx data is captured and displayed in real-time
+          </li>
+          <li><strong>Export</strong>: Download captured SysEx data as <code>.syx</code> files</li>
+          <li><strong>Import</strong>: Upload SysEx files and send them via the selected output</li>
+        </ul>
+
+        <h3 class="performance">Performance Optimization</h3>
+        <p>
+          <strong>Reduce latency and improve performance</strong> by hiding the Monitor and
+          disabling Routing signals!
+        </p>
+
+        <h2>License</h2>
+        <p>MIT License</p>
+
+        <h2>Author</h2>
+        <p>Michael Vorndran</p>
+        <p>
+          Website: <a href="https://webmidibay.de" target="_blank">webmidibay.de</a><br />
+          GitHub:
+          <a href="https://github.com/vorndran/WebMidiBay" target="_blank"
+            >github.com/vorndran/WebMidiBay</a
+          >
+        </p>
+
+        <!-- <div class="back-link-container"> -->
+      </main>
+      <menu class="bottom">
+        <ul id="menu" class="inline_block">
+          <li class="menu routing_menu">
+            <a href="../index.html" data-menuitem_target_id="back">back to WebMidiBay</a>
+          </li>
+          <li class="menu info_menu">
+            <a href="#" class="active">back to top</a>
+          </li>
+        </ul>
+      </menu>
+    </div>
+  </body>
+</html>

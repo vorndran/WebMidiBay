@@ -16,7 +16,7 @@ export class PortPortProperties {
    * Erstellt neue Metadaten für einen MIDI-Port
    * @param {MIDIPort} port - Der MIDI-Port (Input oder Output)
    *
-   * @property {Set<string>} filterSet - Aktive MIDI-Filter für diesen Port
+   * @property {Set<number>} filterSet - Aktive MIDI-Filter für diesen Port (Status-Bytes als Numbers)
    * @property {Channel} channel - Channel-spezifische Einstellungen
    * @property {string} alias - Benutzerdefinierbarer Name für den Port
    * @property {number} clockBuffer - Puffer für MIDI-Clock-Events
@@ -43,6 +43,9 @@ export class PortPortProperties {
     if (port.type === 'input') {
       this.outPortSet = new Set();
       this.outPortNameSet = new Set();
+    }
+    if (port.type === 'output') {
+      this.activeClockSourceSet = new Set();
     }
   }
 }
@@ -76,14 +79,4 @@ export class PortPropertiesManager {
   getPortByTagId(tagId, portByTagIdMap) {
     return portByTagIdMap.get(tagId) || null;
   }
-
-  // /**
-  //  * Aktualisiert den Index eines Ports
-  //  * @param {MIDIPort} port - Der MIDI-Port
-  //  * @param {number} index - Der neue Index
-  //  */
-  // setPortIndex(port, index) {
-  //   const property = this.getPortProperties(port);
-  //   property.index = index;
-  // }
 }

@@ -4,13 +4,12 @@ import * as storage from '../storage/storage.js';
 import * as storagePort from '../storage/storagePort.js';
 import { logger } from '../utils/logger.js';
 import { getPortProperties } from '../utils/helpers.js';
-import { setPortTagFilterClass } from '../filter/filterCss.js';
+import { setFilterCss } from '../filter/filterCss.js';
 
 import { removeClassFromAll } from '../html/domClasses.js';
 import { preventAndStop, addClass, removeClass } from '../html/domStyles.js';
 // ###########################################
 function initChannel() {
-  // midiBay.divChannelTag = document.getElementById('channel');
   midiBay.channelTagMap = {};
   midiBay.channelTagMap.filter = new Map();
   midiBay.channelTagMap.reset = new Map();
@@ -22,7 +21,6 @@ function initChannel() {
   document.querySelectorAll('.channel_reset').forEach((tag) => {
     midiBay.channelTagMap.reset.set(Number(tag.dataset.channelvalue), tag);
   });
-  // document.getElementById('channel').addEventListener('click', clickedChannel);
   restoreChannels();
   setGlobalChannelClass();
 }
@@ -34,10 +32,8 @@ function clickedChannel(eClick) {
   setSelectedChannel(eClick.target);
   if (!midiBay.selectedPort) {
     setGlobalChannelClass();
-    return;
   }
-
-  setPortTagFilterClass(midiBay.selectedPort);
+  setFilterCss();
 }
 // ###########################################
 function setSelectedChannel(channelTag) {
@@ -54,13 +50,11 @@ function setSelectedChannel(channelTag) {
   if (tagChannelValue == portChannelValue) return;
 
   storeChannels();
-  // setChannelSpanClass();
   setChannelClass();
 }
 
 // ###########################################
 function setChannelClass() {
-  // entferne alle Class:
   removeClassFromAll('.selected_channel', 'selected_channel');
   addChannelClass();
 }

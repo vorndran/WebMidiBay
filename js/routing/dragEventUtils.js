@@ -7,7 +7,7 @@ function getEventCoordinates(event) {
   const eventXyMap = getEvent_xy(event);
   return {
     x: eventXyMap.get('x'),
-    y: eventXyMap.get('y')
+    y: eventXyMap.get('y'),
   };
 }
 
@@ -43,7 +43,6 @@ function getEvent_xy(event) {
       event_y = event.changedTouches[0]?.pageY - window.scrollY;
       break;
   }
-  //console.log('getEvent_xy', event.type, event_x, event_y);
   return new Map([
     ['x', event_x],
     ['y', event_y],

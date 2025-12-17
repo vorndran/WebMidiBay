@@ -21,8 +21,6 @@ import { preventAndStop } from './domStyles.js';
 
 // #################################################################
 function initHtmlPorts() {
-  // document.getElementById('inputs').addEventListener('click', clickedMidiPort);
-  // document.getElementById('outputs').addEventListener('click', clickedMidiPort);
   restoreAlias();
   setHtmlPortProperties();
   appendPortTagsToRoutingLists();
@@ -47,10 +45,7 @@ function setHtmlPortProperties() {
       portProperties.tag = document.createElement('li');
       portProperties.tagId = `${port.type}_${portProperties.index}`;
       portProperties.tag.id = portProperties.tagId;
-      // portProperties.tag.classList.add(`midiport`, `${port.type}put`);
       setText(portProperties.tag, portProperties.alias);
-
-      // midiBay.portPropertiesManager.setPortIndex(port, ++index);
     });
   });
 }

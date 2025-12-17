@@ -39,7 +39,6 @@
               <li class="menu settings_menu">
                 <a href="#" data-menuitem_target_id="settings">info/settings</a>
               </li>
-              <!-- <li class="clock"><a href="#">clock</a></li> -->
             </ul>
             <p class="size"></p>
           </menu>
@@ -49,18 +48,34 @@
               <p>DISCAIMER: WebMidiBay is still in beta stage. Use at your own risk!</p>
               <p>
                 WebMidiBay is a MIDI router and monitor running in your web browser. It uses the
-                WebMIDI API to access connected MIDI devices.
+                <a href="https://www.w3.org/TR/webmidi/" target="_blank">Web MIDI API</a>
+                to access connected MIDI devices.
               </p>
               <p>
-                Developed by Michael Vorndran -
-                <a href="https://webmidibay.net" target="_blank">https://webmidibay.net</a>
+                Developed by Michael Vorndran - Contact:
+                <span id="email-contact"></span>
+                <script>
+                  // Bot-sichere E-Mail-Anzeige
+                  const user = 'kontakt';
+                  const domain = 'webmidibay';
+                  const tld = 'de';
+                  document.getElementById(
+                    'email-contact'
+                  ).innerHTML = `<a href="mailto:${user}@${domain}.${tld}">${user}@${domain}.${tld}</a>`;
+                </script>
               </p>
               <p>
                 Source code available on
                 <a href="https://github.com/vorndran/webmidibay" target="_blank">GitHub</a>
               </p>
+              <!-- <h3>Documentation</h3> -->
+              <p class="button documentation">
+                <a href="./html/info.html" style="color: inherit; text-decoration: none"
+                  >Documentation</a
+                >
+              </p>
               <h3>MIDI Data Infos</h3>
-              <p class="button">
+              <p class="button specs">
                 <a href="./html/MIDI_DataTable.html" style="color: inherit; text-decoration: none"
                   >MIDI Data Specs</a
                 >
@@ -86,10 +101,10 @@
                   <span class="toggle_signals form_buttons">Visual Signals: ON</span>
                 </li> -->
                 <li class="settings">
-                  <span class="toggle_port_blacklist form_buttons">manage ports</span>
+                  <span class="toggle_port_blacklist form_buttons">ignore ports</span>
                 </li>
                 <li class="settings port_blacklist_container js-hidden">
-                  <h3>Hide Ports:</h3>
+                  <h3>ignore Ports:</h3>
                   <button id="apply_blacklist" class="form_buttons">Apply Changes</button>
                   <button id="cancel_blacklist" class="form_buttons">Cancel</button>
                   <ul id="port_blacklist_list" class="port_blacklist_list"></ul>
@@ -131,15 +146,17 @@
           </aside>
           <main id="routing" class="menu-member">
             <header id="portmenu">
-              <div>
-                <h2 class="inline_block">Routing</h2>
-                <span class="toggle_signals signals_on"></span>
+              <div class="portmenu_container">
+                <div>
+                  <h2 class="inline_block">Routing</h2>
+                  <span class="toggle_signals signals_on"></span>
+                </div>
                 <ul class="inline_block">
                   <li class="portmenu select active"><a href="#">select</a></li>
                   <li class="portmenu rename"><a href="#">rename</a></li>
                   <li class="portmenu routing"><a href="#">routing</a></li>
                   <li class="portmenu openclose"><a href="#">open/close</a></li>
-                  <li class="clock"><a href="#">clock</a></li>
+                  <!-- <li class="clock"><a href="#">clock</a></li> -->
                 </ul>
               </div>
             </header>
@@ -163,7 +180,7 @@
             Filter: <span class="filterportinfo">all inports</span><span class="in-or-out"></span>
           </h2>
           <section id="filter_cc">
-            <h2 id="filter_head">Filter CC:</h2>
+            <h2 id="filter_head">Filter MIDI data:</h2>
             <ul class="filter-list">
               <li class="filter" data-statusbyte="144">Note On</li>
               <li class="filter" data-statusbyte="128">Note Off</li>
@@ -181,9 +198,6 @@
               <li class="filter" data-statusbyte="254">Active Sensing</li>
             </ul>
           </section>
-          <!-- </div>
-            <div id="column_2_3"> -->
-
           <section id="channel">
             <div id="filter_channel">
               <h2 id="filter_channel_head">Filter Channel:</h2>
@@ -338,30 +352,29 @@
         </section>
         <aside id="monitor" class="flex-item menu-member">
           <h2 id="message_head">
-            Monitor
+            <div class="action_buttons">
+              Monitor
+              <span class="clock"><a href="#">clock</a></span>
+              <span id="pause_message" class="message-button">pause</span>
+              <span id="clear_message" class="message-button">clear</span>
+            </div>
             <div class="message_buttons">
-              <!-- <span class="message_filter"> -->
-              <!-- show -->
-              <select id="filtered_message" class="message-button">
+              <select id="filtered_message" class="message-button" autocomplete="off">
                 <option value="all">all</option>
                 <option value="filtered">filtered</option>
                 <option value="unfiltered">unfiltered</option>
               </select>
-              <!-- messages from -->
-              <select id="filtered_ports" class="message-button">
+              <select id="filtered_ports" class="message-button" autocomplete="off">
                 <option value="inputs">inputs</option>
                 <option value="outputs">outputs</option>
                 <option value="all">all ports</option>
                 <option value="selection">selected port</option>
               </select>
-              <select id="filtered_txt_strings" class="message-button">
+              <select id="filtered_txt_strings" class="message-button" autocomplete="off">
                 <option value="text">text info</option>
                 <option value="raw">raw data</option>
                 <option value="both">text & raw</option>
               </select>
-              <!-- </span> -->
-              <span id="pause_message" class="message-button">pause</span>
-              <span id="clear_message" class="message-button">clear</span>
             </div>
           </h2>
           <section id="message_text" class="message"></section>

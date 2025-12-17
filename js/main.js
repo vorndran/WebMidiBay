@@ -1,13 +1,6 @@
 'use strict';
 
-export {
-  // midiAccessData,
-  // getFiles,
-  midiBay,
-  soundMap,
-  // fileUrl,
-  // timingClockStillActive,
-};
+export { midiBay, soundMap };
 import { receiveMIDIMessage } from './midiMessage.js';
 import { initFilter } from './filter/filter.js';
 import { initRouting } from './routing/routingPorts.js';
@@ -16,6 +9,47 @@ import { PortPropertiesManager } from './portProperties.js';
 import { logger } from './utils/logger.js';
 import { getNameMap, getFilteredNameMap } from './html/htmlBlacklist.js';
 
+/**
+ * Zentrales State-Objekt der Applikation
+ * Enthält alle globalen Zustände, Port-Maps und Manager-Instanzen
+ *
+ * @property {PortPropertiesManager} portPropertiesManager - Verwaltet Metadaten für alle MIDI-Ports
+ * @property {Map} sysexFileMap - Geladene SysEx-Dateien
+ * @property {Array<number>} sysexMessage - Aktuell gesammelte SysEx-Daten
+ * @property {Object} dumpRequestObj - SysEx Dump Request Konfiguration
+ * @property {boolean} signalsEnabled - Globaler Toggle für visuelle Signal-Feedbacks
+ * @property {Set<string>} portBlacklist - Ausgeblendete Port-Namen
+ *
+ * Dynamisch hinzugefügte Properties während Initialisierung:
+ * @property {Map<string, MIDIInput>} allInNameMap - Alle Input-Ports (ungefiltert, für Blacklist-UI)
+ * @property {Map<string, MIDIOutput>} allOutNameMap - Alle Output-Ports (ungefiltert, für Blacklist-UI)
+ * @property {Map<string, MIDIInput>} inNameMap - Aktive Input-Ports (gefiltert)
+ * @property {Map<string, MIDIOutput>} outNameMap - Aktive Output-Ports (gefiltert)
+ * @property {Map<string, Map>} portNameMap - Map mit 'in'/'out' → Port-Maps
+ * @property {Map<string, MIDIPort>} portByTagIdMap - TagID → Port Lookup
+ * @property {Set<number>} globalFilterSet - Globale MIDI-Filter (Status-Bytes)
+ * @property {Object} globalChannel - Globale Channel-Filter/Reset {filter: 0, reset: 0}
+ * @property {MIDIPort|null} selectedPort - Aktuell ausgewählter Port
+ * @property {Map<string, SVGLineElement>} lineMap - Routing-Linien (LineID → SVG-Element)
+ * @property {SVGElement} graphTag - SVG-Container für Routing-Linien
+ * @property {DOMRect} graphTagRect - Bounds des SVG-Containers
+ * @property {HTMLElement} msgTag - Message-Text Container
+ * @property {HTMLElement} monitorTag - Monitor Container
+ * @property {HTMLElement} menuClockTag - Clock Menu Button
+ * @property {Map<string, string>} menuItemVisibleMap - Sichtbarkeitsstatus von Menü-Items
+ * @property {Object} msgMonitor - Monitor-State {paused, showPorts, showFiltered, messageQueue, ...}
+ * @property {Array<number>} messageRectArray - Cached Bounds für Message-Container
+ * @property {Array<number>} svgRectArray - Cached Bounds für SVG-Container
+ * @property {boolean} collectingSysEx - Flag: SysEx wird gerade gesammelt
+ * @property {boolean} sysExWasSent - Flag: SysEx wurde bereits gesendet
+ * @property {boolean} autoSaveSysex - Flag: Auto-Download von empfangenen SysEx
+ * @property {HTMLElement|null} editPortTag - Aktuell bearbeitetes Port-Tag
+ * @property {boolean} renamePortsFlag - Flag: Rename-Modus aktiv
+ * @property {boolean} openClosePortsFlag - Flag: Open/Close-Modus aktiv
+ * @property {boolean} routingEvent - Flag: Routing-Drag-Event aktiv
+ * @property {HTMLElement|null} clickedInPortTag - Geklicktes Input-Port-Tag für Drag&Drop
+ * @property {Map<string, Object>} channelTagMap - Channel-Filter UI Tags {filter: Map, reset: Map}
+ */
 const midiBay = {
   portPropertiesManager: new PortPropertiesManager(),
   sysexFileMap: new Map(),
@@ -27,9 +61,6 @@ const midiBay = {
 
 const soundMap = new Map();
 
-// const readTimingClock = false;
-
-// let timingClockStillActive = false;
 // ################################
 // ########## Start ###############
 // ################################
@@ -37,8 +68,12 @@ const soundMap = new Map();
   // Feature-detection: prüfe, ob die API verfügbar ist
   if (typeof navigator.requestMIDIAccess !== 'function') {
     onMIDIFailure('MIDI Access is not implemented in this browser!');
-    onMIDIFailure('Current browser with MIDI access: "https://caniuse.com/?search=midiaccess"');
-    onMIDIFailure('More about this browser: "https://parseapi.com/useragent"');
+    onMIDIFailure(
+      'Current browser with MIDI access:  <a href="https://caniuse.com/?search=midiaccess" target="_blank">https://caniuse.com/?search=midiaccess</a>'
+    );
+    onMIDIFailure(
+      'More about this browser: <a href="https://parseapi.com/useragent" target="_blank">https://parseapi.com/useragent</a>'
+    );
     return;
   }
   // The Web MIDI API is available to us!
@@ -76,7 +111,6 @@ const soundMap = new Map();
 
     midiBay.inNameMap.forEach((input) => {
       input.onmidimessage = receiveMIDIMessage; // send msg to output!!! -> midiMessage.js
-      input.on;
     });
     logger.debug('-=*#@#*=- midiBay: -=*#@#*=-', midiBay);
   }
@@ -100,8 +134,24 @@ const soundMap = new Map();
       return;
     }
     const body = document.querySelector('body');
-    body.innerHTML = `<h1 class="error">WebMidiBay -> but not in this <span onClick="localStorage.setItem('error', 'ignore')">browser!</span></h1>
-    <h2 class="error">${error}</h2>`;
+    body.innerHTML = `<h1 class="error">WebMidiBay -> has no access to MIDI <span onClick="localStorage.setItem('error', 'ignore')">ports!</span></h1>
+    <h2 class="error">${error}</h2>
+    <p class="error">
+                WebMidiBay is a MIDI router and monitor running in your web browser. It uses the
+                WebMIDI API to access connected MIDI devices.
+              </p>
+              <p class="error">
+                Developed by Michael Vorndran -
+                <a href="https://www.webmidibay.de" target="_blank">https://www.webmidibay.de</a>
+              </p>
+              <p class="error">
+                Source code available on
+                <a href="https://github.com/vorndran/webmidibay" target="_blank">GitHub</a>
+              </p>
+    `;
+    // <p class="error">Please use a WebMIDI compatible browser like <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a> or <a href="https://www.microsoft.com/edge" target="_blank">Microsoft Edge</a>!</p>
+    // <p class="error">More about WebMIDI support: <a href="https://caniuse.com/?search=midiaccess" target="_blank">https://caniuse.com/?search=midiaccess</a></p>
+    // <p class="error">More about this browser: <a href="https://parseapi.com/useragent" target="_blank">https://parseapi.com/useragent</a></p>
     logger.error('------------- error ----------------');
     logger.error(error);
     // Permission was not granted. :(

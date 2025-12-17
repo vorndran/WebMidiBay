@@ -15,11 +15,9 @@ import { midiBay, soundMap } from '../main.js';
 import { logger } from '../utils/logger.js';
 import { addClass } from '../html/domStyles.js';
 import { toggleDisplayClass } from '../html/domStyles.js';
-
-const sysex_start_byte = 240;
-const sysex_end_byte = 247;
+import { MIDI_SYSEX_START, MIDI_SYSEX_END } from '../constants/midiConstants.js';
 // ##############################################
-// kommt von collectSysexData wenn Sysex End Byte empfangen wurde
+// Called from collectSysexData when SysEx End Byte is received
 function sendCollectedSysexToSysexForm(midiData, port) {
   logger.debug('sysex To Message');
 
@@ -34,7 +32,7 @@ function sendCollectedSysexToSysexForm(midiData, port) {
 function collectSysexData(midiData) {
   let lastByte = midiData[midiData.length - 1];
 
-  if (midiData[0] == sysex_start_byte) {
+  if (midiData[0] === MIDI_SYSEX_START) {
     midiBay.sysexMessage = [];
     midiBay.sysExWasSent = false;
     midiBay.collectingSysEx = true;
@@ -44,9 +42,8 @@ function collectSysexData(midiData) {
 
   concatSysexArray(parsedSysexData);
 
-  if (lastByte == sysex_end_byte) {
+  if (lastByte === MIDI_SYSEX_END) {
     midiBay.collectingSysEx = false;
-    // sendCollectedSysexToSysexForm(midiBay.sysexMessage);
   }
 }
 // ##############################################
@@ -56,10 +53,8 @@ function concatSysexArray(sysexArray) {
 }
 // ##############################################
 function parseSysexData(midiData) {
-  // Fast-Path: Keine SysEx-Sammlung und kein SysEx-Start
-
   let sysExBuffer = [];
-  // Byteweise parsen
+  // Parse byte by byte
   for (let i = 0; i < midiData.length; i++) {
     const b = midiData[i];
 
@@ -88,7 +83,7 @@ function showSysexTable(sysexArray, portNameOrFileName) {
   const rowCount = Math.ceil(sysexArray.length / 10);
   const sysexTag = document.querySelector('div.sysex');
 
-  // Separater Container für Tabelle, damit File-Liste erhalten bleibt
+  // Separate container for table to preserve file list
   let tableContainer = document.getElementById('sysex_table_container');
   if (!tableContainer) {
     tableContainer = document.createElement('div');
@@ -100,7 +95,7 @@ function showSysexTable(sysexArray, portNameOrFileName) {
   const firstRow = document.createElement('p');
   addClass(firstRow, 'firstrow');
   firstRow.innerHTML = `<span class="firstcolumn"></span><span class="secondcolumn">from: ${portNameOrFileName} (${sysexArray.length} bytes total)</span>`;
-  if (sysexArray[0] == 240) tableContainer.innerHTML = '';
+  if (sysexArray[0] === MIDI_SYSEX_START) tableContainer.innerHTML = '';
   tableContainer.appendChild(firstRow);
 
   const secondRow = document.createElement('p');
@@ -116,11 +111,6 @@ function showSysexTable(sysexArray, portNameOrFileName) {
 }
 // ##############################################
 function createInnerHtmlHexRow(sysexArray, i) {
-  // return `<span class="firstcolumn">
-  // ${i < 100 ? '&nbsp;' : ''}${i < 10 ? '&nbsp;' : ''}${ i < 1 ? '0' : ''
-  // }${i * 10}</span><span class="secondcolumn">${hexStringFromIntArray(
-  //   sysexArray.slice(i * 10, i * 10 + 10)
-  // )}</span>`;
   return `<span class="firstcolumn">${
     i * 10
   }</span><span class="secondcolumn">${hexStringFromIntArray(
@@ -133,8 +123,8 @@ function hexStringFromIntArray(intArray) {
 }
 // ########################################################
 function extractSysex(midiData) {
-  const sysexStart = midiData.lastIndexOf(sysex_start_byte);
-  const sysexEnd = midiData.indexOf(sysex_end_byte, sysexStart);
+  const sysexStart = midiData.lastIndexOf(MIDI_SYSEX_START);
+  const sysexEnd = midiData.indexOf(MIDI_SYSEX_END, sysexStart);
   logger.debug('extract Sysex', sysexStart, sysexEnd, sysexStart < sysexEnd);
   if (!(sysexStart < sysexEnd)) return null;
 
@@ -160,13 +150,3 @@ function toHex(intArray) {
   return hexArray;
 }
 // #################################################
-Array.prototype.compareSlice = function (array) {
-  //console.log('Array compare Slice', this, array);
-  let isEqual = true;
-  this.forEach((element, index) => {
-    if (array[index] !== element) isEqual = false;
-  });
-  return isEqual;
-};
-
-// #############################################''

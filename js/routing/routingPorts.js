@@ -13,7 +13,7 @@ import { setInportRoutingClass, setOutportRoutingClass } from './routingCssClass
 
 // ###################################################
 function initRouting() {
-  asignMidiPortFunctions();
+  assignMidiPortFunctions();
   restoreRoutingOutPortName();
   resetOutPortSet();
   resetInPortSet();
@@ -121,7 +121,7 @@ function resetAllRouting(eClick) {
   storeRoutingOutPortName();
 }
 // #############################################################
-// toggle Port Routing - schaltet Routing um ...
+// Toggle Port Routing - Enables/disables routing between input and output ports
 // ###############################################################
 function togglePortRouting(inPort, outPort) {
   const inMeta = getPortProperties(inPort);
@@ -129,15 +129,14 @@ function togglePortRouting(inPort, outPort) {
   logger.debug('togglePortRouting', inMeta.tagId, outMeta.tagId);
 
   midiBay.toggleRouting(inPort, outPort);
-  // toggleRoutingLine(inPort, outPort);
   storeRoutingOutPortName();
   setInportRoutingClass();
   setOutportRoutingClass();
 }
 // #############################################################
-// asign MidiPort Functions
+// Assign MIDI Port Functions
 // ###############################################################
-function asignMidiPortFunctions() {
+function assignMidiPortFunctions() {
   midiBay.selectedPort = null;
   midiBay.toggleRouting = toggleRouting;
   midiBay.isRouting = isRouting;
@@ -158,26 +157,29 @@ function asignMidiPortFunctions() {
  * 3. Triggert UI-Update über drawAllRoutingLines
  */
 function toggleRouting(inPort, outPort) {
-  const inMeta = getPortProperties(inPort);
-  const outMeta = getPortProperties(outPort);
-  logger.debug('toggleRouting', inMeta.tagId);
-  const portProperties = inMeta;
+  const inPortProbs = getPortProperties(inPort);
+  const outPortProbs = getPortProperties(outPort);
+  logger.debug('toggleRouting', inPortProbs.tagId);
 
-  if (portProperties.outPortSet.has(outPort)) {
-    portProperties.outPortSet.delete(outPort);
-    portProperties.outPortNameSet.delete(outPort.name);
-    // Symmetrisch: Entferne Input-Port aus Output-Port inPortSet
-    if (outMeta.inPortSet) {
-      outMeta.inPortSet.delete(inPort);
+  if (inPortProbs.outPortSet.has(outPort)) {
+    inPortProbs.outPortSet.delete(outPort);
+    inPortProbs.outPortNameSet.delete(outPort.name);
+    // Symmetric: Remove input port from output port inPortSet
+    if (outPortProbs.inPortSet) {
+      outPortProbs.inPortSet.delete(inPort);
+    }
+    // Remove input port from activeClockSourceSet for immediate warning update
+    if (outPortProbs.activeClockSourceSet) {
+      outPortProbs.activeClockSourceSet.delete(inPort);
     }
   } else {
-    portProperties.outPortSet.add(outPort);
-    portProperties.outPortNameSet.add(outPort.name);
-    // Symmetrisch: Füge Input-Port zu Output-Port inPortSet hinzu
-    if (!outMeta.inPortSet) {
-      outMeta.inPortSet = new Set();
+    inPortProbs.outPortSet.add(outPort);
+    inPortProbs.outPortNameSet.add(outPort.name);
+    // Symmetric: Add input port to output port inPortSet
+    if (!outPortProbs.inPortSet) {
+      outPortProbs.inPortSet = new Set();
     }
-    outMeta.inPortSet.add(inPort);
+    outPortProbs.inPortSet.add(inPort);
   }
   drawAllRoutingLines();
 }

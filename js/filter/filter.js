@@ -18,22 +18,21 @@ import { storePortMap, restorePortMap } from '../storage/storagePort.js';
 import { logger } from '../utils/logger.js';
 import { preventAndStop, toggleDisplayClass } from '../html/domStyles.js';
 import { initChannel, setChannelClass, resetAllChannels } from './filterChannel.js';
+import { updateAllOutputPortClockWarnings } from '../core/midiMessageSignal.js';
+import { MIDI_TIMING_CLOCK } from '../constants/midiConstants.js';
 import {
   initFilterCss,
   setFilterTagsClass,
   setFilterPortInfoTagClass,
   setFilterContainerClass,
   restorePortTagFilterClass,
-  setSelectedPortTagFilterClass,
+  setFilterCss,
 } from './filterCss.js';
 import { removeSelectedPort } from '../routing/routingSelectedPort.js';
 
 // ###########################################
 function initFilter() {
   midiBay.globalFilterSet = new Set();
-  // document.getElementById('filter').addEventListener('click', clickedFilter);
-  // midiBay.h2Filter_headTag = document.getElementById('filter_head');
-  // midiBay.spanFilterportinfoTag = document.getElementById('filterportinfo');
   initChannel(); // channelFilter.js
   restoreFilter();
   initFilterCss(); // filterCss.js
@@ -44,7 +43,7 @@ function clickedFilter(eClick) {
   preventAndStop(eClick);
   toggleFilter(eClick.target);
   storeFilter();
-  setSelectedPortTagFilterClass(); // filterCss.js
+  setFilterCss(); // filterCss.js
 }
 // ###########################################
 function unselectSelectedPort() {
@@ -62,7 +61,7 @@ function unselectSelectedPort() {
 function toggleFilter(clickedFilterTag) {
   logger.debug('toggleFilter', clickedFilterTag.dataset.statusbyte);
 
-  const statusbyte = clickedFilterTag.dataset.statusbyte;
+  const statusbyte = Number(clickedFilterTag.dataset.statusbyte);
   const filterSet = chooseFilterSet();
 
   const filterActive = toggleDisplayClass(clickedFilterTag, 'active');
@@ -70,6 +69,11 @@ function toggleFilter(clickedFilterTag) {
 
   if (filterSet == midiBay.globalFilterSet) {
     toggleDisplayClass(clickedFilterTag, 'all_active', filterActive);
+  }
+
+  // Wenn Clock-Filter geändert wurde, aktualisiere alle Output-Port Warnings
+  if (statusbyte === MIDI_TIMING_CLOCK) {
+    updateAllOutputPortClockWarnings();
   }
 }
 // ###########################################

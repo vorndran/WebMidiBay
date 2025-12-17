@@ -1,21 +1,20 @@
-export { receiveMIDIMessage, getChannel };
+export { receiveMIDIMessage, getChannel, reducedClockAndActiveSensingMessages };
 import { midiBay } from './main.js';
 import { getPortProperties } from './utils/helpers.js';
-import { showMidiMessageAsText, getLoopMessageHtml } from './html/htmlMessage.js';
+import { showMidiMessageAsText } from './html/htmlMessage.js';
 import { logger } from './utils/logger.js';
 import { midiInFilter, midiFilter, getStatusByte, getChannel } from './core/midiMessageFilter.js';
-import { signal, lineSignal } from './core/midiMessageSignal.js';
-import { formatMessageToHtmlAndCollectSysex } from './html/htmlMessageFormat.js';
+import { setPortTagSignal, setPortTagAndRoutingLineSignal } from './core/midiMessageSignal.js';
+import {
+  formatMessageToHtmlAndCollectSysex,
+  getLoopMessageHtml,
+} from './html/htmlMessageFormat.js';
 import { sendCollectedSysexToSysexForm } from './sysex/sysex.js';
+import { MIDI_TIMING_CLOCK, MIDI_ACTIVE_SENSING } from './constants/midiConstants.js';
 // ###################################################
 // receiveMIDIMessage ####################################
 // ###################################################
 function receiveMIDIMessage(midiMessage) {
-  const format = 'background-color: orange; color: darkblue;text-decoration: underline;';
-  const format2 = 'background-color: darkblue ; color:orange;text-decoration: underline;';
-
-  // #####################################################
-
   const inPort = midiMessage.target;
   const statusByte = getStatusByte(midiMessage.data[0]);
   midiMessage.isFiltered = false;
@@ -27,18 +26,19 @@ function receiveMIDIMessage(midiMessage) {
 }
 // #########################################################
 function getMIDIInputMessage(midiMessage, statusByte, inPort) {
-  // set text-messages and signals of Input Port inPort:
+  // Set text-messages and signals of Input Port
 
-  // Signal of incomming In Data of Port inPort:
-  signal('in', statusByte, inPort);
+  // Visual signal for incoming data
+  setPortTagSignal('in', statusByte, inPort);
 
-  // check for Port Filters:
-  midiMessage.isFiltered = midiInFilter(midiMessage, statusByte, inPort);
+  // Apply port filters (pass portProperties to avoid WeakMap lookup)
+  const inPortProps = getPortProperties(inPort);
+  midiMessage.isFiltered = midiInFilter(midiMessage, statusByte, inPort, inPortProps);
   makeMidiMessageVisible(midiMessage, inPort);
   if (midiMessage.isFiltered) return false;
 
-  // Signal of non filtered In Data of Port inPort:
-  signal('out', statusByte, inPort);
+  // Visual signal for non-filtered data
+  setPortTagSignal('out', statusByte, inPort);
   return true;
 }
 // ###########################################
@@ -46,29 +46,40 @@ function setMIDIOutputMessage(midiMessage, statusByte, inPort) {
   // set text-messages and signals of all Out Ports that the inPort is routed to:
   const inPortProps = getPortProperties(inPort);
   for (const outPort of inPortProps.outPortSet) {
-    lineSignal('in', statusByte, inPort, outPort);
+    setPortTagAndRoutingLineSignal('in', statusByte, inPort, outPort);
 
     if (isMidiLoop(outPort, midiMessage)) return;
 
-    midiMessage.isFiltered = midiFilter(midiMessage, statusByte, outPort);
+    // Pass portProperties to avoid WeakMap lookup in hot path
+    const outPortProps = getPortProperties(outPort);
+    midiMessage.isFiltered = midiFilter(midiMessage, statusByte, outPort, outPortProps);
     makeMidiMessageVisible(midiMessage, outPort);
     if (midiMessage.isFiltered) continue;
 
-    lineSignal('out', statusByte, inPort, outPort);
-    outPort.send(midiMessage.data); // -> send midiData!!!
+    setPortTagAndRoutingLineSignal('out', statusByte, inPort, outPort);
+
+    // Send MIDI data with error handling
+    try {
+      if (outPort.state === 'connected') {
+        outPort.send(midiMessage.data);
+      } else {
+        logger.warn(`Cannot send MIDI: Port ${outPort.name} is ${outPort.state}`);
+      }
+    } catch (error) {
+      logger.error(`Error sending MIDI to ${outPort.name}:`, error.message);
+    }
   }
 }
 // ###############################################
-// make MIDI Message visible in Monitor
+// Make MIDI Message visible in Monitor
 function makeMidiMessageVisible(midiMessage, port) {
-  // logger.debug('makeMidiMessageVisible', midiMessage.data, port.id);
-  if (reducedClockAndActiveSensingMessages(midiMessage.data[0], port)) return; // no 'Timing clock' as message!
+  if (reducedClockAndActiveSensingMessages(midiMessage.data[0], port)) return; // Throttle Clock/Active Sensing messages
 
   // Early exit: Wenn Monitor nicht sichtbar, keine Text-Updates nötig
   const monitorElement = document.getElementById('monitor');
   if (monitorElement && monitorElement.classList.contains('js-hidden')) return;
 
-  const midiDataText = formatMessageToHtmlAndCollectSysex(midiMessage.data);
+  const midiDataText = formatMessageToHtmlAndCollectSysex(midiMessage.data, port);
 
   showMidiMessageAsText(midiMessage, midiDataText, port);
 
@@ -79,24 +90,25 @@ function makeMidiMessageVisible(midiMessage, port) {
 }
 // ###########################################
 function reducedClockAndActiveSensingMessages(midiData, port) {
-  if (midiData != 248 && midiData != 254) return false; // not reduced. It's not a 'Timing clock' message and should pass!
-  if (!midiBay.menuClockTag.classList.contains('visible_clock')) return true; // reduced! don't show 'Timing clock' messages if clock button is on!
-  // logger.debug('reducedClockAndActiveSensingMessages', midiData, getPortProperties(port).clockBuffer);
+  if (midiData !== MIDI_TIMING_CLOCK && midiData !== MIDI_ACTIVE_SENSING) return false; // Not a Clock/Active Sensing message, pass through
+  if (!midiBay.menuClockTag.classList.contains('visible_clock')) return true; // Clock display disabled, block message
+
   const portProbs = getPortProperties(port);
   portProbs.clockBuffer = (portProbs.clockBuffer || 0) + 1;
   portProbs.activeSenseBuffer = (portProbs.activeSenseBuffer || 0) + 1;
-  if (midiData === 248 && portProbs.clockBuffer > 60) {
+
+  if (midiData === MIDI_TIMING_CLOCK && portProbs.clockBuffer > 80) {
     portProbs.clockBuffer = 0;
-    return false; // show one 'Timing clock' message after the pause!
+    return false; // Show one Clock message after 80 messages
   }
-  if (midiData === 254 && portProbs.activeSenseBuffer > 4) {
+  if (midiData === MIDI_ACTIVE_SENSING && portProbs.activeSenseBuffer > 6) {
     portProbs.activeSenseBuffer = 0;
-    return false; // show one 'Timing clock' message after the pause!
+    return false; // Show one Active Sensing message after 6 messages
   }
-  return true; // reduced 'Timing clock' message will be blocked in makeMidiMessageVisible()!
+  return true; // Block message (throttled)
 }
 // #####################################################
-// Prüft, ob eine MIDI-Schleife vorliegt (doppelte Nachrichten).
+// Check for MIDI feedback loop (duplicate messages)
 function isMidiLoop(outPort, midiMessage) {
   const portProps = getPortProperties(outPort);
   const midiData = midiMessage.data;
@@ -120,7 +132,7 @@ function isMidiLoop(outPort, midiMessage) {
   if (isLoop) {
     midiBay.msgMonitor.isLoop = true;
     midiMessage.isFiltered = true;
-    const midiDataText = getLoopMessageHtml(midiMessage, outPort);
+    const midiDataText = getLoopMessageHtml(midiMessage);
     showMidiMessageAsText(midiMessage, midiDataText, outPort);
     midiBay.msgMonitor.isLoop = false;
     logger.warn('!!! Double Midi Message!!! -> ', outPort.name, outPort.type);

@@ -57,7 +57,6 @@ function initPortBlacklist() {
     const li = document.createElement('li');
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
-    // checkbox.id = `blacklist_${inPort.id}`;
     checkbox.id = inPort.id;
     checkbox.dataset.portName = portName;
     checkbox.dataset.portType = portType;
@@ -83,7 +82,6 @@ function initPortBlacklist() {
       const li = document.createElement('li');
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
-      //   checkbox.id = `blacklist_${outPort.id}`;
       checkbox.id = outPort.id;
       checkbox.dataset.portName = portName;
       checkbox.dataset.portType = 'output-only';

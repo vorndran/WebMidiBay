@@ -1,5 +1,4 @@
 export {
-  // safeBlofeldSoundDumpAsFile,
   getSysexFileToMap,
   sysexToSyxFile,
   sysexToSyxFileUrl,
@@ -10,8 +9,7 @@ import { extractSysex, clearSysexTable, showSysexTable } from './sysex.js';
 import { logger } from '../utils/logger.js';
 import { addClass } from '../html/domStyles.js';
 import { midiBay, soundMap } from '../main.js';
-const sysex_start_byte = 240;
-const sysex_end_byte = 247;
+import { MIDI_SYSEX_START, MIDI_SYSEX_END } from '../constants/midiConstants.js';
 
 // ################################################################
 function safeSysexAsFile(sysexData) {
@@ -66,16 +64,8 @@ function getSysexFilesToMap(eFiles) {
     reader.readAsArrayBuffer(file);
   }
 }
-// const sysexFileMap = new Map();
 // getSysexFileToMap #########################################################################
 function getSysexFileToMap(file) {
-  // console.log('getSysexFileToMap', file);
-
-  // const fileList = eFiles.target.files; // FileList object
-  // for (const file of eFiles.target.files) {
-  // if (!Object.hasOwnProperty.call(fileList, fileNr)) continue;
-  // if (!file.name.match(/(.mid\b|.syx\b)/i)) continue;
-
   const reader = new FileReader();
   reader.onload = () => extractSysexFileToMap(file, reader.result);
   reader.readAsArrayBuffer(file);
@@ -145,18 +135,18 @@ function showSysexFileContent(eClick) {
 
   const tableContainer = document.getElementById('sysex_table_container');
 
-  // Toggle: Wenn Tabelle sichtbar ist, verstecken
+  // Toggle: If table is visible, hide it
   if (tableContainer && eClick.target.textContent === 'hide content') {
     tableContainer.innerHTML = '';
     eClick.target.textContent = 'view content';
     return;
   }
 
-  // Anzeigen
+  // Display table
   const filename = eClick.target.dataset.filename;
   const sysexArray = midiBay.sysexFileMap.get(filename);
   logger.debug('showSysexFileContent', filename, sysexArray);
-  console.log(`File: ${filename} (${sysexArray.length} bytes)`, sysexArray);
+  logger.debug(`File: ${filename} (${sysexArray.length} bytes)`, sysexArray);
 
   showSysexTable(sysexArray, filename);
 
@@ -174,9 +164,20 @@ function resetViewContentButtons() {
 // ##############################################
 function sendSysexFileDataToSelectedOutput(sysexArray) {
   logger.debug('send Sysex File Data To Selected Output');
-  if (!midiBay.selectedPort || midiBay.selectedPort.type == 'input') return;
-  midiBay.selectedPort.send(sysexArray);
-  logger.debug('sendSysexFileDataToSelectedOutput', midiBay);
+  if (!midiBay.selectedPort || midiBay.selectedPort.type === 'input') return;
+
+  try {
+    if (midiBay.selectedPort.state === 'connected') {
+      midiBay.selectedPort.send(sysexArray);
+      logger.debug('SysEx sent successfully to', midiBay.selectedPort.name);
+    } else {
+      logger.warn(
+        `Cannot send SysEx: Port ${midiBay.selectedPort.name} is ${midiBay.selectedPort.state}`
+      );
+    }
+  } catch (error) {
+    logger.error(`Error sending SysEx to ${midiBay.selectedPort.name}:`, error.message);
+  }
 }
 // ##############################################################
 // function sysexToMidFile(sysexData) {

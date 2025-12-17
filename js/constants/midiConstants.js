@@ -169,3 +169,12 @@ export const mmsg = {
  * Notennamen (Chromatische Skala)
  */
 export const notes = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B'];
+
+/**
+ * MIDI System Messages (Status-Bytes)
+ * MIDI_SYSEX_START markiert die Grenze zwischen Channel Messages (128-239) und System Messages (240-255)
+ */
+export const MIDI_SYSEX_START = 0xf0; // 240 - SysEx Start / Grenze zu System Messages
+export const MIDI_SYSEX_END = 0xf7; // 247 - SysEx End (EOX)
+export const MIDI_TIMING_CLOCK = 0xf8; // 248 - Timing Clock
+export const MIDI_ACTIVE_SENSING = 0xfe; // 254 - Active Sensing

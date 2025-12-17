@@ -6,7 +6,7 @@ export {
   setPortTagFilterClass,
   setFilterPortInfoTagClass,
   restorePortTagFilterClass,
-  setSelectedPortTagFilterClass,
+  setFilterCss,
 };
 import { midiBay } from '../main.js';
 import {
@@ -37,7 +37,7 @@ function setFilterClass() {
   setFilterTagsClass();
   setFilterPortInfoTagClass();
   setFilterContainerClass();
-  setSelectedPortTagFilterClass();
+  setFilterCss();
 }
 // #########################################################
 function restorePortTagFilterClass() {
@@ -48,39 +48,47 @@ function restorePortTagFilterClass() {
   });
 }
 // #########################################################
-function setSelectedPortTagFilterClass() {
-  logger.debug('setSelectedPortTagFilterClass');
+function setFilterCss() {
+  logger.debug('setFilterCss');
 
-  if (!midiBay.selectedPort) return;
-  setPortTagFilterClass(midiBay.selectedPort);
+  midiBay.portByTagIdMap.forEach((port) => {
+    setPortTagFilterClass(port);
+  });
 }
 // #########################################################
 function setPortTagFilterClass(port) {
+  logger.debug('setPortTagFilterClass');
   const portProbs = getPortProperties(port);
 
-  portProbs.filterSet.size + portProbs.channel.filter + portProbs.channel.reset > 0
+  portProbs.filterSet.size +
+    portProbs.channel.filter +
+    portProbs.channel.reset +
+    midiBay.globalFilterSet.size +
+    midiBay.globalChannel.filter +
+    midiBay.globalChannel.reset >
+  0
     ? addClass(portProbs.tag, 'filtered')
     : removeClass(portProbs.tag, 'filtered');
 }
 // ####################################################
-// Setzt die Klasse des Filter-Info-Tags -> CSS Darstellung: gewählter Port oder `all inputs`
+// Sets the CSS class of the filter info tag to display selected port or 'all inputs'
 function setFilterPortInfoTagClass() {
   logger.debug('setFilterPortInfoTagClass');
 
-  const portInfoTagArray = document.querySelectorAll('.filterportinfo');
+  const portInfoTag = document.querySelector('.filterportinfo');
   const inOrOutTag = document.querySelector('.in-or-out');
 
   const selectedPortProbs = getSelectedPortProperties();
 
-  portInfoTagArray.forEach((portInfoTag) => {
-    // Setze zuerst die CSS-Klasse korrekt
+  if (portInfoTag) {
+    // Set CSS class correctly first
     toggleDisplayClass(portInfoTag, 'chosen', Boolean(selectedPortProbs));
 
-    // Dann bestimme den anzuzeigenden Text basierend auf der Auswahl
+    // Then determine the text to display based on selection
     portInfoTag.innerHTML = selectedPortProbs ? selectedPortProbs.alias : `all inputs`;
-  });
+  }
 
-  // Aktualisiere Input/Output Anzeige
+  // Update Input/Output display
   if (inOrOutTag) {
     inOrOutTag.textContent = selectedPortProbs
       ? selectedPortProbs.type === 'input'
@@ -90,30 +98,7 @@ function setFilterPortInfoTagClass() {
   }
 }
 // ####################################################
-// Setzt die Klasse des Filter-Info-Tags -> CSS Darstellung: gewählter Port oder `all inputs`
-// function setFilterPortInfoTagClass() {
-//   logger.debug('setFilterPortInfoTagClass');
-
-//   const portInfoTagArray = document.querySelectorAll('.filterportinfo');
-
-//   const selectedPort = getSelectedPort();
-//   const selectedPortProbs = selectedPort ? getPortProperties(selectedPort) : null;
-
-//   portInfoTagArray.forEach((portInfoTag) => {
-//     logger.debug(
-//       '%csetFilterPortInfoTagClass',
-//       'color: blue;',
-//       'selectedPort',
-//       selectedPortProbs ? selectedPortProbs.alias : 'none'
-//     );
-
-//     portInfoTag.innerHTML = toggleDisplayClass(portInfoTag, 'chosen', selectedPort)
-//       ? selectedPortProbs.alias
-//       : `all inputs`;
-//   });
-// }
-// ####################################################
-// Setzt die Klasse des Filter-Container-Tags auf input oder output Port
+// Sets the filter container tag CSS class to input or output port
 function setFilterContainerClass() {
   logger.debug('setFilterContainerClass');
 
@@ -140,7 +125,7 @@ function setFilterTagsClass() {
 // ####################################################
 function scanFilterSetToFilterTags(filterSet, classItem) {
   midiBay.divFilterTag.classFilterTags.forEach((filterTag) => {
-    filterSet.has(filterTag.dataset.statusbyte) // filter.js
+    filterSet.has(Number(filterTag.dataset.statusbyte))
       ? addClass(filterTag, classItem)
       : removeClass(filterTag, classItem);
   });

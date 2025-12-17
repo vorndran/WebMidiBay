@@ -1,14 +1,9 @@
 export { disableRouting, initRoutingLines, routingLinesUnvisible };
 
 import { midiBay } from '../main.js';
-import { getPortProperties, getSelectedPortProperties } from '../utils/helpers.js';
-import { removeSelectedPort } from './routingSelectedPort.js';
-import { setFilterPortInfoTagClass, setFilterContainerClass } from '../filter/filterCss.js';
+import { getPortProperties } from '../utils/helpers.js';
 import { logger } from '../utils/logger.js';
 import { toggleDisplayClass } from '../html/domStyles.js';
-
-import { setChannelClass } from '../filter/filterChannel.js';
-import { unselectSelectedPort } from '../filter/filter.js';
 import { preventAndStop, getComputedStyleValue } from '../html/domStyles.js';
 import {
   drawRoutingLine,

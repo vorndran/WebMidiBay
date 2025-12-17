@@ -12,7 +12,15 @@ div.table_container {
   /* max-width: 900px; */
   /* margin: auto; */
 }
-#tables {
+menu.table {
+  /* display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center; */
+  /* background-color: var(--menu-bg-color); */
+  padding: 1rem;
+}
+div#tables {
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -24,6 +32,10 @@ h2,
 h3,
 table {
   margin: 1rem 0 0 1rem;
+}
+menu.table h1 {
+  margin: 0;
+  padding: 0;
 }
 h2,
 h3 {

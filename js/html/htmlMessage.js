@@ -3,7 +3,6 @@ export {
   showMidiMessageAsText,
   showMessage,
   clickedMessage,
-  getLoopMessageHtml,
   setMsgMonitor_showFiltered,
   setMsgMonitor_showPorts,
   renderVisibleMessages,
@@ -21,7 +20,6 @@ import { insertPrependLimited, setTagInnerHTML } from './domContent.js';
 import { addClass, preventAndStop, toggleDisplayClass } from './domStyles.js';
 import { updateLayout } from './htmlUpdater.js';
 import { getBoundingClientRectArray, getRectArrayDiffResult } from '../routing/routingLinesSvg.js';
-import { formatMessageToHtmlAndCollectSysex } from './htmlMessageFormat.js';
 // ##########################################################################
 function initHtmlMessage() {
   logger.debug('initHtmlMessage');
@@ -34,12 +32,6 @@ function initHtmlMessage() {
 }
 // ########################################################
 function showMidiMessageAsText(midiMessage, midiDataText, port) {
-  // logger.debug('show TextMessage', midiMessage, port.name);
-  // // let midiDataText = formatMessageToHtmlAndCollectSysex(midiMessage.data);
-  // if (midiBay.msgMonitor.isLoop)
-  //   midiDataText = `<span class="doublemidimessage"> Double Midi Message!!!</span><span class="rawdata"> data: (${midiMessage.data})</span>`;
-  // else midiDataText = formatMessage(midiMessage.data);
-
   const portAlias = getPortProperties(port).alias;
   const filtered = midiMessage.isFiltered ? 'filtered' : 'sended';
   const message = `<span class="portname ${port.type} ${filtered}">${portAlias}</span> ${midiDataText}`;
@@ -62,7 +54,6 @@ function showMessage(message, isFiltered, portType, portName) {
     filtered: isFiltered,
     portType: portType,
     portName: portName,
-    // isSelected: getSelectedPort() ? portName === getSelectedPort().name : false,
     timestamp: Date.now(),
     isEmpty: false,
   });
@@ -74,15 +65,21 @@ function showMessage(message, isFiltered, portType, portName) {
 
   // 4. Mit 'empty' Nachrichten am Ende auffüllen (Helferfunktion)
   fillWithEmptyMessages(midiBay.msgMonitor.messageQueue, maxQueueSize);
-  // 5. DOM neu rendern, wenn Monitor sichtbar ist
+  // 5. DOM neu rendern, wenn Monitor sichtbar ist (throttled via requestAnimationFrame)
   if (midiBay.menuItemVisibleMap.get('monitor') === 'none') return;
-  renderVisibleMessages();
-  updateLayout();
+  scheduleRender();
 }
 // ########################################################
-function getLoopMessageHtml(midiMessage, port) {
-  const portAlias = getPortProperties(port).alias;
-  return `<span class="portname ${port.type} loopmessage">${portAlias}</span> <span class="doublemidimessage"> Double Midi Message!!!</span><span class="rawdata"> data: (${midiMessage.data})</span>`;
+// Performance: Throttle DOM updates using requestAnimationFrame
+function scheduleRender() {
+  if (!midiBay.msgMonitor.renderScheduled) {
+    midiBay.msgMonitor.renderScheduled = true;
+    requestAnimationFrame(() => {
+      renderVisibleMessages();
+      updateLayout();
+      midiBay.msgMonitor.renderScheduled = false;
+    });
+  }
 }
 // ########################################################
 function fillWithEmptyMessages(queue, maxQueueSize) {
@@ -100,12 +97,12 @@ function fillWithEmptyMessages(queue, maxQueueSize) {
 }
 // ########################################################
 function renderVisibleMessages() {
-  // Nachrichten nach Filter filtern
+  // Filter messages based on visibility settings
   const visibleMessages = midiBay.msgMonitor.messageQueue.filter((msg) => {
-    // Filter für gefiltert/unfiltered
+    // Filter for filtered/unfiltered messages
     if (midiBay.msgMonitor.showFiltered === 'filtered' && msg.filtered !== 'filtered') return false;
     if (midiBay.msgMonitor.showFiltered === 'unfiltered' && msg.filtered !== 'sended') return false;
-    // Filter für Ports
+    // Filter for port types
     switch (midiBay.msgMonitor.showPorts) {
       case 'inputs':
         if (msg.portType !== 'input') return false;
@@ -128,16 +125,16 @@ function renderVisibleMessages() {
         if (selectedPort && msg.portName !== selectedPort.name) return false;
         if (msg.portType !== selectedPort.type) return false;
         break;
-      // 'all' oder unbekannt: kein Filter
+      // 'all' or unknown: no filter
     }
     return true;
   });
   fillWithEmptyMessages(visibleMessages, midiBay.msgMonitor.maxVisibleLines);
 
-  // Nur die ERSTEN X sichtbaren Nachrichten nehmen
+  // Take only the FIRST X visible messages
   const displayMessages = visibleMessages.slice(0, midiBay.msgMonitor.maxVisibleLines);
 
-  // DOM komplett neu aufbauen
+  // Rebuild DOM completely
   midiBay.msgTag.innerHTML = '';
   let oddOrEven = 'odd';
 
@@ -155,12 +152,12 @@ function renderVisibleMessages() {
 // ########################################################
 function updateVisibleMessages(forceUpdate = false) {
   if (forceUpdate) renderVisibleMessages();
-  // Prüfe, ob sich die Größe des Message-Containers geändert hat
+  // Check if message container size has changed
   const messageRectArray = getBoundingClientRectArray(midiBay.msgTag);
   const messageRectArrayFormer = midiBay.messageRectArray;
   const messageRectArrayDiff = getRectArrayDiffResult(messageRectArray, messageRectArrayFormer);
 
-  // Wenn sich die Größe nicht geändert hat, keine Aktualisierung notwendig
+  // If size hasn't changed, no update needed
   if (messageRectArrayDiff == 0) {
     return;
   }
@@ -179,10 +176,10 @@ function initMsgMonitor() {
   midiBay.msgTag = document.getElementById('message_text');
   midiBay.msgTag.oddOrEven = 'odd';
   midiBay.msgMonitor.paused = false;
+  midiBay.msgMonitor.renderScheduled = false;
   midiBay.msgMonitor.messageStringDisplay = 'text'; // text | raw | both
   midiBay.messageRectArray = [0, 0, 0, 0, 0, 0, 0, 0];
 
-  // midiBay.msgMonitor.tag = document.querySelector('.message_filter');
   midiBay.msgMonitor.showPorts = 'inputs'; // inputs | outputs | all | selection
   midiBay.msgMonitor.showFiltered = 'all'; // all | filtered | unfiltered
   midiBay.msgMonitor.isLoop = false;
@@ -191,7 +188,7 @@ function initMsgMonitor() {
   midiBay.msgMonitor.maxQueueSize = 500;
   midiBay.msgMonitor.maxVisibleLines = 30;
 
-  // Initial rendern
+  // Initial render
   renderVisibleMessages();
 
   const selectedMsg = document.getElementById('filtered_message').options[0];
@@ -200,12 +197,10 @@ function initMsgMonitor() {
 
   const selectedPort = document.getElementById('filtered_ports').options[0];
   selectedPort.selected = true;
-  midiBay.msgMonitor.showPorts = selectedPort.value; // Fix: showPorts statt showFiltered
-
-  // midiBay.msgMonitor.toggle = toggle;
+  midiBay.msgMonitor.showPorts = selectedPort.value;
 }
 // ########################################################
-// Setzt die Klasse des Filter-Container-Tags auf input oder output Port
+// Sets the filter container tag CSS class to input or output port
 function initMessageClasses() {
   addClass(midiBay.msgTag, 'message-text');
   midiBay.monitorTag = document.getElementById('monitor');
@@ -230,7 +225,7 @@ function clickedMessage(eClick) {
   preventAndStop(eClick);
 
   if (eClick.target == document.getElementById('clear_message')) {
-    midiBay.msgMonitor.messageQueue = []; // Queue leeren
+    midiBay.msgMonitor.messageQueue = []; // Clear queue
     fillWithEmptyMessages(midiBay.msgMonitor.messageQueue, midiBay.msgMonitor.maxQueueSize);
     return updateLayout(true);
   }
@@ -243,10 +238,9 @@ function clickedMessage(eClick) {
 // ##################################################
 function setMsgMonitor_showPorts(eChanged) {
   logger.debug('setMsgMonitor_showPorts', eChanged.target.value);
-  // outputs | inputs | selected
   midiBay.msgMonitor.showPorts = eChanged.target.value;
 
-  // Queue neu rendern für neuen Filter
+  // Re-render queue for new filter
   setMessageContainerClass();
   updateLayout(true);
 }
@@ -264,7 +258,7 @@ function setMsgMonitor_showFiltered(eChanged) {
     midiBay.msgTag.classList.add('filtered');
   }
 
-  // Queue neu rendern für neuen Filter
+  // Re-render queue for new filter
   updateLayout(true);
 }
 // ##################################################

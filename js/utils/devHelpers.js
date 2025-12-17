@@ -56,19 +56,19 @@ export function clickMenuAlternative(eClick) {
  * Auskommentierte Event-Handler-Optionen
  * Original-Kontext: htmlEvents.js, setEventListener()
  */
-export const alternativeClickEvents = {
-  // Globale Window-Events (auskommentiert wegen Konflikten)
-  // window_disableRouting: () => window.addEventListener('click', disableRouting),
-  // window_unselectPort: () => window.addEventListener('click', unselectSelectedPort),
-  // Alternative Event-Targets
-  // '#inputs_head': resetAllRouting,
-  // '#filter_head': resetAllFilter,
-  // '.filterportinfo': clickedUnselectSelectedPort,
-  // '#routing': clickedPortMenuRouting,
-  // '#message_filter': clickedPortMenuRouting,
-  // '#graph': clickedPortMenuRouting,
-  // '#form_settings ul > li': clearStorage,
-};
+// export const alternativeClickEvents = {
+// Globale Window-Events (auskommentiert wegen Konflikten)
+// window_disableRouting: () => window.addEventListener('click', disableRouting),
+// window_unselectPort: () => window.addEventListener('click', unselectSelectedPort),
+// Alternative Event-Targets
+// '#inputs_head': resetAllRouting,
+// '#filter_head': resetAllFilter,
+// '.filterportinfo': clickedUnselectSelectedPort,
+// '#routing': clickedPortMenuRouting,
+// '#message_filter': clickedPortMenuRouting,
+// '#graph': clickedPortMenuRouting,
+// '#form_settings ul > li': clearStorage,
+// };
 
 // ============================================================================
 // HTML.JS - Alternative Implementierungen

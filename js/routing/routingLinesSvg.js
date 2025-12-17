@@ -12,7 +12,7 @@ export {
 import { midiBay } from '../main.js';
 import { getPortProperties } from '../utils/helpers.js';
 import { logger } from '../utils/logger.js';
-import { setText, clearNode } from '../html/domContent.js';
+import { clearNode } from '../html/domContent.js';
 import { setAttributes, createElementWithAttributes } from '../html/domContent.js';
 import { getComputedStyleValue, setStyles } from '../html/domStyles.js';
 import { routingLinesUnvisible } from './routingLines.js';
@@ -24,21 +24,13 @@ import { routingLinesUnvisible } from './routingLines.js';
  */
 function redrawRoutingLines(forceUpdate = false) {
   if (routingLinesUnvisible()) return;
-  // logger.debug('%credrawRoutingLines', 'color: lightblue; font-weight: bold;');
 
-  // Berechne die SVG-Container-Dimensionen neu
+  // Recalculate SVG container dimensions
   const svgRectArray = getBoundingClientRectArray(midiBay.svgContainerTag);
   const svgRectArrayFormer = midiBay.svgRectArray;
   const svgRectArrayDiff = getRectArrayDiffResult(svgRectArray, svgRectArrayFormer);
 
-  // logger.debug(
-  //   '%c SVG Container Rect Array Diff:',
-  //   'color: lightblue; font-weight: bold;',
-  //   svgRectArrayDiff,
-  //   svgRectArray,
-  //   svgRectArrayFormer
-  // );
-  // Wenn sich die Größe nicht geändert hat, keine Aktualisierung notwendig
+  // If size hasn't changed, no update needed
   if (svgRectArrayDiff == 0 && !forceUpdate) {
     return;
   }
@@ -48,7 +40,6 @@ function redrawRoutingLines(forceUpdate = false) {
     '%c drawAllRoutingLines from redrawRoutingLines',
     'color: lightblue; font-weight: bold;'
   );
-  // if (midiBay.svgDimension == allSvgDimensions) return;
 
   drawAllRoutingLines();
 }
@@ -67,7 +58,6 @@ function getRectArrayDiffResult(rectArray1, rectArray2) {
  * Zeichnet alle Routing-Verbindungen als SVG-Linien.
  */
 function drawAllRoutingLines() {
-  // logger.debug('%cdrawAllRoutingLines', 'color: blue; font-weight: bold;');
   if (routingLinesUnvisible()) return;
 
   clearNode(midiBay.graphTag);
@@ -94,8 +84,6 @@ function drawAllRoutingLines() {
  * @returns {SVGLineElement} Die erstellte SVG-Linie
  */
 function drawRoutingLine(inPortTagId, outPortTagId) {
-  // logger.debug('drawRoutingLine', `${inPortTagId}-${outPortTagId}`);
-
   midiBay.graphTagRect = midiBay.graphTag.getBoundingClientRect();
 
   const svgNS = 'http://www.w3.org/2000/svg';
@@ -134,7 +122,6 @@ function get_Y_CenterPosition(portTagId) {
  * Aktualisiert Position und Größe des SVG-Graph-Containers.
  */
 function resetGraphTagPosition() {
-  // logger.debug('resetGraphTagPosition');
   if (routingLinesUnvisible()) return;
 
   getGraphPositionTags();
@@ -167,17 +154,7 @@ function resetGraphTagPosition() {
  * Ermittelt die Referenz-Tags für die Graph-Positionierung.
  */
 function getGraphPositionTags() {
-  // logger.debug('getGraphPositionTags');
   if (routingLinesUnvisible()) return;
-
-  // const inputList = document.getElementById('inputs_list');
-  // const outputList = document.getElementById('output_list');
-
-  // midiBay.graphTag.topLeftTag = inputList.firstElementChild;
-  // midiBay.graphTag.rightTag = outputList.lastElementChild;
-  // midiBay.graphTag.bottomTag =
-  // // ermittel die längere Liste:
-  //   midiBay.inNameMap.size <= midiBay.outNameMap.size ? outputList.lastElementChild : inputList.lastElementChild;
 
   const inputList = document.getElementById('inputs');
   const outputList = document.getElementById('outputs');
@@ -185,8 +162,8 @@ function getGraphPositionTags() {
   midiBay.graphTag.topTag = inputList;
   midiBay.graphTag.leftTag = inputList?.firstElementChild;
   midiBay.graphTag.rightTag = outputList?.lastElementChild;
+  // Determine the longer list for bottom boundary
   midiBay.graphTag.bottomTag =
-    // ermittel die längere Liste:
     midiBay.inNameMap.size <= midiBay.outNameMap.size ? outputList : inputList;
 }
 
@@ -197,7 +174,6 @@ function getGraphPositionTags() {
  * @returns {SVGLineElement} Die erstellte Drag-Linie
  */
 function getDragLine(portTagId) {
-  // logger.debug('getDragLine');
   const line = drawRoutingLine(portTagId, portTagId);
   line.classList.add('dragline');
   midiBay.graphTag.appendChild(line);

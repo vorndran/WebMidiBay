@@ -1,21 +1,42 @@
-export { formatMessageToHtmlAndCollectSysex };
+export { formatMessageToHtmlAndCollectSysex, getLoopMessageHtml };
 
-import { cc, cc2 } from '../constants/midiConstants.js';
+import {
+  cc,
+  cc2,
+  MIDI_SYSEX_START,
+  MIDI_SYSEX_END,
+  MIDI_TIMING_CLOCK,
+} from '../constants/midiConstants.js';
 import { getChannel, getMidiMsg, getNote } from '../utils/midiHelpers.js';
 import { collectSysexData, toHex } from '../sysex/sysex.js';
 import { midiBay } from '../main.js';
+import { getPortProperties } from '../utils/helpers.js';
 
 // ########################################################
-function formatMessageToHtmlAndCollectSysex(midiData) {
-  // 240 oder Laenge > 3 = sysex!
-  if (midiData[0] > 127 && midiData[0] < 160) return noteToText(midiData); // < 160 = note on, note off:
-  if (midiData[0] < 176) return controllerToText(midiData); // 160 - 175 = Polyphonic Aftertouch
-  if (midiData[0] < 192) return ccToText(midiData); // 176 = CC
-  if (midiData[0] < 240) return controllerToText(midiData); // 160 - 239 = other Controller
-  if (midiData[0] == 240) return sysexToTextAndCollectData(midiData);
-  if (midiData[0] == 247) collectSysexData(midiData); // 247 =  EOF
-  if (midiData[0] > 240) return actionDataToText(midiData); // 241 - 255 = action data
-  if (midiData[0] < 128) collectSysexData(midiData); // < 128 = kein Statusbyte oder EOF
+// Performance: Use range-based dispatch instead of sequential if-checks
+function formatMessageToHtmlAndCollectSysex(midiData, port = null) {
+  const statusByte = midiData[0];
+
+  // Fast path: Most common MIDI messages (128-239)
+  if (statusByte >= 128 && statusByte < 240) {
+    if (statusByte < 160) return noteToText(midiData); // 128-159: Note On/Off
+    if (statusByte < 176) return controllerToText(midiData); // 160-175: Polyphonic Aftertouch
+    if (statusByte < 192) return ccToText(midiData); // 176-191: CC
+    return controllerToText(midiData); // 192-239: Program Change, Channel Aftertouch, Pitch Bend
+  }
+
+  // System messages and edge cases
+  if (statusByte === 240) return sysexToTextAndCollectData(midiData); // MIDI_SYSEX_START
+  if (statusByte === 247) {
+    collectSysexData(midiData);
+    return '--';
+  } // MIDI_SYSEX_END
+  if (statusByte > 240) return actionDataToText(midiData, port); // 241-255: System Real Time
+  if (statusByte < 128) {
+    collectSysexData(midiData);
+    return '--';
+  } // Data bytes (inside SysEx)
+
   return '--';
 }
 // Übersicht: Mögliche Status-Bytes vs. Datenbytes
@@ -54,7 +75,7 @@ function ccToText(midiData) {
 }
 // ########################################################
 function controllerToText(midiData) {
-  // wenn midiData[2] nicht existiert, dann leer lassen. (bei Channel Pressure und Program Change)
+  // If midiData[2] doesn't exist, leave empty (Channel Pressure and Program Change)
   const midiData2 = midiData[2] ? `<span class="mididata2 text-msg">${midiData[2]}</span>` : '';
   return `<span class="channel text-msg">${getChannel(midiData[0])}</span>
   <span class="mididata1 text-msg">${getMidiMsg(midiData[0])}</span>
@@ -62,37 +83,35 @@ function controllerToText(midiData) {
   ${midiData2}${rawDataText(midiData)}`;
 }
 // ########################################################
-function actionDataToText(midiData) {
-  return `<span class="action_data">"${cc2[midiData[0]]}"</span>${rawDataText(midiData)}`;
+function actionDataToText(midiData, port = null) {
+  const portProps = port ? getPortProperties(port) : null;
+  const hasClockFilter = portProps?.filterSet?.has(MIDI_TIMING_CLOCK) || false;
+  const clockClass =
+    midiData[0] === MIDI_TIMING_CLOCK &&
+    portProps?.type === 'output' &&
+    !hasClockFilter &&
+    portProps?.activeClockSourceSet?.size > 1
+      ? 'multiple_clock_sources'
+      : '';
+  return `<span class="action_data ${clockClass}">"${
+    cc2[midiData[0]]
+  }" ${clockClass} </span>${rawDataText(midiData)}`;
 }
 // ########################################################
 function rawDataText(midiData) {
-  // wenn midiData[2] nicht existiert, dann leer lassen. (bei Channel Pressure und Program Change)
-  const midiData2 = midiData[2] ? `,${midiData[2]}` : '';
-  const midiData2Hex = midiData[2] ? `|${toHex(midiData)[2]}` : '';
-  return `<span class="rawdata">- data:(${midiData[0]},${midiData[1]}${midiData2}) - hex:(${
-    toHex(midiData)[0]
-  }|${toHex(midiData)[1]}${midiData2Hex})</span>`;
+  // Filter only defined values (allows 0 as valid value)
+  const validData = [...midiData].filter((byte) => byte !== undefined);
+  const hexData = toHex(validData);
+
+  const dataString = validData.join(',');
+  const hexString = hexData.join('|');
+
+  return `<span class="rawdata">- data:(${dataString}) - hex:(${hexString})</span>`;
 }
 // ########################################################
-function printMessageType(midiData) {
-  if (midiData[0] == 240 || midiData.length > 3) return 'sysex';
-  if (midiData[0] < 160) return 'note'; // < 160 = note on, note off:
-  if (midiData[0] < 176) return 'controller'; // 160 - 239 = other Controller
-  if (midiData[0] < 192) return 'cc'; // 176 = CC
-  if (midiData[0] < 240) return 'controller'; // 160 - 239 = other Controller
-  if (midiData[0] > 240) return 'action_data'; // 241 - 255 = action data
-  return 'unknown';
+function getLoopMessageHtml(midiMessage) {
+  return `<span class="doublemidimessage"> Double Midi Message!!!</span>${rawDataText(
+    midiMessage.data
+  )}`;
 }
-// ########################################################
-// function collectSysexDataBlock(midiData, eofByte) {
-//   let dataString = '';
-//   midiData.forEach((dataByte) => {
-//     dataString += `${dataByte},`;
-//   });
-//   dataString = dataString.slice(0, -1); // letztes Komma entfernen
-//   if (eofByte)
-//     return `<span class="sysex">SysEx Data (incomplete): [${dataString}] - EOF Byte: ${eofByte}</span>`;
-//   return `<span class="sysex">SysEx Data (incomplete): [${dataString}]</span>`;
-// }
 // ########################################################

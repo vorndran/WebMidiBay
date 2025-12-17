@@ -1,0 +1,115 @@
+:root {
+  /* Font Sizes */
+  --fontsize-small: 0.9rem;
+  --fontsize-normal: 1rem;
+  --fontsize-large: 1.2rem;
+
+  /* Base Colors */
+  --bg-color: #ffdea1;
+  --font-color: #3b2102;
+  --font-hell-color: #aa5c00;
+  --hell: #e6fbf7;
+  --hell-hover: #fff;
+
+  /* Menu Colors */
+  --menu-bg-color: #ffcb8d;
+  --menu-bg-color-hover: #ffe6c7;
+
+  /* Input Port Colors */
+  --in-bg-color: #fcaf77;
+  --in-open-color: #fdcb9e;
+  --in-closed-color: #e48139;
+
+  /* Output Port Colors */
+  --out-bg-color: #c9cce2;
+  --out-open-color: #eaecff;
+  --out-closed-color: #969cc2;
+
+  /* Selected Port Colors */
+  --selected-color: #ffc3f3;
+  --selected-bg-color: #6a549a;
+
+  /* Signal & Routing Colors */
+  --signal-color: rgb(255, 136, 0);
+  --routing-color: #00b3c6;
+  --routing-light-color: #c8f0f5;
+  --filtered-color: #8f6eea;
+  --clock-color: #d60000;
+  --clock-light-color: #ffa4a4;
+
+  /* Feature-specific Colors */
+  --monitor-bg-color: rgba(216, 158, 0, 0.44);
+  --syx-bg-color: #92d6cd;
+  --settings-bg-color: #cda7c7;
+
+  /* --note-color: #fff3cd; */
+  --note-color: #ffe8c0;
+  /* --note-color: #ffeccd; */
+
+  /* CSS Filters für SVG-Einfärbung (für background-image mit schwarzem SVG) */
+  /* Generiert mit: https://codepen.io/sosuke/pen/Pjoqqp */
+
+  /* Base Color Filters */
+  --filter-bg-color: invert(88%) sepia(23%) saturate(824%) hue-rotate(331deg) brightness(103%)
+    contrast(101%); /* #ffdea1 */
+  --filter-font-color: invert(10%) sepia(37%) saturate(1756%) hue-rotate(25deg) brightness(92%)
+    contrast(96%); /* #3b2102 */
+  --filter-font-hell-color: invert(36%) sepia(89%) saturate(1273%) hue-rotate(14deg) brightness(98%)
+    contrast(106%); /* #aa5c00 */
+  --filter-hell: invert(98%) sepia(17%) saturate(1086%) hue-rotate(108deg) brightness(97%)
+    contrast(97%); /* #e6fbf7 */
+  --filter-hell-hover: invert(100%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%)
+    contrast(100%); /* #fff */
+
+  /* Menu Color Filters */
+  --filter-menu-bg-color: invert(89%) sepia(17%) saturate(1007%) hue-rotate(322deg) brightness(101%)
+    contrast(102%); /* #ffcb8d */
+  --filter-menu-bg-color-hover: invert(91%) sepia(13%) saturate(569%) hue-rotate(315deg)
+    brightness(102%) contrast(101%); /* #ffe6c7 */
+
+  /* Input Port Color Filters */
+  --filter-in-bg-color: invert(79%) sepia(35%) saturate(742%) hue-rotate(324deg) brightness(100%)
+    contrast(98%); /* #fcaf77 */
+  --filter-in-open-color: invert(88%) sepia(15%) saturate(564%) hue-rotate(316deg) brightness(100%)
+    contrast(98%); /* #fdcb9e */
+  --filter-in-closed-color: invert(58%) sepia(54%) saturate(3196%) hue-rotate(348deg)
+    brightness(95%) contrast(94%); /* #e48139 */
+
+  /* Output Port Color Filters */
+  --filter-out-bg-color: invert(84%) sepia(9%) saturate(602%) hue-rotate(202deg) brightness(93%)
+    contrast(90%); /* #c9cce2 */
+  --filter-out-open-color: invert(95%) sepia(8%) saturate(711%) hue-rotate(202deg) brightness(103%)
+    contrast(101%); /* #eaecff */
+  --filter-out-closed-color: invert(69%) sepia(13%) saturate(699%) hue-rotate(202deg)
+    brightness(86%) contrast(88%); /* #969cc2 */
+
+  /* Selected Port Color Filters */
+  --filter-selected-color: invert(86%) sepia(43%) saturate(3476%) hue-rotate(283deg)
+    brightness(104%) contrast(99%); /* #ffc3f3 */
+  --filter-selected-bg-color: invert(34%) sepia(16%) saturate(1594%) hue-rotate(234deg)
+    brightness(92%) contrast(85%); /* #6a549a */
+
+  /* Signal & Routing Color Filters */
+  --filter-signal-color: invert(59%) sepia(97%) saturate(1812%) hue-rotate(359deg) brightness(102%)
+    contrast(107%); /* #ff8800 */
+  --filter-routing-color: invert(40%) sepia(40%) saturate(1531%) hue-rotate(145deg) brightness(93%)
+    contrast(101%); /* #00b3c6 */
+  --filter-routing-light-color: invert(93%) sepia(6%) saturate(1191%) hue-rotate(145deg)
+    brightness(99%) contrast(94%); /* #c8f0f5 */
+  --filter-filtered-color: invert(40%) sepia(46%) saturate(1774%) hue-rotate(232deg) brightness(92%)
+    contrast(93%); /* #8f6eea */
+  --filter-clock-color: invert(9%) sepia(98%) saturate(6989%) hue-rotate(358deg) brightness(95%)
+    contrast(118%); /* #d60000 */
+
+  /* Feature-specific Color Filters */
+  --filter-syx-bg-color: invert(82%) sepia(11%) saturate(901%) hue-rotate(124deg) brightness(89%)
+    contrast(90%); /* #92d6cd */
+  --filter-settings-bg-color: invert(78%) sepia(9%) saturate(883%) hue-rotate(258deg)
+    brightness(92%) contrast(87%); /* #cda7c7 */
+  --filter-note-color: invert(94%) sepia(25%) saturate(663%) hue-rotate(317deg) brightness(104%)
+    contrast(101%); /* #ffe8c0 */
+
+  /* Spezielle Icon-Farben */
+  --filter-active-sensing: invert(79%) sepia(13%) saturate(1574%) hue-rotate(305deg)
+    brightness(105%) contrast(101%); /* #ff9797 */
+}

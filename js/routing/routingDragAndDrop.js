@@ -23,7 +23,6 @@ function initDragAndDrop() {
     midiBay.portPropertiesManager
       .getPortProperties(inPort)
       .tag.addEventListener('pointerdown', routingEventStart, { passive: false });
-    // inPort.tag.onmousedown = routingEventStart;
     midiBay.routingEvent = false;
   });
 }
@@ -32,8 +31,6 @@ function routingEventStart(event) {
   logger.debug('routingEventStart', event.pointerId, event.isPrimary);
 
   if (routingLinesUnvisible()) return;
-  //console.log('touch Move', event.touches[0]?.identifier);
-  // event.preventDefault();
   event.stopPropagation();
   if (midiBay.graphTag.classList.contains('routing')) return;
   if (midiBay.editPortTag) return;
@@ -74,16 +71,13 @@ function routingEventEnd(event) {
   if (midiBay.selectedPort) {
     const selectedPortProbs = midiBay.portPropertiesManager.getPortProperties(midiBay.selectedPort);
     if (selectedPortProbs.tag != event.target) setSelectedPort(getPortByTagId(event.target.id));
-  } // else {
-  // setSelectedPort(midiBay.portByTagIdMap.get(event.target.id));
-  //}
+  }
 
   midiBay.graphTag.dragLine.remove();
   midiBay.graphTag.dragLine = null;
 
   const eventXyMap = getEvent_xy(event);
   const endTarget = document.elementFromPoint(eventXyMap.get('x'), eventXyMap.get('y'));
-  //console.log('touch End', endTarget);
   removeClass(midiBay.clickedInPortTag, 'routing_source');
   removeClassFromAll('.routing_target', 'routing_target');
 

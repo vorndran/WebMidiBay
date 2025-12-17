@@ -1,4 +1,9 @@
-export { signal, lineSignal };
+export {
+  setPortTagSignal,
+  setPortTagAndRoutingLineSignal,
+  trackOutputClockSources,
+  updateAllOutputPortClockWarnings,
+};
 
 import { midiBay } from '../main.js';
 import { getPortProperties } from '../utils/helpers.js';
@@ -6,6 +11,8 @@ import { routingLinesUnvisible } from '../routing/routingLines.js';
 import { addClass, removeClass } from '../html/domStyles.js';
 import { hasClass } from '../html/domClasses.js';
 import { logger } from '../utils/logger.js';
+import { updateLayout } from '../html/htmlUpdater.js';
+import { MIDI_TIMING_CLOCK, MIDI_ACTIVE_SENSING } from '../constants/midiConstants.js';
 
 let timingClockStillActive = false;
 const signalInPortTagSet = new Set();
@@ -14,125 +21,192 @@ const signalPortTagMap = { in: signalInPortTagSet, out: signalOutPortTagSet };
 const clockSignalPortTagSet = new Set();
 
 // ################################################
-function lineSignal(inOrOut, statusByte, inPort, outPort) {
+function setPortTagAndRoutingLineSignal(inOrOut, statusByte, inPort, outPort) {
   const inPortProbs = getPortProperties(inPort);
   const outPortProbs = getPortProperties(outPort);
   const lineTagId = `${inPortProbs.tagId}-${outPortProbs.tagId}`;
-  signal(inOrOut, statusByte, outPort, lineTagId);
+  setPortTagSignal(inOrOut, statusByte, outPort, lineTagId, inPort);
 }
 
 // ################################################
-function signal(inOrOut, statusByte, port, lineTagId) {
+function setPortTagSignal(inOrOut, statusByte, port, lineTagId, inPort = null) {
   const portProbs = getPortProperties(port);
 
-  // wenn es ein Clock- oder Active Sensing Signal ist -> Icon permanent setzen:
-  if (statusByte == 248 || statusByte == 254) {
-    if (
-      (portProbs.type === 'input' && inOrOut === 'in') ||
-      (portProbs.type === 'output' && inOrOut === 'out')
-    )
-      clockAndActiveSensingSignal(portProbs, statusByte); // Permanente clock_active Klasse
-  }
+  // Handle Clock/Active Sensing signals with permanent icon
+  if (handleClockAndActiveSensingSignal(inOrOut, statusByte, portProbs, inPort)) return;
 
-  // Early exit: Visual Signals deaktiviert ###################################################
+  // Early exit: Visual Signals disabled
   if (!midiBay.signalsEnabled) return;
 
-  // wenn es ein Clock- oder Active Sensing Signal ist -> blinkendes Signal:
-  if (statusByte == 248 || statusByte == 254) {
-    clockAndActiveSensingSignalBlinks(portProbs.tag, inOrOut); // Blinkendes Signal
-    return;
-  }
-
-  // wenn das Port-Tag schon im Set ist, dann kein neues Signal starten:
+  // Prevent multiple signals on same port tag
   if (signalPortTagMap[inOrOut].has(portProbs.tagId)) return;
-  // die tag.id von prtTags mit Signalen wird in einem Set gesammelt, damit sie nicht mehrfach ein Signal bekommen:
+  // Collect port tags with signals in a Set to prevent duplicate signals
   signalPortTagMap[inOrOut].add(portProbs.tagId);
 
   const signal = inOrOut == 'in' ? 'insignal' : 'outsignal';
-
-  // Die CSS Klasse für das Port-Signal hinzufügen:
-  if (hasClass(portProbs.tag, signal)) return; // Schutz, falls Klasse schon da ist1^
+  setPortTagAndRoutingLineSignalClassWithTimer(portProbs, inOrOut, lineTagId, signal);
+}
+// #########################################################
+function setPortTagAndRoutingLineSignalClassWithTimer(portProbs, inOrOut, lineTagId, signal) {
+  // Add CSS class for port signal
   addClass(portProbs.tag, signal);
-  // Die CSS Klasse für das Linien-Signal hinzufügen, falls Linie existiert und sichtbar:
+  // Add CSS class for routing line signal if line exists and is visible
   if (lineTagId && !routingLinesUnvisible()) addClass(midiBay.lineMap.get(lineTagId), 'signal');
 
   setTimeout(() => {
     signalPortTagMap[inOrOut].delete(portProbs.tagId);
     removeClass(portProbs.tag, signal);
-    // removeClass ist safe auch wenn Linie nicht mehr existiert/sichtbar
+    // removeClass is safe even if line no longer exists/visible
     if (lineTagId) removeClass(midiBay.lineMap.get(lineTagId), 'signal');
-  }, 400);
+  }, 300);
+}
+// #########################################################
+function handleClockAndActiveSensingSignal(inOrOut, statusByte, portProbs, inPort) {
+  if (statusByte !== MIDI_TIMING_CLOCK && statusByte !== MIDI_ACTIVE_SENSING) return false; // Not a Clock/Active Sensing message
+
+  if (
+    (portProbs.type === 'input' && inOrOut === 'in') ||
+    (portProbs.type === 'output' && inOrOut === 'out')
+  )
+    clockAndActiveSensingSignal(portProbs, statusByte, inPort); // Permanent clock_active CSS class
+
+  // If it's an output port and inPort is known, add to activeClockSourceSet
+  if (
+    statusByte === MIDI_TIMING_CLOCK &&
+    portProbs.type === 'output' &&
+    inOrOut === 'out' &&
+    inPort
+  ) {
+    trackClockSourceForOutput(portProbs, inPort);
+  }
+
+  return true;
 }
 
 // #########################################################
-function clockAndActiveSensingSignal(portProbs, statusByte) {
-  const isClock = statusByte === 248;
+function clockAndActiveSensingSignal(portProbs, statusByte, inPort = null) {
+  const isClock = statusByte === MIDI_TIMING_CLOCK;
   const timestampKey = isClock ? 'clockTimestamp' : 'activeSensingTimestamp';
   const timerKey = isClock ? 'clockTimer' : 'activeSensingTimer';
   const cssClass = isClock ? 'clock_active' : 'active_sensing_active';
 
-  // Aktualisiere entsprechenden Timestamp
+  // Update corresponding timestamp
   portProbs[timestampKey] = Date.now();
 
-  // Wenn es ein Output-Port ist, prüfe auf multiple Clock-Quellen (nur für Clock)
-  if (isClock && portProbs.type === 'output') {
-    trackOutputClockSources(portProbs);
+  // On first start: Set CSS class
+  const isFirstStart = !portProbs[timerKey];
+  if (isFirstStart) {
+    addClass(portProbs.tag, cssClass);
+    updateLayout();
   }
 
-  // Wenn bereits ein Timer läuft: Aktualisiere nur Timestamp und return
-  if (portProbs[timerKey]) return;
+  // Start timer for port visual (CSS class)
+  startRecurringTimer(portProbs, timestampKey, timerKey, () => {
+    removeClass(portProbs.tag, cssClass);
+    updateLayout();
+  });
+}
+// #########################################################
+/**
+ * Verfolgt Clock-Quellen für Output-Ports und startet Timer im Input-Port.
+ * @param {Object} portProbs - Properties des Output-Ports
+ * @param {Object} inPort - Der Input-Port als Clock-Quelle
+ */
+function trackClockSourceForOutput(portProbs, inPort) {
+  const inPortProbs = getPortProperties(inPort);
+  portProbs.activeClockSourceSet.add(inPort);
+  trackOutputClockSources(portProbs);
 
-  logger.debug(`Starte ${timerKey} für ${portProbs.tagId}`);
+  // Start timer in input port that updates all connected outputs
+  startRecurringTimer(inPortProbs, 'clockTimestamp', 'inputClockTimer', () => {
+    // Callback: Remove input from all connected output activeClockSourceSets
+    if (inPortProbs.outPortSet) {
+      inPortProbs.outPortSet.forEach((outPort) => {
+        const outPortProbs = getPortProperties(outPort);
+        if (outPortProbs.activeClockSourceSet) {
+          outPortProbs.activeClockSourceSet.delete(inPort);
+          trackOutputClockSources(outPortProbs);
+          logger.debug(
+            `Removed inactive clock source ${inPortProbs.tagId} from ${outPortProbs.tagId}`
+          );
+        }
+      });
+    }
+  });
+}
+// #########################################################
+/**
+ * Generic helper function for recurring timeout checks.
+ * Checks every 1s if timestamp is older than 1s and executes callback.
+ *
+ * @param {Object} targetObj - Object with timestamp and timer
+ * @param {string} timestampKey - Key for timestamp (e.g. 'clockTimestamp')
+ * @param {string} timerKey - Key for timer ID (e.g. 'clockTimer')
+ * @param {Function} onTimeout - Callback on timeout (after 1s without update)
+ */
+function startRecurringTimer(targetObj, timestampKey, timerKey, onTimeout) {
+  // Update timestamp
+  targetObj[timestampKey] = Date.now();
 
-  // Markiere Port als aktiv (nur beim ersten Mal)
-  addClass(portProbs.tag, cssClass);
+  // If timer already running, only update timestamp
+  if (targetObj[timerKey]) return;
 
-  // Rekursive Prüfung: Läuft alle 1s und prüft ob Messages noch kommen
+  logger.debug(`Starting timer ${timerKey}`);
+
   const checkActive = () => {
-    if (Date.now() - portProbs[timestampKey] >= 1000) {
-      // Keine Messages mehr seit 1s → Entferne Klasse
-      removeClass(portProbs.tag, cssClass);
-      portProbs[timerKey] = null;
-
-      // Wenn es Clock auf Output-Port ist, aktualisiere Clock-Source-Tracking
-      if (isClock && portProbs.type === 'output') {
-        trackOutputClockSources(portProbs);
-      }
+    if (Date.now() - targetObj[timestampKey] >= 1000) {
+      // Timeout → Cleanup and execute callback
+      targetObj[timerKey] = null;
+      onTimeout();
+      logger.debug(`Timer ${timerKey} expired`);
     } else {
-      // Messages kommen noch → Prüfe erneut in 1s
-      portProbs[timerKey] = setTimeout(checkActive, 1000);
+      // Still active → Check again in 1s
+      targetObj[timerKey] = setTimeout(checkActive, 1000);
     }
   };
 
-  // Starte erste Prüfung in 1s
-  portProbs[timerKey] = setTimeout(checkActive, 1000);
+  targetObj[timerKey] = setTimeout(checkActive, 1000);
+}
+
+// #########################################################
+/**
+ * Aktualisiert Clock-Warnings für alle Output-Ports.
+ * Wird aufgerufen wenn Clock-Filter geändert werden.
+ */
+function updateAllOutputPortClockWarnings() {
+  midiBay.portByTagIdMap.forEach((port) => {
+    const portProbs = getPortProperties(port);
+    if (portProbs.type === 'output' && portProbs.activeClockSourceSet) {
+      trackOutputClockSources(portProbs);
+    }
+  });
 }
 
 // #########################################################
 /**
  * Überwacht Output-Ports auf mehrere Clock-Quellen.
- * Zählt wie viele Input-Ports aktiv Clock-Signale an diesen Output senden.
- * Fügt CSS-Klasse 'multiple_clock_sources' hinzu wenn mehr als eine Quelle aktiv ist.
+ * Prüft activeClockSourceSet und setzt CSS-Klasse 'multiple_clock_sources'.
  *
  * @param {Object} outPortProbs - Port-Properties des Output-Ports
  */
 function trackOutputClockSources(outPortProbs) {
-  if (!outPortProbs.inPortSet) return; // Kein Routing vorhanden
+  if (!outPortProbs.activeClockSourceSet) return;
 
-  let activeClockSources = 0;
+  const hasClockFilter = outPortProbs?.filterSet?.has(MIDI_TIMING_CLOCK) || false;
+  const globalClockFilter = midiBay?.globalFilterSet?.has(MIDI_TIMING_CLOCK) || false;
 
-  // Zähle wie viele Input-Ports aktiv Clock senden
-  outPortProbs.inPortSet.forEach((inPort) => {
-    const inPortProbs = getPortProperties(inPort);
-    if (inPortProbs.clockTimer) {
-      activeClockSources++;
+  // Early exit: If clock is filtered, no warning needed
+  if (hasClockFilter || globalClockFilter) {
+    // Only removeClass if class exists (performance optimization)
+    if (hasClass(outPortProbs.tag, 'multiple_clock_sources')) {
+      removeClass(outPortProbs.tag, 'multiple_clock_sources');
     }
-  });
+    return;
+  }
 
-  // Nur DOM ändern wenn Status sich ändert (Performance-Optimierung)
+  // Only change DOM when status changes (performance optimization)
   const hasWarning = hasClass(outPortProbs.tag, 'multiple_clock_sources');
-  const shouldWarn = activeClockSources > 1;
-
+  const shouldWarn = checkActiveClockSourcesForOutputPorts(outPortProbs);
   if (shouldWarn && !hasWarning) {
     addClass(outPortProbs.tag, 'multiple_clock_sources');
   } else if (!shouldWarn && hasWarning) {
@@ -141,41 +215,13 @@ function trackOutputClockSources(outPortProbs) {
 }
 
 // #########################################################
-function clockAndActiveSensingSignalBlinks(portTag, inOrOut) {
-  // Port bekommt ein clock-Signal
-  // alle portTag, die ein clock-Signal bekommen, werden in einem Set gesammelt
-  clockSignalPortTagSet.add({ tagId: portTag.id, direction: inOrOut });
-  if (timingClockStillActive) return;
-
-  const clockTag = midiBay.menuClockTag;
-
-  addClass(clockTag, `clock_signal`);
-
-  if (hasClass(clockTag, 'visible_clock'))
-    // um bei Anfang des Signals die jeweilige Klasse hinzuzufügen:
-    clockSignalPortTagSet.forEach((entry) => toggleClockClass(entry, true));
-
-  timingClockStillActive = true;
-  setTimeout(() => {
-    removeClass(clockTag, `clock_signal`);
-
-    if (hasClass(clockTag, 'visible_clock'))
-      // um bei Ende des Signals die jeweilige Klasse wieder zu entfernen:
-      clockSignalPortTagSet.forEach((entry) => toggleClockClass(entry, false));
-    clockSignalPortTagSet.clear();
-
-    setTimeout(() => {
-      timingClockStillActive = false;
-    }, 1000);
-  }, 1000);
+function checkActiveClockSourcesForOutputPorts(outPortProbs) {
+  for (const port of outPortProbs.activeClockSourceSet) {
+    const portProbs = getPortProperties(port);
+    if (portProbs.filterSet?.has(MIDI_TIMING_CLOCK)) {
+      outPortProbs.activeClockSourceSet.delete(port);
+    }
+  }
+  return outPortProbs.activeClockSourceSet.size > 1;
 }
-// #####################################################
-// Hilfsfunktion für clockAndActiveSensingSignalBlinks():
-// Fügt oder entfernt die Clock-Klasse für einen Port
-function toggleClockClass(entry, add = true) {
-  const portTag = document.getElementById(entry.tagId);
-  if (!portTag) return;
-  const className = `clock_${entry.direction}`;
-  add ? addClass(portTag, className) : removeClass(portTag, className);
-}
-// #####################################################
+// #########################################################
