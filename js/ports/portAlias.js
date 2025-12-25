@@ -1,18 +1,13 @@
-export { renamePortAlias, isPortNameEdit, restoreAlias, renameFile, resetAllAlias };
+export { renamePortAlias, isPortNameEdit, restoreAlias, resetAllAlias };
 import { midiBay } from '../main.js';
-import {
-  getPortProperties,
-  getSelectedPortProperties,
-  getSelectedPort,
-  getPortByTagId,
-} from '../utils/helpers.js';
+import { getPortProperties, getSelectedPortProperties, getPortByTagId } from '../utils/helpers.js';
 import { removeStorage } from '../storage/storage.js';
 import { storePortMap, restorePortMap } from '../storage/storagePort.js';
 import { redrawRoutingLines } from '../routing/routingLines.js';
-import { setSelectedPort } from '../html/htmlPorts.js';
+import { setSelectedPort } from './portInteraction.js';
 import { logger } from '../utils/logger.js';
-import { preventAndStop, hide, show } from './domStyles.js';
-import { setText } from './domContent.js';
+import { preventAndStop, hide, show } from '../html/domUtils.js';
+import { setText } from '../html/domContent.js';
 
 // #################################################################
 // store Routing - midiBayRouting in den Speicher laden.
@@ -45,20 +40,21 @@ function resetAllAlias(eClick) {
 function renamePortAlias(eClick) {
   logger.debug('renamePortAlias');
   hide(midiBay.graphTag);
-  // eClick.stopPropagation();
+
   const clickedPortTag = eClick.target;
   if (midiBay.editPortTag == clickedPortTag) return;
   // compare the selected port's portProperties.tag to the click target
   const selTag = getSelectedPortProperties().tag;
   if (selTag != eClick.target) setSelectedPort(getPortByTagId(eClick.target.id));
   midiBay.editPortTag = eClick.target;
+  // Inline-Listener sind hier bewusst lokal, da sie nur während des Edit-Modus aktiv sind
   midiBay.editPortTag.addEventListener('focusout', editPortTagFocusOut);
   midiBay.editPortTag.addEventListener('keydown', blurByEnter);
   midiBay.editPortTag.contentEditable = 'true';
   midiBay.editPortTag.focus();
 }
 // ###############################################################
-function editPortTagFocusOut() {
+function editPortTagFocusOut(event) {
   logger.debug('editPortTagFocusOut');
   show(midiBay.graphTag); // CSS-native Sichtbarkeit
   if (!midiBay.editPortTag) return;
@@ -100,45 +96,3 @@ function isPortNameEdit(eClick) {
   return false;
 }
 // ###############################################################
-function renameFile(eClick) {
-  logger.debug('renameFile');
-
-  const clickedTag = eClick.target;
-  if (midiBay.editFileTag == clickedTag) return;
-  // if (midiBay.selectedPort?.tag != eClick.target) setSelectedPort(midiBay.portByTagIdMap.get(eClick.target.id));
-  // unselectSelectedPort();
-  midiBay.editFileTag = eClick.target;
-  midiBay.editFileTag.addEventListener('focusout', editRenameFileFocusOut);
-  midiBay.editFileTag.addEventListener('keydown', blurFileByEnter);
-  midiBay.editFileTag.contentEditable = 'true';
-  midiBay.editFileTag.focus();
-}
-// ###############################################################
-function editRenameFileFocusOut(event) {
-  logger.debug('editRenameFileFocusOut', event.target.id);
-
-  event.target.removeEventListener('focusout', editRenameFileFocusOut);
-  event.target.contentEditable = 'false';
-  // midiBay.portByTagIdMap.get(event.target.id).alias = event.target.innerText;
-  // const fileDownloadTag = document.getElementById('file_download');
-  // fileDownloadTag.download = event.target.innerText + '.json';
-  midiBay.editFileTag = null;
-  redrawRoutingLines();
-  storeAlias();
-}
-// ###############################################################
-function blurFileByEnter(eKey) {
-  logger.debug('blurFileByEnter');
-
-  if (eKey.code == 'Escape') {
-    // midiBay.editFileTag.innerText = fileDownloadTag.download.replace('.json', '');
-    midiBay.editFileTag.blur();
-  }
-  if (eKey.code == 'Enter') {
-    //console.log('blur By Enter', eKey.code);
-    // const sendEvent = new Object({ target: midiBay.editFileTag });
-    midiBay.editFileTag.blur();
-    //console.log('blur By Enter', sendEvent);
-    // editRenameFileFocusOut(sendEvent);
-  }
-}

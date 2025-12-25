@@ -9,15 +9,12 @@ export {
   setFilterCss,
 };
 import { midiBay } from '../main.js';
-import {
-  getPortProperties,
-  removeClasses,
-  getSelectedPort,
-  getSelectedPortProperties,
-} from '../utils/helpers.js';
+import { getPortProperties, getSelectedPort, getSelectedPortProperties } from '../utils/helpers.js';
+
 import { chooseFilterSet } from './filter.js';
 import { logger } from '../utils/logger.js';
-import { toggleDisplayClass, addClass, removeClass } from '../html/domStyles.js';
+import { addClass, removeClass, toggleClass, removeClasses } from '../html/domUtils.js';
+import { setText } from '../html/domContent.js';
 
 // ###########################################
 function initFilterCss() {
@@ -82,19 +79,21 @@ function setFilterPortInfoTagClass() {
 
   if (portInfoTag) {
     // Set CSS class correctly first
-    toggleDisplayClass(portInfoTag, 'chosen', Boolean(selectedPortProbs));
+    toggleClass(portInfoTag, 'chosen', Boolean(selectedPortProbs));
 
     // Then determine the text to display based on selection
-    portInfoTag.innerHTML = selectedPortProbs ? selectedPortProbs.alias : `all inputs`;
+    const portInfoText = selectedPortProbs ? selectedPortProbs.alias : `all inputs`;
+    setText(portInfoTag, portInfoText);
   }
 
   // Update Input/Output display
   if (inOrOutTag) {
-    inOrOutTag.textContent = selectedPortProbs
+    const inOrOutTagText = selectedPortProbs
       ? selectedPortProbs.type === 'input'
         ? ' (Input)'
         : ' (Output)'
       : '';
+    setText(inOrOutTag, inOrOutTagText);
   }
 }
 // ####################################################

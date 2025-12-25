@@ -17,12 +17,13 @@ export {
 
 import { midiBay } from '../main.js';
 import { logger } from '../utils/logger.js';
-import { addClass, toggleDisplayClass } from './domStyles.js';
+
+import { addClass, hasClass, toggleClass, removeClassFromAll } from '../html/domUtils.js';
 import { unselectSelectedPort } from '../filter/filter.js';
 import { getPortProperties, getSelectedPortProperties } from '../utils/helpers.js';
 import { setFilterPortInfoTagClass, setFilterContainerClass } from '../filter/filterCss.js';
 import { setChannelClass } from '../filter/filterChannel.js';
-import { removeSelectedPort } from '../routing/routingSelectedPort.js';
+import { removeSelectedPort } from './portSelection.js';
 
 // ################################################
 /**
@@ -31,7 +32,7 @@ import { removeSelectedPort } from '../routing/routingSelectedPort.js';
 function resetPortMenuFunctions() {
   midiBay.renamePortsFlag = false;
   midiBay.openClosePortsFlag = false;
-  if (midiBay.graphTag.classList.contains('routing')) {
+  if (hasClass(midiBay.graphTag, 'routing')) {
     clickedPortMenuRouting(false);
   }
 }
@@ -44,7 +45,7 @@ function resetPortMenuFunctions() {
  */
 function setPortMenuActive(menuElement) {
   // Ermittle aktuell aktives Port-Menü vor Änderungen
-  const isCurrentMenuActive = menuElement.classList.contains('active');
+  const isCurrentMenuActive = hasClass(menuElement, 'active');
 
   // Zentrale active-Verwaltung für alle Port-Menüs
   removeActiveFromPortMenu();
@@ -61,7 +62,7 @@ function setPortMenuActive(menuElement) {
  * Entfernt 'active' Klasse von allen Port-Menüs
  */
 function removeActiveFromPortMenu() {
-  document.querySelectorAll('.portmenu').forEach((menu) => menu.classList.remove('active'));
+  removeClassFromAll('.portmenu', 'active');
 }
 
 // ################################################
@@ -71,10 +72,7 @@ function removeActiveFromPortMenu() {
  * @returns {string|null} Die Aktion ('rename', 'routing', 'openclose') oder null
  */
 function getPortMenuAction(menuElement) {
-  return (
-    ['rename', 'routing', 'openclose'].find((action) => menuElement.classList.contains(action)) ||
-    null
-  );
+  return ['rename', 'routing', 'openclose'].find((action) => hasClass(menuElement, action)) || null;
 }
 
 // ################################################
@@ -98,6 +96,7 @@ function clickedPortMenuOpenClose(eClick) {
   logger.debug('clickedPortMenuOpenClose', eClick.target.id);
 
   midiBay.openClosePortsFlag = true;
+  midiBay.openCloseInProgress = false;
   unselectSelectedPort();
 }
 
@@ -109,10 +108,10 @@ function clickedPortMenuOpenClose(eClick) {
 function clickedPortMenuRouting(isRouting) {
   logger.debug('clickedPortMenuRouting', isRouting);
 
-  toggleDisplayClass(midiBay.graphTag, 'routing', isRouting);
+  toggleClass(midiBay.graphTag, 'routing', isRouting);
 
   midiBay.portByTagIdMap.forEach((port) => {
-    toggleDisplayClass(getPortProperties(port).tag, 'routing', isRouting);
+    toggleClass(getPortProperties(port).tag, 'routing', isRouting);
   });
 
   if (midiBay.selectedPort?.type == 'output') {

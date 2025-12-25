@@ -1,4 +1,4 @@
-export { setInportRoutingClass, setOutportRoutingClass, updateSelectedRoutingLines };
+export { setInportRoutingClass, setOutportRoutingClass, removeAllRoutedClasses };
 
 import { midiBay } from '../main.js';
 import {
@@ -8,8 +8,8 @@ import {
   getPortByTagId,
 } from '../utils/helpers.js';
 import { logger } from '../utils/logger.js';
-import { toggleDisplayClass } from '../html/domStyles.js';
-import { removeClassFromAll } from '../html/domClasses.js';
+
+import { addClass, toggleClass, removeClassFromAll } from '../html/domUtils.js';
 
 // ###################################################
 function setOutportRoutingClass() {
@@ -61,7 +61,7 @@ function updateSelectedRoutingLines() {
 
     // Markiere Linie wenn sie mit selectedPort verbunden ist
     if (lineInput === selectedTagId || lineOutput === selectedTagId) {
-      line.classList.add('selected');
+      addClass(line, 'selected');
     }
   });
 }
@@ -88,7 +88,7 @@ function shouldHighlightRoutedOutputs() {
 function highlightRoutedOutputs() {
   const portProbs = getPortProperties(getSelectedPort());
   portProbs.outPortSet.forEach((outPort) => {
-    getPortProperties(outPort).tag.classList.add('routed_to_selected_input');
+    addClass(getPortProperties(outPort).tag, 'routed_to_selected_input');
   });
 }
 // ###################################################
@@ -118,7 +118,7 @@ function markConnectedOutputPorts(inPortTag) {
   const portProbs = getPortProperties(inPort);
 
   portProbs.outPortSet.forEach((outPort) => {
-    getPortProperties(outPort).tag.classList.add('routed_to_input');
+    addClass(getPortProperties(outPort).tag, 'routed_to_input');
   });
 }
 // ###################################################
@@ -133,6 +133,13 @@ function markConnectedOutputPorts(inPortTag) {
 function setInportRoutingClass() {
   logger.debug('setInportRoutingClass');
   forEachPortWithPortProperties(midiBay.inNameMap, (inport, portProbs) => {
-    toggleDisplayClass(portProbs.tag, 'routed_to_output', portProbs.outPortSet.size > 0);
+    toggleClass(portProbs.tag, 'routed_to_output', portProbs.outPortSet.size > 0);
   });
+}
+// ###################################################
+// Entfernt alle .routed_to_input und .routed_to_output Klassen im gesamten DOM
+function removeAllRoutedClasses() {
+  removeClassFromAll('.routed_to_input', 'routed_to_input');
+  removeClassFromAll('.routed_to_output', 'routed_to_output');
+  removeClassFromAll('.routed_to_selected_input', 'routed_to_selected_input');
 }

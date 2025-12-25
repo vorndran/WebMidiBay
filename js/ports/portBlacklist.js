@@ -22,9 +22,10 @@ export {
 import { midiBay } from '../main.js';
 import { logger } from '../utils/logger.js';
 import { getPortProperties } from '../utils/helpers.js';
-import { toggleDisplayClass } from './domStyles.js';
+import { addClass, hasClass, toggleClass } from '../html/domUtils.js';
+import { clearInnerHTML, setText } from '../html/domContent.js';
 import { getStorage, setStorage } from '../storage/storage.js';
-import { updateLayout } from './htmlUpdater.js';
+import { updateLayout } from '../html/htmlUpdater.js';
 
 // ################################################
 /**
@@ -41,7 +42,7 @@ function initPortBlacklist() {
   }
 
   // Lösche bestehende Einträge
-  listContainer.innerHTML = '';
+  clearInnerHTML(listContainer);
 
   // Iteriere über ALLE Input-Ports (ungefiltert)
   const inMap = midiBay.allInNameMap || midiBay.inNameMap;
@@ -60,12 +61,12 @@ function initPortBlacklist() {
     checkbox.id = inPort.id;
     checkbox.dataset.portName = portName;
     checkbox.dataset.portType = portType;
-    checkbox.classList.add('port_blacklist_checkbox');
+    addClass(checkbox, 'port_blacklist_checkbox');
 
     const label = document.createElement('label');
     label.htmlFor = checkbox.id;
     const inProps = portType === 'pair' ? getPortProperties(inPort) : { alias: portName };
-    label.textContent = `${inProps.alias} ${portType === 'pair' ? '(I/O)' : '(I)'}`;
+    setText(label, `${inProps.alias} ${portType === 'pair' ? '(I/O)' : '(I)'}`);
 
     li.appendChild(checkbox);
     li.appendChild(label);
@@ -85,12 +86,12 @@ function initPortBlacklist() {
       checkbox.id = outPort.id;
       checkbox.dataset.portName = portName;
       checkbox.dataset.portType = 'output-only';
-      checkbox.classList.add('port_blacklist_checkbox');
+      addClass(checkbox, 'port_blacklist_checkbox');
 
       const label = document.createElement('label');
       label.htmlFor = checkbox.id;
       const outProps = getPortProperties(outPort);
-      label.textContent = `${outProps.alias} (O)`;
+      setText(label, `${outProps.alias} (O)`);
 
       li.appendChild(checkbox);
       li.appendChild(label);
@@ -115,7 +116,7 @@ function togglePortBlacklistUI(eClick) {
   const container = document.querySelector('.port_blacklist_container');
   if (!container) return;
 
-  const isHidden = container.classList.contains('js-hidden');
+  const isHidden = hasClass(container, 'js-hidden');
 
   // Beim Schließen: Änderungen verwerfen
   if (!isHidden) {
@@ -124,11 +125,10 @@ function togglePortBlacklistUI(eClick) {
   }
 
   // Beim Öffnen: Container anzeigen und ggf. initialisieren
-  toggleDisplayClass(container, 'js-hidden');
+  toggleClass(container, 'js-hidden');
   if (container.querySelector('#port_blacklist_list').children.length === 0) {
     initPortBlacklist();
   }
-  updateLayout();
 }
 
 // ################################################
@@ -138,7 +138,7 @@ function togglePortBlacklistUI(eClick) {
  */
 function clickedPortBlacklistCheckbox(eClick) {
   const checkbox = eClick.target;
-  if (!checkbox.classList.contains('port_blacklist_checkbox')) return;
+  if (!hasClass(checkbox, 'port_blacklist_checkbox')) return;
 
   const portName = checkbox.dataset.portName;
   const portType = checkbox.dataset.portType;
@@ -256,9 +256,8 @@ function cancelBlacklistChanges() {
   // Verstecke Container
   const container = document.querySelector('.port_blacklist_container');
   if (container) {
-    container.classList.add('js-hidden');
+    addClass(container, 'js-hidden');
   }
-  updateLayout();
 }
 // ################################################
 function getFilteredNameMap(nameMap) {

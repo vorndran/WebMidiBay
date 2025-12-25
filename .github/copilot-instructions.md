@@ -58,8 +58,8 @@ import { dependency } from './otherModule.js';
 
 Verwende Helper-Funktionen aus dem [html/](../js/html/) Verzeichnis:
 
-- `addClass()`, `removeClass()`, `toggleDisplayClass()` aus [domStyles.js](../js/html/domStyles.js)
-- `clearNode()`, `setAttributes()` aus [domContent.js](../js/html/domContent.js)
+- `addClass()`, `removeClass()`, `toggleDisplayClass()` aus [domUtils.js](../js/html/domUtils.js)
+- `clearInnerHTML()`, `setAttributes()` aus [domContent.js](../js/html/domContent.js)
 - Niemals `innerHTML` für dynamischen Content verwenden - nutze Text/DOM-Erstellungsfunktionen
 
 ### Signal-Timing-Pattern
@@ -129,7 +129,7 @@ Zwei-Schichten-Filtersystem:
 ### UI-Event-Handler hinzufügen
 
 - Registriere in [htmlEvents.js](../js/html/htmlEvents.js) via `setEventListener()`
-- Verwende `preventAndStop(event)` aus [domStyles.js](../js/html/domStyles.js) um Propagierung zu stoppen
+- Verwende `preventAndStop(event)` aus [domUtils.js](../js/html/domUtils.js) um Propagierung zu stoppen
 
 ## Datei-Organisation
 
@@ -233,7 +233,7 @@ SysEx-Nachrichten (System Exclusive) können über mehrere MIDI-Messages verteil
    - Monitor zeigt "SysEx Data (incomplete, collecting...)" während Collection läuft
 
 3. **Export/Import:**
-   - `autoSaveSysex` Flag für automatischen Download nach Empfang
+   - `autoDownloadSysex` Flag für automatischen Download nach Empfang
    - `sendCollectedSysexToSysexForm()` triggert Download bei Bedarf
    - Hex-Darstellung via `hexStringFromIntArray()` und `toHex()`
 

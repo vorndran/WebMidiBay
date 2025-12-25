@@ -14,13 +14,16 @@ export {
 
 import { showDumpButton } from './htmlForm.js';
 import { midiBay } from '../main.js';
-import { getPortProperties, getSelectedPort, removeClasses } from '../utils/helpers.js';
+import { getPortProperties, getSelectedPort } from '../utils/helpers.js';
+
+import { addClass, toggleClass, removeClasses } from './domUtils.js';
 import { logger } from '../utils/logger.js';
-import { insertPrependLimited, setTagInnerHTML } from './domContent.js';
-import { addClass, preventAndStop, toggleDisplayClass } from './domStyles.js';
+import { setTagInnerHTML, clearInnerHTML } from './domContent.js';
+import { preventAndStop } from './domUtils.js';
 import { updateLayout } from './htmlUpdater.js';
-import { getBoundingClientRectArray, getRectArrayDiffResult } from '../routing/routingLinesSvg.js';
+import { getBoundingClientRectArray, getRectArrayDiffResult } from '../routing/routingLines.js';
 // ##########################################################################
+// Init & Bootstrap
 function initHtmlMessage() {
   logger.debug('initHtmlMessage');
   midiBay.sysexMessage = [];
@@ -76,7 +79,6 @@ function scheduleRender() {
     midiBay.msgMonitor.renderScheduled = true;
     requestAnimationFrame(() => {
       renderVisibleMessages();
-      updateLayout();
       midiBay.msgMonitor.renderScheduled = false;
     });
   }
@@ -135,7 +137,7 @@ function renderVisibleMessages() {
   const displayMessages = visibleMessages.slice(0, midiBay.msgMonitor.maxVisibleLines);
 
   // Rebuild DOM completely
-  midiBay.msgTag.innerHTML = '';
+  clearInnerHTML(midiBay.msgTag);
   let oddOrEven = 'odd';
 
   displayMessages.forEach((msg) => {
@@ -227,11 +229,11 @@ function clickedMessage(eClick) {
   if (eClick.target == document.getElementById('clear_message')) {
     midiBay.msgMonitor.messageQueue = []; // Clear queue
     fillWithEmptyMessages(midiBay.msgMonitor.messageQueue, midiBay.msgMonitor.maxQueueSize);
-    return updateLayout(true);
+    return;
   }
   if (eClick.target == document.getElementById('pause_message')) {
     midiBay.msgMonitor.paused = !midiBay.msgMonitor.paused;
-    toggleDisplayClass(eClick.target, 'paused', midiBay.msgMonitor.paused);
+    toggleClass(eClick.target, 'paused', midiBay.msgMonitor.paused);
     return;
   }
 }
@@ -242,7 +244,6 @@ function setMsgMonitor_showPorts(eChanged) {
 
   // Re-render queue for new filter
   setMessageContainerClass();
-  updateLayout(true);
 }
 // ##################################################
 function setMsgMonitor_showFiltered(eChanged) {
@@ -253,21 +254,18 @@ function setMsgMonitor_showFiltered(eChanged) {
   removeClasses(midiBay.msgTag, ['filtered', 'unfiltered']);
 
   if (midiBay.msgMonitor.showFiltered === 'unfiltered') {
-    midiBay.msgTag.classList.add('unfiltered');
+    addClass(midiBay.msgTag, 'unfiltered');
   } else if (midiBay.msgMonitor.showFiltered === 'filtered') {
-    midiBay.msgTag.classList.add('filtered');
+    addClass(midiBay.msgTag, 'filtered');
   }
 
   // Re-render queue for new filter
-  updateLayout(true);
 }
 // ##################################################
 function setMsgMonitor_maxVisibleLines(eChanged) {
   logger.debug('setMsgMonitor_maxVisibleLines', eChanged.target.value);
 
-  midiBay.msgMonitor.maxVisibleLines = eChanged.target.value;
-
-  updateLayout(true);
+  midiBay.msgMonitor.maxVisibleLines = Number(eChanged.target.value);
 }
 
 // ####################################################

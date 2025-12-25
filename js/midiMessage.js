@@ -1,6 +1,7 @@
 export { receiveMIDIMessage, getChannel, reducedClockAndActiveSensingMessages };
 import { midiBay } from './main.js';
 import { getPortProperties } from './utils/helpers.js';
+import { hasClass } from './html/domUtils.js';
 import { showMidiMessageAsText } from './html/htmlMessage.js';
 import { logger } from './utils/logger.js';
 import { midiInFilter, midiFilter, getStatusByte, getChannel } from './core/midiMessageFilter.js';
@@ -9,7 +10,8 @@ import {
   formatMessageToHtmlAndCollectSysex,
   getLoopMessageHtml,
 } from './html/htmlMessageFormat.js';
-import { sendCollectedSysexToSysexForm } from './sysex/sysex.js';
+import { collectSysexData } from './sysex/sysexData.js';
+import { sendCollectedSysexToSysexFormAction } from './sysex/sysexFileActions.js';
 import { MIDI_TIMING_CLOCK, MIDI_ACTIVE_SENSING } from './constants/midiConstants.js';
 // ###################################################
 // receiveMIDIMessage ####################################
@@ -75,23 +77,27 @@ function setMIDIOutputMessage(midiMessage, statusByte, inPort) {
 function makeMidiMessageVisible(midiMessage, port) {
   if (reducedClockAndActiveSensingMessages(midiMessage.data[0], port)) return; // Throttle Clock/Active Sensing messages
 
-  // Early exit: Wenn Monitor nicht sichtbar, keine Text-Updates nötig
+  // SysEx Collection unabhängig vom Monitor (wenn aktiviert)
+  if (midiBay.autoCollectSysex) {
+    collectSysexData(midiMessage.data);
+
+    if (!midiBay.collectingSysEx && !midiBay.sysExWasSent) {
+      sendCollectedSysexToSysexFormAction(midiBay.sysexMessage, port);
+      midiBay.sysExWasSent = true;
+    }
+  }
+
+  // Early exit für Monitor-UI
   const monitorElement = document.getElementById('monitor');
-  if (monitorElement && monitorElement.classList.contains('js-hidden')) return;
+  if (monitorElement && hasClass(monitorElement, 'js-hidden')) return;
 
   const midiDataText = formatMessageToHtmlAndCollectSysex(midiMessage.data, port);
-
   showMidiMessageAsText(midiMessage, midiDataText, port);
-
-  if (!midiBay.collectingSysEx && !midiBay.sysExWasSent) {
-    sendCollectedSysexToSysexForm(midiBay.sysexMessage, port);
-    midiBay.sysExWasSent = true;
-  }
 }
 // ###########################################
 function reducedClockAndActiveSensingMessages(midiData, port) {
   if (midiData !== MIDI_TIMING_CLOCK && midiData !== MIDI_ACTIVE_SENSING) return false; // Not a Clock/Active Sensing message, pass through
-  if (!midiBay.menuClockTag.classList.contains('visible_clock')) return true; // Clock display disabled, block message
+  if (!hasClass(midiBay.menuClockTag, 'visible_clock')) return true; // Clock display disabled, block message
 
   const portProbs = getPortProperties(port);
   portProbs.clockBuffer = (portProbs.clockBuffer || 0) + 1;

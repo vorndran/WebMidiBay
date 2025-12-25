@@ -1,17 +1,21 @@
 export { initHtml, updateMenuState, applyViewModeRules, showMidiAccessStateChange };
 import { midiBay } from '../main.js';
-import { setEventListener } from './htmlEvents.js';
+import { getPortProperties } from '../utils/helpers.js';
+import { setEventListener } from '../events/eventBootstrap.js';
 import { getStorage } from '../storage/storage.js';
-import { initHtmlPorts, setPortConnectionClass } from './htmlPorts.js';
+import { initHtmlPorts, setPortConnectionClass } from '../ports/portInteraction.js';
 import { initHtmlMessage, showMessage } from './htmlMessage.js';
-import { initPortBlacklist } from './htmlBlacklist.js';
+import { initPortBlacklist } from '../ports/portBlacklist.js';
 import { logger } from '../utils/logger.js';
-import { addClass, removeClass, toggleDisplayClass } from './domStyles.js';
+import { addClass, removeClass, hasClass, toggleClass } from './domUtils.js';
+import { updateLayout } from './htmlUpdater.js';
 
 // #################################################################
 logger.debug('%c html.js loaded', 'color: orange; font-weight: bold;');
 
 // initHtml ##########################################
+// ##############################################
+// Reihenfolge: Ports/UI aufbauen → Eventlistener → Sichtbarkeit/View-Mode aus Storage → Toggles setzen
 function initHtml() {
   initHtmlPorts();
   initHtmlMessage();
@@ -24,48 +28,46 @@ function initHtml() {
 
 // ################################################
 function restoreMenuItemVisibility() {
-  // Nur noch die Storage-kritische Map für Sichtbarkeits-Zustand
   midiBay.menuItemVisibleMap = new Map();
 
-  // Lade gespeicherte Sichtbarkeits-Zustände oder erkenne DOM-Zustand
   const savedVisibility = getStorage('WMB_html_visibility');
   if (savedVisibility) {
-    // Restore UI-Zustand aus Storage mit updateMenuState (setzt automatisch Map + UI)
-    savedVisibility.forEach(([targetId, visibilityStatus]) => {
-      const isVisible = visibilityStatus === 'visible';
-      updateMenuState(targetId, isVisible);
-    });
+    restoreVisibilityFromStorage(savedVisibility);
   } else {
-    // Initialisiere mit aktuellem DOM-Zustand (Map + UI)
-    const menuItems = document.querySelectorAll('#menu .menu a[data-menuitem_target_id]');
-    menuItems.forEach((item) => {
-      const targetId = item.dataset.menuitem_target_id;
-      const menuItemTarget = document.getElementById(targetId);
-      if (menuItemTarget) {
-        const isVisible = !menuItemTarget.classList.contains('js-hidden');
-        updateMenuState(targetId, isVisible);
-      }
-    });
+    hydrateVisibilityFromDom();
   }
-  logger.debug('%cinitMenuItemVisibility', 'color: orange; font-weight: bold;');
 
-  // Element View Mode: 'single' oder 'multi' (default)
   midiBay.elementViewMode = getStorage('WMB_element_view_mode') || 'multi';
-  // addClass(document.querySelector('.container'), midiBay.elementViewMode);
-  // Initialisiere View Mode Button Text
   const toggleButton = document.querySelector('.toggle_element_view');
   if (toggleButton) {
     toggleButton.textContent = `view: ${midiBay.elementViewMode}`;
     toggleButton.dataset.viewMode = midiBay.elementViewMode;
   }
 
-  // Wende View-Mode Regeln an
   applyViewModeRules(midiBay.elementViewMode);
-
   logger.debug('initMenuItemVisibility complete', midiBay.menuItemVisibleMap);
 }
 
 // ##############################################
+function restoreVisibilityFromStorage(savedVisibility) {
+  savedVisibility.forEach(([targetId, visibilityStatus]) => {
+    const isVisible = visibilityStatus === 'visible';
+    updateMenuState(targetId, isVisible);
+  });
+}
+
+// ##############################################
+function hydrateVisibilityFromDom() {
+  const menuItems = document.querySelectorAll('#menu .menu a[data-menuitem_target_id]');
+  menuItems.forEach((item) => {
+    const targetId = item.dataset.menuitem_target_id;
+    const menuItemTarget = document.getElementById(targetId);
+    if (!menuItemTarget) return;
+    const isVisible = !hasClass(menuItemTarget, 'js-hidden');
+    updateMenuState(targetId, isVisible);
+  });
+}
+
 // ################################################
 /**
  * Setzt Menü-Sichtbarkeit und aktualisiert alle abhängigen Zustände
@@ -73,16 +75,17 @@ function restoreMenuItemVisibility() {
  * @param {boolean} isVisible - Soll sichtbar sein
  */
 function updateMenuState(targetId, isVisible) {
+  logger.debug('updateMenuState', targetId, isVisible);
   const target = document.getElementById(targetId);
   const menuButton = document.querySelector(
     `[data-menuitem_target_id="${targetId}"]`
   )?.parentElement;
 
   if (target) {
-    toggleDisplayClass(target, 'js-hidden', !isVisible);
+    toggleClass(target, 'js-hidden', !isVisible);
   }
   if (menuButton) {
-    toggleDisplayClass(menuButton, 'visible', isVisible);
+    toggleClass(menuButton, 'visible', isVisible);
   }
 
   midiBay.menuItemVisibleMap.set(targetId, isVisible ? 'visible' : 'none');
@@ -97,11 +100,9 @@ function applyViewModeRules(viewMode) {
   const routingMenuButton = document.querySelector('li.menu.routing_menu');
   logger.debug('%capplyViewModeRules:', 'color: red;', viewMode);
   if (viewMode === 'multi') {
-    // Multi-Mode: routing sichtbar, routing_menu versteckt
     updateMenuState('routing', true);
     addClass(routingMenuButton, 'js-hidden');
   } else {
-    // Single-Mode: routing_menu sichtbar für Navigation
     removeClass(routingMenuButton, 'js-hidden');
   }
 }
@@ -135,7 +136,7 @@ function restoreToggleStates() {
 // function showMidiAccessStateChange(porttype, portname, status) {
 function showMidiAccessStateChange(eventPort) {
   const portProbs = midiBay.portPropertiesManager?.getPortProperties
-    ? midiBay.portPropertiesManager.getPortProperties(eventPort)
+    ? getPortProperties(eventPort)
     : null;
   const displayName = portProbs ? portProbs.alias : eventPort.name;
   logger.info(

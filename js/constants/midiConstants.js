@@ -154,16 +154,26 @@ export const cc2 = {
 
 /**
  * MIDI Message Types (Status-Byte oberes Nibble)
+ * Index = oberes Nibble des Status-Bytes (0-15)
  */
-export const mmsg = {
-  8: 'Note Off',
-  9: 'Note On',
-  10: 'Aftertouch',
-  11: 'CC',
-  12: 'Program Change',
-  13: 'Ch. Aftertouch',
-  14: 'Pitch Wheel',
-};
+export const mmsg = [
+  undefined, // 0x0
+  undefined, // 0x1
+  undefined, // 0x2
+  undefined, // 0x3
+  undefined, // 0x4
+  undefined, // 0x5
+  undefined, // 0x6
+  undefined, // 0x7
+  'Note Off', // 0x8
+  'Note On', // 0x9
+  'Aftertouch', // 0xA
+  'CC', // 0xB
+  'Program Change', // 0xC
+  'Ch. Aftertouch', // 0xD
+  'Pitch Wheel', // 0xE
+  undefined, // 0xF (System messages)
+];
 
 /**
  * Notennamen (Chromatische Skala)

@@ -8,10 +8,9 @@ import {
   MIDI_TIMING_CLOCK,
 } from '../constants/midiConstants.js';
 import { getChannel, getMidiMsg, getNote } from '../utils/midiHelpers.js';
-import { collectSysexData, toHex } from '../sysex/sysex.js';
+import { toHex } from '../sysex/sysexFormat.js';
 import { midiBay } from '../main.js';
 import { getPortProperties } from '../utils/helpers.js';
-
 // ########################################################
 // Performance: Use range-based dispatch instead of sequential if-checks
 function formatMessageToHtmlAndCollectSysex(midiData, port = null) {
@@ -26,16 +25,10 @@ function formatMessageToHtmlAndCollectSysex(midiData, port = null) {
   }
 
   // System messages and edge cases
-  if (statusByte === 240) return sysexToTextAndCollectData(midiData); // MIDI_SYSEX_START
-  if (statusByte === 247) {
-    collectSysexData(midiData);
-    return '--';
-  } // MIDI_SYSEX_END
+  if (statusByte === 240) return sysexToText(); // MIDI_SYSEX_START
+  if (statusByte === 247) return '--'; // MIDI_SYSEX_END
   if (statusByte > 240) return actionDataToText(midiData, port); // 241-255: System Real Time
-  if (statusByte < 128) {
-    collectSysexData(midiData);
-    return '--';
-  } // Data bytes (inside SysEx)
+  if (statusByte < 128) return '--'; // Data bytes (inside SysEx)
 
   return '--';
 }
@@ -47,14 +40,18 @@ function formatMessageToHtmlAndCollectSysex(midiData, port = null) {
 // 0xF1–0xF6	System Common	0x00–0x7F
 // 0xF8–0xFF	RealTime	Keine Datenbytes (1-Byte-Messages)
 // ########################################################
-function sysexToTextAndCollectData(midiData) {
-  collectSysexData(midiData);
-  if (midiBay.collectingSysEx)
-    return '<span class="sysex">SysEx Data (incomplete, collecting...)</span>';
+function sysexToText() {
   const sysexArray = Array.from(midiBay.sysexMessage);
+  if (sysexArray.length <= 0) {
+    return '<span class="sysex">SysEx Data (to view data: enable \'auto-collect sysex\' in SysEx)</span>';
+  }
+
+  if (sysexArray.length <= 10)
+    return `<span class="sysex">hex (${hexStringFromIntArraySmall(sysexArray)})</span>`;
+
   return `<span class="sysex">hex (${hexStringFromIntArraySmall(
-    sysexArray.slice(0, 12)
-  )}| ... <span class="see_sysex"> ( ${sysexArray.length} digits, see "Sysex"!)</span>`;
+    sysexArray.slice(0, 10)
+  )}| ... <span class="see_sysex"> ( ${sysexArray.length} digits, see "SysEx"!)</span>`;
 }
 // ########################################################
 function hexStringFromIntArraySmall(intArray) {

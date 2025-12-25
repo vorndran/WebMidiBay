@@ -1,23 +1,25 @@
-export { initHtmlPorts, clickedMidiPort, setSelectedPort, setPortConnectionClass };
+export {
+  initHtmlPorts,
+  clickedMidiPort,
+  setSelectedPort,
+  setPortConnectionClass,
+  sendTemporaryTextToTag,
+};
 import { midiBay } from '../main.js';
-import {
-  getPortProperties,
-  forEachPortWithPortProperties,
-  getPortByTagId,
-} from '../utils/helpers.js';
-import { showMessage } from './htmlMessage.js';
+import { getPortProperties, getPortByTagId } from '../utils/helpers.js';
 import { setFilterClass } from '../filter/filterCss.js';
 import { setChannelClass } from '../filter/filterChannel.js';
-import { unselectSelectedPort } from '../filter/filter.js';
-import { renamePortAlias } from './htmlAlias.js';
+import { renamePortAlias } from './portAlias.js';
 import { logger } from '../utils/logger.js';
-import { addClass, removeClass, toggleDisplayClass } from './domStyles.js';
+import { addClass, removeClass, hasClass, toggleClass } from '../html/domUtils.js';
 import { setInportRoutingClass, setOutportRoutingClass } from '../routing/routingCssClasses.js';
-import { addSelectedPort } from '../routing/routingSelectedPort.js';
-import { togglePortRouting } from '../routing/routingPorts.js';
-import { restoreAlias } from './htmlAlias.js';
-import { insertPrependLimited, setText } from './domContent.js';
-import { preventAndStop } from './domStyles.js';
+import { addSelectedPort } from './portSelection.js';
+import { togglePortRouting, removeAllRoutingsToOutput } from '../routing/routingToggleRouting.js';
+import { storeRoutingOutPortName } from '../storage/storagePort.js';
+import { restoreAlias } from './portAlias.js';
+import { setText } from '../html/domContent.js';
+import { preventAndStop } from '../html/domUtils.js';
+import { updateLayout } from '../html/htmlUpdater.js';
 
 // #################################################################
 function initHtmlPorts() {
@@ -60,7 +62,8 @@ function appendPortTagsToRoutingLists() {
     portMap.forEach((port) => {
       const portProperties = getPortProperties(port);
       const portTag = getPortProperties(port).tag;
-      portTag.classList.add(`midiport`, `${type}put`);
+      addClass(portTag, `midiport`);
+      addClass(portTag, `${type}put`);
       setText(portTag, portProperties.alias);
       listTag.append(portTag);
     });
@@ -116,21 +119,22 @@ function setSelectedPort(clickedPort) {
 function setPortRouting(selectedPort, clickedPort) {
   logger.debug('setPortRouting');
   if (clickedPort.type == 'output') {
-    if (midiBay.graphTag.classList.contains('routing')) {
+    if (hasClass(midiBay.graphTag, 'routing')) {
       if (!midiBay.selectedPort) {
         // logger.debug('setPortRouting: no selected input port', getPortProperties(clickedPort));
         // showMessage(`<span class="routing">For routing: first select Input!!!</span>`, 'routing');
         const clickedTag = getPortProperties(clickedPort).tag;
-        addClass(clickedTag, 'warning');
-        setText(clickedTag, ' Select Input First!');
-        setTimeout(() => {
-          setText(clickedTag, getPortProperties(clickedPort).alias);
-          removeClass(clickedTag, 'warning');
-        }, 2000);
+        sendTemporaryTextToTag(clickedTag, ' Select Input First!');
+        // addClass(clickedTag, 'warning');
+        // setText(clickedTag, ' Select Input First!');
+        // setTimeout(() => {
+        //   setText(clickedTag, getPortProperties(clickedPort).alias);
+        //   removeClass(clickedTag, 'warning');
+        // }, 2000);
         // logger.debug('setPortRouting: no selected input port - end');
         return true;
       }
-      togglePortRouting(selectedPort, clickedPort);
+      togglePortRouting(selectedPort, clickedPort, storeRoutingOutPortName);
       return true;
     }
   }
@@ -140,7 +144,15 @@ function setPortRouting(selectedPort, clickedPort) {
 function openCloseMidiPort(port) {
   logger.debug('openCloseMidiPort', port.type, port.name, port.connection);
 
-  port.connection == 'open' ? port.close() : port.open();
+  if (port.connection == 'open') {
+    // Bei Output-Ports: Zuerst alle Routings entfernen, dann Port schließen
+    if (port.type === 'output') {
+      removeAllRoutingsToOutput(port);
+    }
+    port.close();
+  } else {
+    port.open();
+  }
 }
 // #################################################
 function setAllPortConnectionClass() {
@@ -156,6 +168,17 @@ function setPortConnectionClass(port) {
 
   const meta = getPortProperties(port);
   meta.tag = meta.tag || document.getElementById(meta.tagId);
-  toggleDisplayClass(meta.tag, 'open', port.connection == 'open');
+  toggleClass(meta.tag, 'open', port.connection == 'open');
   return meta.tag;
+}
+// #################################################
+function sendTemporaryTextToTag(tag, warningText, className = 'warning') {
+  const originalText = tag.innerHTML;
+  addClass(tag, className);
+  setText(tag, warningText);
+  setTimeout(() => {
+    setText(tag, warningText);
+    setText(tag, originalText);
+    removeClass(tag, className);
+  }, 3000);
 }

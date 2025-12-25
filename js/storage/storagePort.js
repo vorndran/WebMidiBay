@@ -5,7 +5,40 @@
  * Konvertiert zwischen Port-Maps und Storage-Format (Sets ↔ Arrays).
  */
 
-export { storePortMap, restorePortMap, removeSelectedPortStorage };
+export {
+  storePortMap,
+  restorePortMap,
+  removeSelectedPortStorage,
+  storeRoutingOutPortName,
+  restoreRoutingOutPortName,
+};
+import { midiBay } from '../main.js';
+import { getStorage } from './storage.js';
+/**
+ * Speichert die aktuelle Routing-Konfiguration im sessionStorage.
+ * Verwendet Port-Namen statt direkter Port-Referenzen für die Persistenz.
+ */
+function storeRoutingOutPortName() {
+  logger.debug('storeRoutingOutPortName');
+  const serializedData = {};
+  forEachPortWithPortProperties(midiBay.inNameMap, (inPort, portProperties, name) => {
+    serializedData[name] = [...portProperties.outPortNameSet];
+  });
+  setStorage('WMB_routing_outport_name', serializedData);
+}
+
+/**
+ * Lädt die gespeicherte Routing-Konfiguration aus dem sessionStorage.
+ */
+function restoreRoutingOutPortName() {
+  logger.debug('restoreRoutingOutPortName');
+  const serializedData = getStorage('WMB_routing_outport_name') || {};
+  forEachPortWithPortProperties(midiBay.inNameMap, (inPort, portProperties, name) => {
+    if (serializedData[name]) {
+      portProperties.outPortNameSet = new Set(serializedData[name]);
+    }
+  });
+}
 
 import { getPortProperties, forEachPortWithPortProperties } from '../utils/helpers.js';
 import { logger } from '../utils/logger.js';

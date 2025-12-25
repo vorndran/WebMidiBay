@@ -6,8 +6,8 @@ import { logger } from '../utils/logger.js';
 import { getPortProperties } from '../utils/helpers.js';
 import { setFilterCss } from '../filter/filterCss.js';
 
-import { removeClassFromAll } from '../html/domClasses.js';
-import { preventAndStop, addClass, removeClass } from '../html/domStyles.js';
+import { addClass, removeClass, removeClassFromAll } from '../html/domUtils.js';
+import { preventAndStop } from '../html/domUtils.js';
 // ###########################################
 function initChannel() {
   midiBay.channelTagMap = {};

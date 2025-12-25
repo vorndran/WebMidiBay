@@ -1,27 +1,20 @@
-export { disableRouting, initRoutingLines, routingLinesUnvisible };
+export {
+  initRoutingLines,
+  drawAllRoutingLines,
+  redrawRoutingLines,
+  getBoundingClientRectArray,
+  getRectArrayDiffResult,
+};
 
 import { midiBay } from '../main.js';
-import { getPortProperties } from '../utils/helpers.js';
 import { logger } from '../utils/logger.js';
-import { toggleDisplayClass } from '../html/domStyles.js';
-import { preventAndStop, getComputedStyleValue } from '../html/domStyles.js';
 import {
   drawRoutingLine,
-  drawAllRoutingLines,
-  redrawRoutingLines,
   resetGraphTagPosition,
-  get_Y_CenterPosition,
-  getDragLine,
+  routingLinesUnvisible,
 } from './routingLinesSvg.js';
-
-// Re-export SVG functions for backward compatibility
-export {
-  drawRoutingLine,
-  drawAllRoutingLines,
-  redrawRoutingLines,
-  get_Y_CenterPosition,
-  getDragLine,
-};
+import { getPortProperties } from '../utils/helpers.js';
+import { clearInnerHTML } from '../html/domContent.js';
 // ################################################################
 function initRoutingLines() {
   midiBay.lineMap = new Map();
@@ -32,39 +25,65 @@ function initRoutingLines() {
   // Vereinfachter Sichtbarkeitsstatus statt spezifischer Display-Werte
   midiBay.graphTag.graphDisplay = 'visible';
   redrawRoutingLines();
+}
+// #############################################################
+/**
+ * Zeichnet alle aktiven Routing-Linien neu.
+ * Wird bei Resize oder Routing-Änderungen aufgerufen.
+ */
+function redrawRoutingLines(forceUpdate = false) {
+  if (routingLinesUnvisible()) return;
 
-  // Initiale Fenstergröße anzeigen
-  // import('../utils/helpers.js').then(({ updateWindowSizeDisplay }) => {
-  //   updateWindowSizeDisplay('p.size');
-  // });
+  // Recalculate SVG container dimensions
+  const svgRectArray = getBoundingClientRectArray(midiBay.svgContainerTag);
+  const svgRectArrayFormer = midiBay.svgRectArray;
+  const svgRectArrayDiff = getRectArrayDiffResult(svgRectArray, svgRectArrayFormer);
+
+  // If size hasn't changed, no update needed
+  if (svgRectArrayDiff == 0 && !forceUpdate) {
+    return;
+  }
+  midiBay.svgRectArray = svgRectArray;
+
+  logger.debug(
+    '%c drawAllRoutingLines from redrawRoutingLines',
+    'color: lightblue; font-weight: bold;'
+  );
+
+  drawAllRoutingLines();
+}
+// #############################################################
+function getBoundingClientRectArray(element) {
+  const rect = element.getBoundingClientRect();
+  return [rect.left, rect.width, rect.top, rect.height, rect.right, rect.bottom, rect.x, rect.y];
 }
 
-// ################################################################
-function disableRouting(eClick) {
-  logger.debug('disableRouting');
-  preventAndStop(eClick);
+// #############################################################
+function getRectArrayDiffResult(rectArray1, rectArray2) {
+  // logger.debug('getRectArrayDiffResult', rectArray1, rectArray2);
+  const arrayDiffResult = rectArray1.map((value, x) => value - rectArray2[x]);
+  return arrayDiffResult.reduce((acc, val) => acc + val, 0);
+}
 
-  midiBay.graphTag.classList.remove('routing');
-  midiBay.portByTagIdMap.forEach((port) => {
-    getPortProperties(port).tag.classList.remove('routing');
+// #############################################################
+/**
+ * Zeichnet alle Routing-Verbindungen als SVG-Linien.
+ */
+function drawAllRoutingLines() {
+  if (routingLinesUnvisible()) return;
+
+  clearInnerHTML(midiBay.graphTag);
+  midiBay.lineMap.clear();
+  resetGraphTagPosition();
+
+  midiBay.inNameMap.forEach((inPort) => {
+    const inMeta = getPortProperties(inPort);
+    inMeta.outPortSet.forEach((outPort) => {
+      const outMeta = getPortProperties(outPort);
+      const line = drawRoutingLine(inMeta.tagId, outMeta.tagId);
+
+      midiBay.graphTag.appendChild(line);
+      midiBay.lineMap.set(line.id, line);
+    });
   });
-}
-// ################################################################
-
-// ##################################################
-/**
- * Aktualisiert die CSS-Klasse des Menü-Items basierend auf Routing-Status.
- * @param {HTMLElement} menuItem - Das Menü-Element
- */
-function setMenuItemClass(menuItem) {
-  toggleDisplayClass(menuItem, 'active', midiBay.graphTag.classList.contains('routing'));
-}
-
-// ##################################################
-/**
- * Prüft, ob Routing-Linien unsichtbar sind.
- * @returns {boolean} True, wenn Routing-Container ausgeblendet ist
- */
-function routingLinesUnvisible() {
-  return getComputedStyleValue('#routing_lines', 'display') === 'none';
 }

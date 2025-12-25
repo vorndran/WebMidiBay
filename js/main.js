@@ -1,13 +1,14 @@
 'use strict';
 
-export { midiBay, soundMap };
+export { midiBay };
 import { receiveMIDIMessage } from './midiMessage.js';
 import { initFilter } from './filter/filter.js';
 import { initRouting } from './routing/routingPorts.js';
 import { initHtml, showMidiAccessStateChange } from './html/html.js';
 import { PortPropertiesManager } from './portProperties.js';
 import { logger } from './utils/logger.js';
-import { getNameMap, getFilteredNameMap } from './html/htmlBlacklist.js';
+import { getNameMap, getFilteredNameMap } from './ports/portBlacklist.js';
+import { addClass } from './html/domUtils.js';
 
 /**
  * Zentrales State-Objekt der Applikation
@@ -42,7 +43,7 @@ import { getNameMap, getFilteredNameMap } from './html/htmlBlacklist.js';
  * @property {Array<number>} svgRectArray - Cached Bounds für SVG-Container
  * @property {boolean} collectingSysEx - Flag: SysEx wird gerade gesammelt
  * @property {boolean} sysExWasSent - Flag: SysEx wurde bereits gesendet
- * @property {boolean} autoSaveSysex - Flag: Auto-Download von empfangenen SysEx
+ * @property {boolean} autoDownloadSysex - Flag: Auto-Download von empfangenen SysEx
  * @property {HTMLElement|null} editPortTag - Aktuell bearbeitetes Port-Tag
  * @property {boolean} renamePortsFlag - Flag: Rename-Modus aktiv
  * @property {boolean} openClosePortsFlag - Flag: Open/Close-Modus aktiv
@@ -57,9 +58,8 @@ const midiBay = {
   dumpRequestObj: {},
   signalsEnabled: true, // Global Flag für Visual Signals
   portBlacklist: new Set(),
+  autoCollectSysex: false, // Auto-collect SysEx messages (independent of monitor visibility)
 };
-
-const soundMap = new Map();
 
 // ################################
 // ########## Start ###############
@@ -127,7 +127,7 @@ const soundMap = new Map();
     }
     if (document.querySelector('h1.error')) {
       const h2 = document.createElement('h2');
-      h2.classList.add('error');
+      addClass(h2, 'error');
       h2.innerHTML = error;
       const body = document.querySelector('body').appendChild(h2);
       logger.error(error);

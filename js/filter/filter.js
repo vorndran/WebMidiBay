@@ -16,7 +16,7 @@ import {
 import { getStorage, setStorage } from '../storage/storage.js';
 import { storePortMap, restorePortMap } from '../storage/storagePort.js';
 import { logger } from '../utils/logger.js';
-import { preventAndStop, toggleDisplayClass } from '../html/domStyles.js';
+import { preventAndStop } from '../html/domUtils.js';
 import { initChannel, setChannelClass, resetAllChannels } from './filterChannel.js';
 import { updateAllOutputPortClockWarnings } from '../core/midiMessageSignal.js';
 import { MIDI_TIMING_CLOCK } from '../constants/midiConstants.js';
@@ -28,7 +28,9 @@ import {
   restorePortTagFilterClass,
   setFilterCss,
 } from './filterCss.js';
-import { removeSelectedPort } from '../routing/routingSelectedPort.js';
+import { removeSelectedPort } from '../ports/portSelection.js';
+import { toggleClass } from '../html/domUtils.js';
+import { updateLayout } from '../html/htmlUpdater.js';
 
 // ###########################################
 function initFilter() {
@@ -64,11 +66,11 @@ function toggleFilter(clickedFilterTag) {
   const statusbyte = Number(clickedFilterTag.dataset.statusbyte);
   const filterSet = chooseFilterSet();
 
-  const filterActive = toggleDisplayClass(clickedFilterTag, 'active');
+  const filterActive = toggleClass(clickedFilterTag, 'active');
   filterActive ? filterSet.add(statusbyte) : filterSet.delete(statusbyte);
 
   if (filterSet == midiBay.globalFilterSet) {
-    toggleDisplayClass(clickedFilterTag, 'all_active', filterActive);
+    toggleClass(clickedFilterTag, 'all_active', filterActive);
   }
 
   // Wenn Clock-Filter geändert wurde, aktualisiere alle Output-Port Warnings

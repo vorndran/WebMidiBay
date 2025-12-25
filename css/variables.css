@@ -30,7 +30,11 @@
   --selected-bg-color: #6a549a;
 
   /* Signal & Routing Colors */
-  --signal-color: rgb(255, 136, 0);
+  /* --signal-color: rgb(255, 136, 0); */
+  --signal-color: #ffeed6;
+  --signal-on-inputs-color: #ea9416;
+  --signal-on-outputs-color: #767cbc;
+
   --routing-color: #00b3c6;
   --routing-light-color: #c8f0f5;
   --filtered-color: #8f6eea;

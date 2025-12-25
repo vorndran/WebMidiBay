@@ -1,25 +1,26 @@
 export { initDragAndDrop };
 import { midiBay } from '../main.js';
-import { getPortProperties, getPortByTagId } from '../utils/helpers.js';
-import { routingLinesUnvisible } from '../routing/routingLines.js';
-import { togglePortRouting } from '../routing/routingPorts.js';
-import { setSelectedPort } from '../html/htmlPorts.js';
-import { removeClassFromAll } from '../html/domClasses.js';
+import { getPortByTagId, getSelectedPortProperties } from '../utils/helpers.js';
+import { togglePortRouting } from './routingToggleRouting.js';
+import { storeRoutingOutPortName } from '../storage/storagePort.js';
+import { setSelectedPort } from '../ports/portInteraction.js';
+
+import { removeClass, hasClass, removeClassFromAll } from '../html/domUtils.js';
 import { setAttributes } from '../html/domContent.js';
-import { removeClass } from '../html/domStyles.js';
+import { preventAndStop } from '../html/domUtils.js';
 import { logger } from '../utils/logger.js';
-import { getEventCoordinates, getEvent_xy } from './dragEventUtils.js';
-import { preventSelect } from './dragSelectUtils.js';
 import {
+  preventSelect,
   initializeDragLineIfNeeded,
   calculateDragLinePosition,
-  updateHoverTargetClasses,
-} from './dragLineUtils.js';
+} from './routingDragUtils.js';
+import { routingLinesUnvisible } from './routingLinesSvg.js';
 
 // ########################################################
 function initDragAndDrop() {
   logger.debug('initDragAndDrop');
   midiBay.inNameMap.forEach((inPort) => {
+    // Drag-Start bleibt lokal registriert, da er nur im Routing-Modus relevant ist
     midiBay.portPropertiesManager
       .getPortProperties(inPort)
       .tag.addEventListener('pointerdown', routingEventStart, { passive: false });
@@ -31,8 +32,8 @@ function routingEventStart(event) {
   logger.debug('routingEventStart', event.pointerId, event.isPrimary);
 
   if (routingLinesUnvisible()) return;
-  event.stopPropagation();
-  if (midiBay.graphTag.classList.contains('routing')) return;
+  preventAndStop(event, true, false); // Only stopPropagation
+  if (hasClass(midiBay.graphTag, 'routing')) return;
   if (midiBay.editPortTag) return;
   if (event.isPrimary == false) return;
   midiBay.routingEvent = false;
@@ -47,7 +48,7 @@ function routingEventMove(event) {
   logger.debug('routingEventMove');
 
   if (routingLinesUnvisible()) return;
-  event.preventDefault();
+  preventAndStop(event, false, true); // Only preventDefault
   midiBay.routingEvent = true;
 
   initializeDragLineIfNeeded(event);
@@ -58,34 +59,6 @@ function routingEventMove(event) {
   setAttributes(midiBay.graphTag.dragLine, { x2: dragLine_x2, y2: dragLine_y2 });
 }
 
-// ########################################################
-function routingEventEnd(event) {
-  logger.debug('routingEventEnd', event.type);
-
-  event.preventDefault();
-
-  setEventListener(event);
-
-  if (!midiBay.graphTag.dragLine) return;
-
-  if (midiBay.selectedPort) {
-    const selectedPortProbs = midiBay.portPropertiesManager.getPortProperties(midiBay.selectedPort);
-    if (selectedPortProbs.tag != event.target) setSelectedPort(getPortByTagId(event.target.id));
-  }
-
-  midiBay.graphTag.dragLine.remove();
-  midiBay.graphTag.dragLine = null;
-
-  const eventXyMap = getEvent_xy(event);
-  const endTarget = document.elementFromPoint(eventXyMap.get('x'), eventXyMap.get('y'));
-  removeClass(midiBay.clickedInPortTag, 'routing_source');
-  removeClassFromAll('.routing_target', 'routing_target');
-
-  if (endTarget?.classList.contains('output'))
-    togglePortRouting(getPortByTagId(midiBay.clickedInPortTag.id), getPortByTagId(endTarget.id));
-
-  midiBay.clickedInPortTag = null;
-}
 // ########################################################
 function setEventListener(event) {
   switch (event.type) {
@@ -101,5 +74,86 @@ function setEventListener(event) {
       break;
   }
 }
+// ########################################################
+function routingEventEnd(event) {
+  logger.debug('routingEventEnd', event.type);
+
+  preventAndStop(event, false, true); // Only preventDefault
+
+  setEventListener(event);
+
+  if (!midiBay.graphTag.dragLine) return;
+
+  const selectedPortProbs = getSelectedPortProperties();
+  if (selectedPortProbs && selectedPortProbs.tag != event.target) {
+    setSelectedPort(getPortByTagId(event.target.id));
+  }
+
+  midiBay.graphTag.dragLine.remove();
+  midiBay.graphTag.dragLine = null;
+
+  const eventXyMap = getEvent_xy(event);
+  const endTarget = document.elementFromPoint(eventXyMap.get('x'), eventXyMap.get('y'));
+  removeClass(midiBay.clickedInPortTag, 'routing_source');
+  removeClassFromAll('.routing_target', 'routing_target');
+
+  if (endTarget && hasClass(endTarget, 'output')) {
+    togglePortRouting(
+      getPortByTagId(midiBay.clickedInPortTag.id),
+      getPortByTagId(endTarget.id),
+      storeRoutingOutPortName
+    );
+  }
+
+  midiBay.clickedInPortTag = null;
+}
+// #############################################################################
+/**
+ * Extrahiert X/Y-Koordinaten aus dem Event
+ */
+function getEventCoordinates(event) {
+  const eventXyMap = getEvent_xy(event);
+  return {
+    x: eventXyMap.get('x'),
+    y: eventXyMap.get('y'),
+  };
+}
 
 // #############################################################################
+/**
+ * Normalisiert Event-Koordinaten für verschiedene Event-Typen
+ */
+function getEvent_xy(event) {
+  let event_x;
+  let event_y;
+  switch (event.type) {
+    case 'pointermove':
+      event_x = event.pageX - window.scrollX;
+      event_y = event.pageY - window.scrollY;
+      break;
+    case 'pointerup':
+      event_x = event.pageX - window.scrollX;
+      event_y = event.pageY - window.scrollY;
+      break;
+    case 'mousemove':
+      event_x = event.pageX - window.scrollX;
+      event_y = event.pageY - window.scrollY;
+      break;
+    case 'mouseup':
+      event_x = event.pageX - window.scrollX;
+      event_y = event.pageY - window.scrollY;
+      break;
+    case 'touchmove':
+      event_x = event.touches[0]?.pageX - window.scrollX;
+      event_y = event.touches[0]?.pageY - window.scrollY;
+      break;
+    case 'touchend':
+      event_x = event.changedTouches[0]?.pageX - window.scrollX;
+      event_y = event.changedTouches[0]?.pageY - window.scrollY;
+      break;
+  }
+  return new Map([
+    ['x', event_x],
+    ['y', event_y],
+  ]);
+}

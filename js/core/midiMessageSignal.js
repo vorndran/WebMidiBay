@@ -7,18 +7,15 @@ export {
 
 import { midiBay } from '../main.js';
 import { getPortProperties } from '../utils/helpers.js';
-import { routingLinesUnvisible } from '../routing/routingLines.js';
-import { addClass, removeClass } from '../html/domStyles.js';
-import { hasClass } from '../html/domClasses.js';
+import { routingLinesUnvisible } from '../routing/routingLinesSvg.js';
+import { addClass, removeClass, hasClass } from '../html/domUtils.js';
 import { logger } from '../utils/logger.js';
 import { updateLayout } from '../html/htmlUpdater.js';
 import { MIDI_TIMING_CLOCK, MIDI_ACTIVE_SENSING } from '../constants/midiConstants.js';
 
-let timingClockStillActive = false;
 const signalInPortTagSet = new Set();
 const signalOutPortTagSet = new Set();
 const signalPortTagMap = { in: signalInPortTagSet, out: signalOutPortTagSet };
-const clockSignalPortTagSet = new Set();
 
 // ################################################
 function setPortTagAndRoutingLineSignal(inOrOut, statusByte, inPort, outPort) {

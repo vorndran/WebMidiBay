@@ -69,11 +69,35 @@
                 <a href="https://github.com/vorndran/webmidibay" target="_blank">GitHub</a>
               </p>
               <!-- <h3>Documentation</h3> -->
-              <p class="button documentation">
-                <a href="./html/info.html" style="color: inherit; text-decoration: none"
-                  >Documentation</a
-                >
-              </p>
+              <div id="info-buttons">
+                <p class="button info">
+                  <a href="./html/info.html" style="color: inherit; text-decoration: none"
+                    >README (by AI)</a
+                  >
+                </p>
+                <p class="button documentation">
+                  <a href="" style="color: inherit; text-decoration: none">documentation</a>
+                </p>
+                <div id="donate-button-container">
+                  <div id="donate-button"></div>
+                  <script
+                    src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js"
+                    charset="UTF-8"
+                  ></script>
+                  <script>
+                    PayPal.Donation.Button({
+                      env: 'production',
+                      hosted_button_id: 'RBDWQPWLW7SSW',
+                      image: {
+                        src: 'https://www.paypalobjects.com/en_US/DK/i/btn/btn_donateCC_LG.gif',
+                        alt: 'Donate with PayPal button',
+                        title: 'PayPal - The safer, easier way to pay online!',
+                      },
+                    }).render('#donate-button');
+                  </script>
+                </div>
+              </div>
+
               <h3>MIDI Data Infos</h3>
               <p class="button specs">
                 <a href="./html/MIDI_DataTable.html" style="color: inherit; text-decoration: none"
@@ -325,18 +349,21 @@
       <div class="flex-container second-column">
         <section id="sysex" class="flex-item menu-member">
           <form id="form_sysex">
-            <h2>Sysex:</h2>
+            <h2>SysEx</h2>
             <ul id="sysex_file">
               <!-- <button id="settings_file_download" name="save_settings">Download Settings</button> -->
               <li class="sysex">
-                <span class="custom_sysex_file_upload form_buttons">load sysex files</span> (upload)
-                <input type="file" id="sysex_file_upload" multiple />
+                <span class="toggle_sysex_collection form_buttons">auto-collect sysex</span>
               </li>
               <li class="sysex">
-                <span class="auto_save_sysex form_buttons">auto-download sysex</span>
+                <span class="auto_download_sysex form_buttons">auto-download sysex</span>
+              </li>
+              <li class="sysex">
+                <span class="custom_sysex_file_upload form_buttons">load SysEx files</span> (upload)
+                <input type="file" id="sysex_file_upload" multiple />
               </li>
               <li class="sysex inline_block filename">
-                <span class="sysex_file_download form_buttons">save sysex as file</span> (download)
+                <span class="sysex_file_download form_buttons">save SysEx as file</span> (download)
               </li>
               <li class="sysex inline_block">
                 -&gt; filename: "<span

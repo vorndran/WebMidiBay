@@ -4,9 +4,9 @@ import { midiBay } from '../main.js';
 import { getPortProperties, getPortByTagId } from '../utils/helpers.js';
 import { getStorage, setStorage } from '../storage/storage.js';
 import { removeSelectedPortStorage } from '../storage/storagePort.js';
-import { addClass, removeClass } from '../html/domStyles.js';
+import { addClass, removeClass } from '../html/domUtils.js';
 import { logger } from '../utils/logger.js';
-import { setOutportRoutingClass } from './routingCssClasses.js';
+import { setOutportRoutingClass } from '../routing/routingCssClasses.js';
 import { updateLayout } from '../html/htmlUpdater.js';
 
 // ###################################################
@@ -75,7 +75,6 @@ function setSelectedPort(clickedPort) {
   if (previousPort) {
     removePreviousPortSelection(previousPort);
   }
-  updateLayout(true);
 }
 // ####################################################
 /**
@@ -94,7 +93,7 @@ function deselectPort(port) {
 function updateSelectedPortState(port) {
   midiBay.selectedPort = port;
   const portProperties = getPortProperties(port);
-  portProperties.tag.classList.add('selected_port');
+  addClass(portProperties.tag, 'selected_port');
   setStorage('WMB_selected_port', portProperties.tagId);
 }
 // ####################################################
@@ -118,5 +117,4 @@ function removeSelectedPort(selectedPortTag) {
   removeSelectedPortStorage();
   removeClass(selectedPortTag, 'selected_port');
   setOutportRoutingClass();
-  updateLayout(true);
 }

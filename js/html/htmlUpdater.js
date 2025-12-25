@@ -1,48 +1,52 @@
 export { updateLayout };
 import { midiBay } from '../main.js';
-
-/**
- * HTML Updater
- *
- * Zentrale Funktionen für Layout- und UI-Updates.
- * Koordiniert verschiedene Update-Mechanismen nach Größenänderungen oder Layout-Events.
- */
-import { logger } from '../utils/logger.js';
-import { redrawRoutingLines } from '../routing/routingLinesSvg.js';
-import { updateWindowSizeDisplay } from '../utils/helpers.js';
+import { logger, DEVELOPER_MODE } from '../utils/logger.js';
+import { redrawRoutingLines } from '../routing/routingLines.js';
+import { updateWindowSizeDisplay } from '../utils/dev/devHelpers.js';
 import { updateVisibleMessages } from './htmlMessage.js';
-import { hasClass } from './domClasses.js';
+
+// Debounce-State für updateLayout
+let layoutUpdateScheduled = false;
+let layoutForceUpdate = false;
+
 // #############################################################
 /**
  * Aktualisiert alle layout-abhängigen UI-Elemente nach Größenänderungen.
  * Zentrale Funktion für komplette Layout-Updates.
+ * Integriertes Debouncing: Maximal 1x pro Frame, sammelt forceUpdate-Flags.
  */
 function updateLayout(forceUpdate = false) {
-  // logger.debug('%cupdateLayout', 'color: blue; font-weight: bold;');
+  // forceUpdate merken falls einer der Aufrufe es anfordert
+  if (forceUpdate) layoutForceUpdate = true;
 
-  // Fenstergröße anzeigen
-  updateWindowSizeDisplay('p.size');
+  // Bereits geplant? → Nur Flag setzen, kein neuer Frame
+  if (layoutUpdateScheduled) return;
+  layoutUpdateScheduled = true;
+
+  requestAnimationFrame(() => {
+    executeLayoutUpdate(layoutForceUpdate);
+    layoutUpdateScheduled = false;
+    layoutForceUpdate = false;
+  });
+}
+
+/**
+ * Führt das eigentliche Layout-Update durch.
+ */
+function executeLayoutUpdate(forceUpdate) {
+  logger.debug('%cupdateLayout', 'color: blue; font-weight: bold;');
+  if (DEVELOPER_MODE) updateWindowSizeDisplay('p.size');
 
   if (!midiBay.menuItemVisibleMap) return;
   // Message-Container Zeilenzahl aktualisieren
   if (midiBay.menuItemVisibleMap.get('monitor') == 'visible') {
-    // logger.debug('%cupdateVisibleMessages from updateLayout', 'color: purple; font-weight: bold;');
     updateVisibleMessages(forceUpdate);
   }
-  // logger.debug(
-  //   '%c Routing Lines Check',
-  //   'color: blue; font-weight: bold;',
-  //   midiBay.menuItemVisibleMap.get('routing'),
-  //   getComputedStyle(midiBay.graphTag).display
-  // );
   // Routing-Linien nur aktualisieren, wenn sichtbar
   if (
-    // midiBay.graphTag &&
-    midiBay.menuItemVisibleMap.get('routing') == 'visible' &&
+    midiBay.menuItemVisibleMap.get('routing') === 'visible' &&
     getComputedStyle(midiBay.graphTag).display === 'block'
   ) {
-    // SVG Routing-Linien neu zeichnen
-    // logger.debug('%credrawRoutingLines from updateLayout', 'color: blue; font-weight: bold;');
     redrawRoutingLines(forceUpdate);
   }
 }

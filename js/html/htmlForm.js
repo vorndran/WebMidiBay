@@ -1,10 +1,13 @@
 export { getFiles, showDumpButton, downloadSettingsFile, downloadSysexFile };
 import { midiBay } from '../main.js';
-// import {  } from '../sysex/sysex.js';
-import { getSysexFileToMap, sysexToSyxFileUrl } from '../sysex/sysexFile.js';
+import { loadSysexFile } from '../sysex/sysexFileUpload.js';
+import { listSysexFilesToSendListAction } from '../sysex/sysexFileActions.js';
+import { sysexToSyxFileUrl } from '../sysex/sysexFormat.js';
 import { loadJsonFileToStorage, storageToJson, getStorage } from '../storage/storage.js';
 import { logger } from '../utils/logger.js';
-import { hide, show } from './domStyles.js';
+import { hide } from './domUtils.js';
+import { sanitizeFilename } from '../utils/helpers.js';
+import { sendTemporaryTextToTag } from '../ports/portInteraction.js';
 
 // #################################################
 function getFiles(eFiles) {
@@ -13,7 +16,8 @@ function getFiles(eFiles) {
   for (let fileNr = 0; fileNr < fileArray.length; fileNr++) {
     const file = fileArray[fileNr];
     if (file.name.endsWith('.json')) loadJsonFileToStorage(file);
-    else if (file.name.match(/(.mid\b|.syx\b)/i)) getSysexFileToMap(file);
+    else if (file.name.match(/(.mid\b|.syx\b)/i))
+      loadSysexFile(file, listSysexFilesToSendListAction);
   }
   document.getElementById('form_settings').reset();
   logger.debug('getFiles complete', fileArray.length, 'files');
@@ -22,9 +26,14 @@ function getFiles(eFiles) {
 function downloadSysexFile() {
   logger.debug('downloadSysexFile');
 
-  if (!midiBay.sysexMessage) return;
+  if (!midiBay.sysexMessage || midiBay.sysexMessage.length === 0) {
+    const downloadButtonTag = document.querySelector(`.sysex_file_download`);
+    sendTemporaryTextToTag(downloadButtonTag, 'No data available', 'warning');
+    return;
+  }
 
-  const fileName = document.getElementById(`sysex_file_rename`).innerText || 'sysex';
+  const rawFileName = document.getElementById(`sysex_file_rename`).innerText || 'sysex';
+  const fileName = sanitizeFilename(rawFileName) + '.syx';
   logger.debug('downloadSysexFile filename', fileName);
   const fileDownloadTag = document.createElement('a');
   // const fileDownloadTag = document.getElementById(`settings_file_download`);
@@ -32,7 +41,7 @@ function downloadSysexFile() {
   // fileDownloadTag.href = `application/octet-stream, ${downloadString}`;
   fileDownloadTag.href = sysexToSyxFileUrl(midiBay.sysexMessage);
   // fileDownloadTag.download = fileRenameTag.innerText + '.syx' || syxFileName;
-  fileDownloadTag.download = fileName + '.syx';
+  fileDownloadTag.download = fileName;
   // fileDownloadTag.innerText = 'Download Settings';
   // fileDownloadTag.setAttribute('visibility', 'visible');
 
@@ -48,13 +57,12 @@ function downloadSysexFile() {
 function downloadSettingsFile() {
   logger.debug('download Settings File');
 
-  const jsonFileName = 'WMB_Storage.json';
   const fileRenameTag = document.getElementById(`settings_file_rename`);
+  const rawFileName = fileRenameTag.innerText || 'WMB_Storage';
+  const fileName = sanitizeFilename(rawFileName);
   const fileDownloadTag = document.createElement('a');
   fileDownloadTag.href = `data:application/json, ${storageToJson()}`;
-  fileDownloadTag.download = fileRenameTag.innerText + '.json' || jsonFileName;
-  // fileDownloadTag.innerText = 'Download Settings';
-  // fileDownloadTag.setAttribute('visibility', 'visible');
+  fileDownloadTag.download = fileName + '.json';
   hide(fileDownloadTag);
   fileDownloadTag.click();
   fileDownloadTag.remove();
