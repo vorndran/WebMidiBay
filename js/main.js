@@ -66,7 +66,7 @@ const midiBay = {
 // ################################
 (function () {
   // Feature-detection: prüfe, ob die API verfügbar ist
-  if (typeof navigator.requestMIDIAcces !== 'function') {
+  if (typeof navigator.requestMIDIAccess !== 'function') {
     onMIDIFailure('MIDI Access is not implemented in this browser!');
     onMIDIFailure(
       'Current browser with MIDI access:  <a href="https://caniuse.com/?search=midiaccess" target="_blank">https://caniuse.com/?search=midiaccess</a>'

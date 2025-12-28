@@ -1011,18 +1011,18 @@ div.browser-support-error ul li {
     height: 100%;
   }
   #monitor {
-    /* width: 41rem; */
+    width: 41rem;
     height: 100%;
   }
 }
 @media (min-width: 93rem) {
   #monitor {
-    /* width: 48rem; */
+    width: 48rem;
   }
 }
 @media (min-width: 110rem) {
   #monitor {
-    /* width: 60rem; */
+    width: 60rem;
   }
 }
 @media (min-width: 130rem) {
@@ -1033,10 +1033,10 @@ div.browser-support-error ul li {
     flex-direction: row;
   }
   #monitor {
-    /* width: 48rem; */
+    width: 48rem;
   }
   .container:has(#filter.js-hidden):has(#sysex.js-hidden) #monitor {
-    /* width: 60rem; */
+    width: 60rem;
   }
   .second-column:has(#monitor) #sysex {
     max-width: 34rem;
@@ -1059,7 +1059,7 @@ div.browser-support-error ul li {
     max-width: fit-content; /* 60rem; */
   }
   #monitor {
-    /* width: 60rem; */
+    width: 60rem;
   }
 }
 
