@@ -8,7 +8,7 @@ export { setEventListener };
 import { clickEvents, changeEvents } from './clickMap.js';
 import { handleKeyboardShortcuts } from './keyboardShortcuts.js';
 import { renamePortAlias } from '../ports/portAlias.js';
-import { updateLayout } from '../html/htmlUpdater.js';
+import { updateLayout, scheduleLayoutUpdate } from '../html/htmlUpdater.js';
 import { midiBay } from '../main.js';
 
 function setEventListener() {
@@ -30,21 +30,24 @@ function setEventListener() {
 
 /**
  * Verzögerte Layout-Updates nach UI-Events.
- * Zweifaches Update: Sofort + nach kurzer Verzögerung für Scrollbar-Änderungen.
  */
 function initDelayedLayoutUpdates() {
-  const scheduleLayoutUpdate = () => {
-    // Erstes Update: Sofort nach Event
-    requestAnimationFrame(() => updateLayout(true));
+  document.addEventListener('click', handleClickForLayoutUpdate, false);
+  document.addEventListener('change', scheduleLayoutUpdate, false);
+  // Note: keydown scheduleLayoutUpdate nur bei erfolgreichen Shortcuts (siehe keyboardShortcuts.js)
+}
 
-    // Zweites Update: Nach Scrollbar-Änderung (Browser braucht Zeit)
-    setTimeout(() => {
-      requestAnimationFrame(() => updateLayout(true));
-    }, 50);
-  };
-
-  document.addEventListener('click', scheduleLayoutUpdate, false);
-  document.addEventListener('keydown', scheduleLayoutUpdate, false);
+/**
+ * Click-Handler für Layout-Updates mit contentEditable-Check.
+ * Lässt Clicks auf contentEditable Elemente durch für Cursor-Positionierung.
+ */
+function handleClickForLayoutUpdate(event) {
+  // Ignore clicks on contentEditable elements (z.B. Port-Umbenennung)
+  const target = event.target;
+  if (target && (target.contentEditable === 'true' || target.isContentEditable)) {
+    return;
+  }
+  scheduleLayoutUpdate();
 }
 
 /**

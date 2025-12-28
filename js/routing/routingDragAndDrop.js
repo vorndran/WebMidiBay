@@ -31,6 +31,11 @@ function initDragAndDrop() {
 function routingEventStart(event) {
   logger.debug('routingEventStart', event.pointerId, event.isPrimary);
 
+  // Früher Check: Lasse Events auf contentEditable Elementen durch (Port-Umbenennung)
+  if (event.target.contentEditable === 'true' || event.target.isContentEditable) {
+    return; // Erlaubt native Cursor-Positionierung und Textbearbeitung
+  }
+
   if (routingLinesUnvisible()) return;
   preventAndStop(event, true, false); // Only stopPropagation
   if (hasClass(midiBay.graphTag, 'routing')) return;

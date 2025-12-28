@@ -45,7 +45,7 @@ function clickedPortMenu(eClick) {
   const action = getPortMenuAction(menuElement);
   logger.debug('clickedPortMenu: ', action);
 
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
   resetPortMenuFunctions();
 
   if (!setPortMenuActive(menuElement)) return;
@@ -67,19 +67,19 @@ function clickedPortMenu(eClick) {
 
 function clickDownloadSysexFile(eClick) {
   logger.debug('clickDownloadSysexFile');
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
   downloadSysexFile();
 }
 
 function clickDownloadSettingsFile(eClick) {
   logger.debug('clickDownloadSettingsFile');
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
   downloadSettingsFile();
 }
 
 function clickedUnselectSelectedPort(eClick) {
   logger.debug('clickedUnselectSelectedPort');
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
   unselectSelectedPort();
 }
 
@@ -107,12 +107,12 @@ function clearAllStorage() {
 }
 
 function clickSettingsFileUploadInput(eClick) {
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
   document.getElementById('settings_file_upload').click();
 }
 
 function clickSysexFileUploadInput(eClick) {
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
   document.getElementById('sysex_file_upload').click();
   logger.debug('clickSysexFileUploadInput');
 }

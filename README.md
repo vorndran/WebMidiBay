@@ -5,13 +5,18 @@
 ## Features
 
 - 🎹 **MIDI Routing**: Connect any MIDI input to multiple outputs with visual feedback
+
 - 📊 **Message Monitor**: Real-time display of MIDI messages with filtering options
 - 💡 **Signal Visualization**: Visual indicators for MIDI activity, Clock, and Active Sensing
-- 🎛️ **Channel Filtering**: Filter messages by MIDI channel
-- 📝 **SysEx Support**: View and export System Exclusive messages
+- ⚠️ **Multiple Clock Warning**: Detects when an output receives Clock signals from multiple sources
+- 🔍 **MIDI Loop Detection**: Identifies and filters immediate MIDI feedback loops
+- 🎛️ **Message Filtering**: Filter messages by MIDI channel and / or event type
+- 📝 **SysEx Support**: Auto-collect, view, export and send System Exclusive messages
 - 💾 **Storage**: Save and restore routing configurations, filters, and website settings
 - 🎨 **Port Aliases**: Customize port names for better organization
+- 🚫 **Port Blacklist**: Hide unwanted MIDI ports from the interface
 - ⚡ **Performance**: Optimizable for low latency and high throughput
+- ⌨️ **Keyboard Shortcuts**: Quick access to main sections (keys 1-4)
 
 ## Browser Support
 
@@ -22,7 +27,7 @@ WebMidiBay requires a browser with [Web MIDI API](https://www.w3.org/TR/webmidi/
 - Opera
 - Firefox (Desktop only, version 108+)
 
-**Note:** Safari and Firefox on mobile devices (Android/iOS) do not currently support the [Web MIDI API](https://www.w3.org/TR/webmidi/).
+**Note:** Mobile devices (Android/iOS) are not supported at the current stage of development.
 
 ## Usage
 
@@ -54,6 +59,7 @@ Click the lightbulb icon in the routing menu to toggle MIDI event visibility:
 
 - **Blink Signals**: Brief flashes indicate MIDI activity
 - **Clock Active**: Persistent indicator for continuous MIDI Clock signals
+- **Multiple Clock Sources Warning**: Red background on output ports receiving Clock from multiple inputs (potential timing conflicts)
 
 ### Filter
 
@@ -66,14 +72,26 @@ You can:
 
 ### Monitor
 
-- **Channel Filter**: Display messages from specific sources (inputs only, outputs only, selected channel, or all)
+- **Port Filter**: Display messages from specific sources (inputs only, outputs only, selected channel, or all)
 - **Message Filter**: Toggle visibility of message types (filtered/unfiltered messages, text format, raw data, or both)
+- **Clock Display Toggle**: Show/hide MIDI Clock and Active Sensing messages (click clock icon in routing menu)
+- **Loop Detection**: Automatically detects and marks MIDI messages that are immediately sent back (feedback loops)
+- **Pause/Clear**: Pause message stream or clear monitor display
 
 ### SysEx
 
+- **Auto-Collect**: Toggle automatic SysEx collection (independent of monitor visibility)
 - **Capture**: Incoming SysEx data is captured and displayed in real-time
-- **Export**: Download captured SysEx data as `.syx` files
+- **Save/Export**: Download captured/received SysEx data as `.syx` files
 - **Import**: Upload SysEx files and send them via the selected output
+- **Auto-Download**: Automatically download received SysEx messages (requires Auto-Collect)
+
+### Settings
+
+- **Port Blacklist**: Hide specific MIDI ports from the interface (useful for virtual ports or unused devices)
+- **Export/Import Settings**: Save and load complete configurations as JSON files
+- **View Modes**: Toggle between different display layouts
+- **Message Line Count**: Adjust how many lines are displayed in the monitor (30-200)
 
 ### Performance Optimization
 

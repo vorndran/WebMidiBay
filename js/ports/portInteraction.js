@@ -86,7 +86,13 @@ function setPortByTagIdMap() {
 // ##################################################
 function clickedMidiPort(eClick) {
   logger.debug('clickedMidiPort', eClick.target.id);
-  preventAndStop(eClick);
+
+  // Früher Check: Lasse Clicks auf contentEditable Elementen durch (Port-Umbenennung)
+  if (eClick.target.contentEditable === 'true' || eClick.target.isContentEditable) {
+    return; // Erlaubt native Cursor-Positionierung
+  }
+
+  preventAndStop(eClick, true, false);
   switch (true) {
     case midiBay.renamePortsFlag:
       return renamePortAlias(eClick);
@@ -121,17 +127,8 @@ function setPortRouting(selectedPort, clickedPort) {
   if (clickedPort.type == 'output') {
     if (hasClass(midiBay.graphTag, 'routing')) {
       if (!midiBay.selectedPort) {
-        // logger.debug('setPortRouting: no selected input port', getPortProperties(clickedPort));
-        // showMessage(`<span class="routing">For routing: first select Input!!!</span>`, 'routing');
         const clickedTag = getPortProperties(clickedPort).tag;
         sendTemporaryTextToTag(clickedTag, ' Select Input First!');
-        // addClass(clickedTag, 'warning');
-        // setText(clickedTag, ' Select Input First!');
-        // setTimeout(() => {
-        //   setText(clickedTag, getPortProperties(clickedPort).alias);
-        //   removeClass(clickedTag, 'warning');
-        // }, 2000);
-        // logger.debug('setPortRouting: no selected input port - end');
         return true;
       }
       togglePortRouting(selectedPort, clickedPort, storeRoutingOutPortName);
@@ -174,11 +171,13 @@ function setPortConnectionClass(port) {
 // #################################################
 function sendTemporaryTextToTag(tag, warningText, className = 'warning') {
   const originalText = tag.innerHTML;
+  if (hasClass(tag, className)) return; // Vermeide Mehrfachanzeigen
   addClass(tag, className);
   setText(tag, warningText);
   setTimeout(() => {
-    setText(tag, warningText);
     setText(tag, originalText);
     removeClass(tag, className);
+    updateLayout(true); // Nötig: Text-Zurücksetzung nach Timer kann Layout ändern
   }, 3000);
+  // Note: Initiales Layout-Update durch globalen Click-Listener abgedeckt
 }

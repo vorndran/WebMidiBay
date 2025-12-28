@@ -4,14 +4,14 @@ import { getPortProperties } from '../utils/helpers.js';
 import { setEventListener } from '../events/eventBootstrap.js';
 import { getStorage } from '../storage/storage.js';
 import { initHtmlPorts, setPortConnectionClass } from '../ports/portInteraction.js';
-import { initHtmlMessage, showMessage } from './htmlMessage.js';
+import { initHtmlMessage } from '../message/messageInit.js';
+import { showMessage } from '../message/messageMonitor.js';
 import { initPortBlacklist } from '../ports/portBlacklist.js';
 import { logger } from '../utils/logger.js';
 import { addClass, removeClass, hasClass, toggleClass } from './domUtils.js';
-import { updateLayout } from './htmlUpdater.js';
 
 // #################################################################
-logger.debug('%c html.js loaded', 'color: orange; font-weight: bold;');
+logger.debug('%c initHtml.js loaded', 'color: orange; font-weight: bold;');
 
 // initHtml ##########################################
 // ##############################################
@@ -22,7 +22,7 @@ function initHtml() {
   initPortBlacklist();
   setEventListener();
   restoreMenuItemVisibility();
-  midiBay.menuClockTag = document.querySelector('.clock');
+  midiBay.menuClockTag = document.querySelector('.toggle_clock_message');
   restoreToggleStates();
 }
 

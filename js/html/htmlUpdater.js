@@ -1,13 +1,29 @@
-export { updateLayout };
+export { updateLayout, scheduleLayoutUpdate };
 import { midiBay } from '../main.js';
 import { logger, DEVELOPER_MODE } from '../utils/logger.js';
 import { redrawRoutingLines } from '../routing/routingLines.js';
 import { updateWindowSizeDisplay } from '../utils/dev/devHelpers.js';
-import { updateVisibleMessages } from './htmlMessage.js';
+import { updateVisibleMessages } from '../message/messageMonitor.js';
 
 // Debounce-State für updateLayout
 let layoutUpdateScheduled = false;
 let layoutForceUpdate = false;
+
+// #############################################################
+/**
+ * Verzögertes Layout-Update mit doppeltem Update-Zyklus.
+ * Zweifaches Update: Sofort + nach kurzer Verzögerung für Scrollbar-Änderungen.
+ * Wird bei Clicks und erfolgreichen Keyboard-Shortcuts aufgerufen.
+ */
+function scheduleLayoutUpdate() {
+  // Erstes Update: Sofort nach Event
+  requestAnimationFrame(() => updateLayout(true));
+
+  // Zweites Update: Nach Scrollbar-Änderung (Browser braucht Zeit)
+  setTimeout(() => {
+    requestAnimationFrame(() => updateLayout(true));
+  }, 50);
+}
 
 // #############################################################
 /**

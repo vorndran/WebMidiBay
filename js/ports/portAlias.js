@@ -8,6 +8,7 @@ import { setSelectedPort } from './portInteraction.js';
 import { logger } from '../utils/logger.js';
 import { preventAndStop, hide, show } from '../html/domUtils.js';
 import { setText } from '../html/domContent.js';
+import { scheduleLayoutUpdate } from '../html/htmlUpdater.js';
 
 // #################################################################
 // store Routing - midiBayRouting in den Speicher laden.
@@ -29,7 +30,7 @@ function restoreAlias() {
 }
 // ###############################################################
 function resetAllAlias(eClick) {
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
   removeStorage('WMB_midi_in_port_alias');
   removeStorage('WMB_midi_out_port_alias');
   location.reload();
@@ -66,6 +67,7 @@ function editPortTagFocusOut(event) {
   midiBay.editPortTag = null;
   redrawRoutingLines();
   storeAlias();
+  scheduleLayoutUpdate(); // Layout-Update nach Namensänderung
 }
 // ###############################################################
 function blurByEnter(eKey) {
@@ -76,6 +78,7 @@ function blurByEnter(eKey) {
     setText(midiBay.editPortTag, getPortProperties(port).alias);
     midiBay.editPortTag.blur();
     show(midiBay.graphTag); // CSS-native Sichtbarkeit
+    scheduleLayoutUpdate(); // Layout-Update nach Abbruch mit Escape
   }
   if (eKey.code == 'Enter') {
     midiBay.editPortTag.blur();

@@ -27,7 +27,7 @@ function initChannel() {
 // ###########################################
 function clickedChannel(eClick) {
   logger.debug('clickedChannel');
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
 
   setSelectedChannel(eClick.target);
   if (!midiBay.selectedPort) {

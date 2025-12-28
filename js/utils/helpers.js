@@ -89,12 +89,3 @@ export const sanitizeFilename = (filename) => {
 };
 
 // ################################################
-// DOM-Funktionen wurden nach html/domClasses.js verschoben:
-// - removeClasses() → domClasses.js
-// - addClasses() → domClasses.js
-// - toggleClass() → domClasses.js (bereits vorhanden)
-// - replaceClass() → domClasses.js
-//
-// Dev-Utilities wurden nach utils/dev/devHelpers.js verschoben:
-// - updateWindowSizeDisplay() → dev/devHelpers.js
-// ################################################

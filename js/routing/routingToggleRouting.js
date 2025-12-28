@@ -6,6 +6,8 @@ import { logger } from '../utils/logger.js';
 import { drawAllRoutingLines } from './routingLines.js';
 import { setInportRoutingClass, setOutportRoutingClass } from './routingCssClasses.js';
 import { storeRoutingOutPortName } from '../storage/storagePort.js';
+import { preventCircularRouting } from './routingCircularDetection.js';
+import { removeClass } from '../html/domUtils.js';
 
 // #############################################################
 // Toggle Port Routing - Enables/disables routing between input and output ports
@@ -42,22 +44,15 @@ function toggleRouting(inPort, outPort) {
   if (inPortProbs.outPortSet.has(outPort)) {
     inPortProbs.outPortSet.delete(outPort);
     inPortProbs.outPortNameSet.delete(outPort.name);
-    // Symmetric: Remove input port from output port inPortSet
-    if (outPortProbs.inPortSet) {
-      outPortProbs.inPortSet.delete(inPort);
-    }
-    // Remove input port from activeClockSourceSet for immediate warning update
-    if (outPortProbs.activeClockSourceSet) {
-      outPortProbs.activeClockSourceSet.delete(inPort);
-    }
+    // Symmetric: Remove input port from output port inPortSet (garantiert vorhanden)
+    outPortProbs.inPortSet.delete(inPort);
+    // Remove input port from activeClockSourceSet (garantiert vorhanden bei Output-Ports)
+    outPortProbs.activeClockSourceSet.delete(inPort);
+    // Remove circular routing warning if it exists
+    removeClass(inPortProbs.tag, 'circular_routing_warning');
   } else {
-    inPortProbs.outPortSet.add(outPort);
-    inPortProbs.outPortNameSet.add(outPort.name);
-    // Symmetric: Add input port to output port inPortSet
-    if (!outPortProbs.inPortSet) {
-      outPortProbs.inPortSet = new Set();
-    }
-    outPortProbs.inPortSet.add(inPort);
+    // Try to create connection with circular routing protection
+    preventCircularRouting(inPort, outPort);
   }
   drawAllRoutingLines();
 }
@@ -75,8 +70,8 @@ function removeAllRoutingsToOutput(outPort) {
 
   let routingsRemoved = false;
 
-  // Nutze inPortSet des Output-Ports als Quelle für alle verbundenen Inputs
-  if (outPortProbs.inPortSet && outPortProbs.inPortSet.size > 0) {
+  // Nutze inPortSet des Output-Ports (garantiert vorhanden bei Output-Ports)
+  if (outPortProbs.inPortSet.size > 0) {
     outPortProbs.inPortSet.forEach((inPort) => {
       const inPortProbs = getPortProperties(inPort);
       inPortProbs.outPortSet?.delete(outPort);
@@ -88,10 +83,8 @@ function removeAllRoutingsToOutput(outPort) {
     outPortProbs.inPortSet.clear();
   }
 
-  // Clear activeClockSourceSet
-  if (outPortProbs.activeClockSourceSet) {
-    outPortProbs.activeClockSourceSet.clear();
-  }
+  // Clear activeClockSourceSet (garantiert vorhanden bei Output-Ports)
+  outPortProbs.activeClockSourceSet.clear();
 
   if (routingsRemoved) {
     storeRoutingOutPortName();

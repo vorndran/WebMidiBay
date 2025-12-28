@@ -64,7 +64,7 @@ function listSysexFilesToSendListAction() {
  * Combines file retrieval (UI) with MIDI sending (Send)
  */
 function sendSysexFileDataAction(eClick) {
-  if (eClick) preventAndStop(eClick);
+  if (eClick) preventAndStop(eClick, true, false);
 
   const filename = eClick.target.dataset.filename;
   const sysexArray = midiBay.sysexFileMap.get(filename);
@@ -77,7 +77,7 @@ function sendSysexFileDataAction(eClick) {
  * Combines table display with UI button state management
  */
 function showSysexFileContentAction(eClick) {
-  if (eClick) preventAndStop(eClick);
+  if (eClick) preventAndStop(eClick, true, false);
 
   const tableContainer = document.getElementById('sysex_table_container');
 
@@ -127,7 +127,7 @@ function toggleAutoCollectSysexAction() {
  * Action: Toggle auto-download with auto-collection dependency
  */
 function toggleAutoDownloadSysexAction(eClick) {
-  if (eClick) preventAndStop(eClick);
+  if (eClick) preventAndStop(eClick, true, false);
 
   logger.debug('auto Download Sysex');
   midiBay.autoDownloadSysex = !midiBay.autoDownloadSysex;
@@ -161,7 +161,7 @@ function sendCollectedSysexToSysexFormAction(midiData, port) {
  * @param {Event} event - Optional event object
  */
 function clearSysexFileList(event) {
-  if (event) preventAndStop(event);
+  if (event) preventAndStop(event, true, false);
 
   logger.debug('clear Sysex File List');
   midiBay.sysexFileMap.clear();

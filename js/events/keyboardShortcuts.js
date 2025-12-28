@@ -1,10 +1,21 @@
+/**
+ * Keyboard Shortcuts Handler
+ *
+ * Tastenkombinationen:
+ * - Cmd+0 (macOS) / Ctrl+0 (Windows/Linux): Seite neu laden
+ * - Cmd+1-4 (macOS) / Ctrl+1-4 (Windows/Linux): Menü-Navigation
+ * - Cmd+x (macOS) / Ctrl+x (Windows/Linux): Monitor leeren
+ * - Cmd+p (macOS) / Ctrl+p (Windows/Linux): Monitor pausieren
+ */
 export { handleKeyboardShortcuts };
 
 import { midiBay } from '../main.js';
 import { logger } from '../utils/logger.js';
 import { preventAndStop } from '../html/domUtils.js';
+import { scheduleLayoutUpdate } from '../html/htmlUpdater.js';
 
 function handleKeyboardShortcuts(eKeydown) {
+  // Ignore shortcuts when typing in input fields
   if (
     document.activeElement &&
     (document.activeElement.tagName === 'INPUT' ||
@@ -14,12 +25,25 @@ function handleKeyboardShortcuts(eKeydown) {
     return;
   }
 
-  if (eKeydown.key === '0' && !eKeydown.ctrlKey && !eKeydown.metaKey && !eKeydown.altKey) {
-    preventAndStop(eKeydown);
+  // Check for required modifier key (Cmd on macOS, Ctrl on Windows/Linux)
+  const hasModifier = eKeydown.metaKey || eKeydown.ctrlKey;
+  if (!hasModifier) {
+    return; // No modifier pressed, ignore shortcut
+  }
+
+  // Additional check: Prevent Alt combinations (reserved for browser/OS)
+  if (eKeydown.altKey) {
+    return;
+  }
+
+  // Reload page: Cmd/Ctrl+0
+  if (eKeydown.key === 'r') {
+    preventAndStop(eKeydown, true, false);
     location.reload();
     return;
   }
 
+  // Menu shortcuts (1-4) and extra buttons (x, p)
   const menuButtons = getMenuShortcutTargets(midiBay.elementViewMode);
   logger.debug('Menu shortcut targets:', menuButtons);
   const extraButtons = [
@@ -30,9 +54,12 @@ function handleKeyboardShortcuts(eKeydown) {
   const button = [...menuButtons, ...extraButtons].find((b) => b.key === eKeydown.key);
   if (!button || !button.element) return;
 
-  logger.debug(`Keyboard shortcut ${button.key} pressed`);
-  preventAndStop(eKeydown);
+  logger.debug(`Keyboard shortcut Cmd/Ctrl+${button.key} pressed`);
+  preventAndStop(eKeydown, true, false);
   button.element.click();
+
+  // Trigger layout update after successful shortcut execution
+  scheduleLayoutUpdate();
 }
 
 function getMenuShortcutTargets(viewMode) {

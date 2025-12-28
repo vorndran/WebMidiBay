@@ -1,10 +1,10 @@
 'use strict';
 
 export { midiBay };
-import { receiveMIDIMessage } from './midiMessage.js';
+import { receiveMIDIMessage } from './messageReceiver.js';
 import { initFilter } from './filter/filter.js';
 import { initRouting } from './routing/routingPorts.js';
-import { initHtml, showMidiAccessStateChange } from './html/html.js';
+import { initHtml, showMidiAccessStateChange } from './html/initHtml.js';
 import { PortPropertiesManager } from './portProperties.js';
 import { logger } from './utils/logger.js';
 import { getNameMap, getFilteredNameMap } from './ports/portBlacklist.js';
@@ -66,7 +66,7 @@ const midiBay = {
 // ################################
 (function () {
   // Feature-detection: prüfe, ob die API verfügbar ist
-  if (typeof navigator.requestMIDIAccess !== 'function') {
+  if (typeof navigator.requestMIDIAcces !== 'function') {
     onMIDIFailure('MIDI Access is not implemented in this browser!');
     onMIDIFailure(
       'Current browser with MIDI access:  <a href="https://caniuse.com/?search=midiaccess" target="_blank">https://caniuse.com/?search=midiaccess</a>'
@@ -106,7 +106,7 @@ const midiBay = {
     console.groupEnd('initWebMidiBay');
 
     midiAccess.onstatechange = (stateEvent) => {
-      showMidiAccessStateChange(stateEvent.port); // html.js
+      showMidiAccessStateChange(stateEvent.port); // initHtml.js
     };
 
     midiBay.inNameMap.forEach((input) => {
@@ -137,17 +137,33 @@ const midiBay = {
     body.innerHTML = `<h1 class="error">WebMidiBay -> has no access to MIDI <span onClick="localStorage.setItem('error', 'ignore')">ports!</span></h1>
     <h2 class="error">${error}</h2>
     <p class="error">
-                WebMidiBay is a MIDI router and monitor running in your web browser. It uses the
-                WebMIDI API to access connected MIDI devices.
-              </p>
-              <p class="error">
-                Developed by Michael Vorndran -
-                <a href="https://www.webmidibay.de" target="_blank">https://www.webmidibay.de</a>
-              </p>
-              <p class="error">
-                Source code available on
-                <a href="https://github.com/vorndran/webmidibay" target="_blank">GitHub</a>
-              </p>
+      WebMidiBay is a MIDI router, filter, monitor and SysEx handler running in your web browser. 
+    </p>
+    <p class="error">
+      It uses the <strong><a href="https://www.w3.org/TR/webmidi/" target="_blank">Web MIDI API</a></strong> to access connected MIDI devices.
+    </p>
+    <div class="browser-support-error">
+    <p class="error">
+    The following browsers in their current versions support the Web MIDI API (after permission has been granted to the browser!):
+    <ul class="error">
+    <li>Google Chrome</li>
+    <li>Mozilla Firefox</li>
+    <li>Opera</li>
+    <li>Microsoft Edge</li>
+    </ul>
+    </p>
+    <p class="error">
+    Tested on Windows 10/11 and macOS. (Currently no explicit support for Android and iOS.)
+    </div>
+    </p>
+    <p class="error">
+      Developed by Michael Vorndran -
+      <a href="https://www.webmidibay.de" target="_blank">https://www.webmidibay.de</a>
+    </p>
+    <p class="error">
+      Source code available on
+      <a href="https://github.com/vorndran/webmidibay" target="_blank">GitHub</a>
+    </p>
     `;
     // <p class="error">Please use a WebMIDI compatible browser like <a href="https://www.google.com/chrome/" target="_blank">Google Chrome</a> or <a href="https://www.microsoft.com/edge" target="_blank">Microsoft Edge</a>!</p>
     // <p class="error">More about WebMIDI support: <a href="https://caniuse.com/?search=midiaccess" target="_blank">https://caniuse.com/?search=midiaccess</a></p>

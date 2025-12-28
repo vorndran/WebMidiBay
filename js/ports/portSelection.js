@@ -103,9 +103,8 @@ function updateSelectedPortState(port) {
  */
 function removePreviousPortSelection(previousPort) {
   const prevMeta = getPortProperties(previousPort);
-  if (prevMeta?.tag) {
-    removeClass(prevMeta.tag, 'selected_port');
-  }
+  // prevMeta.tag ist garantiert vorhanden (wird bei Initialisierung erstellt)
+  removeClass(prevMeta.tag, 'selected_port');
 }
 // ####################################################
 function removeSelectedPort(selectedPortTag) {

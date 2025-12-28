@@ -86,7 +86,7 @@ function populateInPortSetFromOutPorts(outPortProperties, outPort) {
 // ###########################################
 function resetAllRouting(eClick) {
   logger.debug('resetAllRouting');
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
 
   midiBay.resetRoutingSets();
   clearInnerHTML('svg');

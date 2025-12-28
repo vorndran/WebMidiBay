@@ -1,4 +1,4 @@
-export { formatMessageToHtmlAndCollectSysex, getLoopMessageHtml };
+export { formatMidiMessageToHtml, getLoopMessageHtml };
 
 import {
   cc,
@@ -13,7 +13,7 @@ import { midiBay } from '../main.js';
 import { getPortProperties } from '../utils/helpers.js';
 // ########################################################
 // Performance: Use range-based dispatch instead of sequential if-checks
-function formatMessageToHtmlAndCollectSysex(midiData, port = null) {
+function formatMidiMessageToHtml(midiData, port = null) {
   const statusByte = midiData[0];
 
   // Fast path: Most common MIDI messages (128-239)

@@ -345,7 +345,10 @@ a:is(:link, :visited, :hover, :active) {
   color: var(--selected-color) !important;
   background-color: var(--routing-color) !important;
 }
-.warning {
+.warning,
+.loop_warning,
+.multiple_clock_sources,
+.circular_routing_warning {
   color: var(--font-color) !important;
   background-color: var(--clock-light-color) !important;
 }
@@ -420,12 +423,6 @@ li.midiport.output.clock_active::after,
 li.midiport.output.active_sensing_active::after {
   margin-left: 0.5rem;
   margin-right: 0;
-}
-
-/* Warning: Multiple Clock sources sending to same output */
-li.midiport.output.multiple_clock_sources {
-  background-color: var(--clock-light-color);
-  /* padding-left: 0.5rem; */
 }
 
 /* Blacklisted ports are hidden */
@@ -511,37 +508,25 @@ h1::before {
 }
 span.toggle_signals {
   display: flex;
-  /* width: 4.2rem; */
+  margin: 0 0 0 0.5rem;
   font-size: var(--fontsize-large);
   font-weight: normal;
-  /* cursor: pointer; */
-  margin-left: 0.5rem;
-  /* padding: 0.2rem 0.4rem; */
-  /* background-color: var(--in-bg-color); */
-}
-span.toggle_signals::before {
-  content: '';
-  display: inline-block;
-  --bg-img-size: 1.8rem;
+  cursor: pointer;
+  border: 0;
   background-image: url('../icon/bulb_off.svg');
   background-repeat: no-repeat;
+  --bg-img-size: 1.8rem;
   background-size: var(--bg-img-size) var(--bg-img-size);
   width: var(--bg-img-size);
   height: var(--bg-img-size);
-  /* position: absolute;
-  right: 0.6rem;
-  top: 0.6rem; */
-  cursor: pointer;
-  /* opacity: 0.4; */
-  border: 0;
-  margin: 0;
+  color: transparent;
+  font-size: 0;
 }
-span.toggle_signals.signals_on::before {
-  /* background-image: url('../icon/bulb_on_bold.png'); */
+span.toggle_signals.signals_on {
   background-image: url('../icon/bulb_on.svg');
-  background-repeat: no-repeat;
 }
-span.clock {
+
+span.toggle_clock_message {
   --bg-img-size: 1.6rem;
   background-image: url('../icon/clock.svg');
   background-repeat: no-repeat;
@@ -555,14 +540,14 @@ span.clock {
   opacity: 0.4;
   border: 0;
   margin: 0;
-}
-span.clock a {
   color: transparent;
+  font-size: 0;
 }
-span.clock.clock_signal {
+
+span.toggle_clock_message.clock_signal {
   opacity: 0.8;
 }
-span.clock.visible_clock {
+span.toggle_clock_message.visible_clock {
   opacity: 1;
 }
 
@@ -885,6 +870,26 @@ span.error {
 p.error a {
   text-decoration: underline;
 }
+div.browser-support-error {
+  margin: 2rem;
+  padding: 1rem;
+  border: 2px solid var(--font-hell-color);
+  background-color: var(--bg-color);
+}
+div.browser-support-error ul {
+  text-align: left;
+  max-width: fit-content;
+  margin: auto;
+}
+div.browser-support-error ul li {
+  list-style-type: disc;
+  margin: 0;
+  border: none;
+  font-size: var(--fontsize-large);
+}
+/* ============================================
+   Responsive Design
+   ============================================ */
 @media (min-width: 36rem) {
   .container {
     min-width: 36rem;
@@ -1006,18 +1011,18 @@ p.error a {
     height: 100%;
   }
   #monitor {
-    width: 41rem;
+    /* width: 41rem; */
     height: 100%;
   }
 }
 @media (min-width: 93rem) {
   #monitor {
-    width: 48rem;
+    /* width: 48rem; */
   }
 }
 @media (min-width: 110rem) {
   #monitor {
-    width: 60rem;
+    /* width: 60rem; */
   }
 }
 @media (min-width: 130rem) {
@@ -1028,10 +1033,10 @@ p.error a {
     flex-direction: row;
   }
   #monitor {
-    width: 48rem;
+    /* width: 48rem; */
   }
   .container:has(#filter.js-hidden):has(#sysex.js-hidden) #monitor {
-    width: 60rem;
+    /* width: 60rem; */
   }
   .second-column:has(#monitor) #sysex {
     max-width: 34rem;
@@ -1054,7 +1059,7 @@ p.error a {
     max-width: fit-content; /* 60rem; */
   }
   #monitor {
-    width: 60rem;
+    /* width: 60rem; */
   }
 }
 
@@ -1157,6 +1162,8 @@ span.mididata2::after {
 }
 #message_text span.input {
   background-color: var(--in-bg-color);
+  /* display: inline-block;
+  min-width: 7.5rem; */
 }
 #message_text span.output {
   background-color: var(--out-open-color);
@@ -1201,10 +1208,13 @@ span.doublemidimessage,
 
 #message_text span.rawdata {
   padding: 0 0.5rem;
-  white-space: nowrap;
+  /* white-space: nowrap;
   break-before: avoid;
   break-inside: avoid;
-  break-after: avoid;
+  break-after: avoid; */
+  white-space: normal;
+  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 #message_text.message-raw span.text-msg {
   display: none;

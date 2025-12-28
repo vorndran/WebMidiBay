@@ -12,7 +12,7 @@ import { logger } from '../utils/logger.js';
 import { midiBay } from '../main.js';
 import { hasClass, toggleClass, removeClassFromAll, preventAndStop } from '../html/domUtils.js';
 import { setStorage } from '../storage/storage.js';
-import { updateMenuState, applyViewModeRules } from '../html/html.js';
+import { updateMenuState, applyViewModeRules } from '../html/initHtml.js';
 import { updateLayout } from '../html/htmlUpdater.js';
 import { toggleAutoCollectSysexAction } from '../sysex/sysexFileActions.js';
 
@@ -44,7 +44,7 @@ function hideAllMenuItemsExcept(exceptId = null) {
 }
 // ##############################################
 function toggleElementViewMode(eClick) {
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
 
   midiBay.elementViewMode = midiBay.elementViewMode === 'single' ? 'multi' : 'single';
   setStorage('WMB_element_view_mode', midiBay.elementViewMode);
@@ -66,7 +66,7 @@ function toggleElementViewMode(eClick) {
 }
 // ##############################################
 function toggleVisibleClock(eClick) {
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
 
   toggleClass(midiBay.menuClockTag, 'visible_clock');
   const isVisible = hasClass(midiBay.menuClockTag, 'visible_clock');
@@ -78,7 +78,7 @@ function toggleVisibleClock(eClick) {
 }
 // ##############################################
 function toggleSignals(eClick) {
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
 
   midiBay.signalsEnabled = !midiBay.signalsEnabled;
 
@@ -95,6 +95,6 @@ function clearClockIndicators() {
 }
 // ##############################################
 function toggleSysexCollection(event) {
-  preventAndStop(event);
+  preventAndStop(event, true, false);
   toggleAutoCollectSysexAction();
 }

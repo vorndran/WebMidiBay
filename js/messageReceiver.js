@@ -2,17 +2,16 @@ export { receiveMIDIMessage, getChannel, reducedClockAndActiveSensingMessages };
 import { midiBay } from './main.js';
 import { getPortProperties } from './utils/helpers.js';
 import { hasClass } from './html/domUtils.js';
-import { showMidiMessageAsText } from './html/htmlMessage.js';
+import { showMidiMessageAsText } from './message/messageMonitor.js';
 import { logger } from './utils/logger.js';
-import { midiInFilter, midiFilter, getStatusByte, getChannel } from './core/midiMessageFilter.js';
-import { setPortTagSignal, setPortTagAndRoutingLineSignal } from './core/midiMessageSignal.js';
-import {
-  formatMessageToHtmlAndCollectSysex,
-  getLoopMessageHtml,
-} from './html/htmlMessageFormat.js';
+import { midiInFilter, midiFilter, getStatusByte, getChannel } from './filter/messageFilter.js';
+import { setPortTagSignal, setPortTagAndRoutingLineSignal } from './ports/portSignals.js';
+import { formatMidiMessageToHtml } from './message/messageFormat.js';
 import { collectSysexData } from './sysex/sysexData.js';
 import { sendCollectedSysexToSysexFormAction } from './sysex/sysexFileActions.js';
 import { MIDI_TIMING_CLOCK, MIDI_ACTIVE_SENSING } from './constants/midiConstants.js';
+import { sendTemporaryTextToTag } from './ports/portInteraction.js';
+import { updateLayout } from './html/htmlUpdater.js';
 // ###################################################
 // receiveMIDIMessage ####################################
 // ###################################################
@@ -50,7 +49,8 @@ function setMIDIOutputMessage(midiMessage, statusByte, inPort) {
   for (const outPort of inPortProps.outPortSet) {
     setPortTagAndRoutingLineSignal('in', statusByte, inPort, outPort);
 
-    if (isMidiLoop(outPort, midiMessage)) return;
+    // Check for potential MIDI loop (warning only, does not block)
+    checkMidiLoop(outPort, midiMessage);
 
     // Pass portProperties to avoid WeakMap lookup in hot path
     const outPortProps = getPortProperties(outPort);
@@ -91,7 +91,7 @@ function makeMidiMessageVisible(midiMessage, port) {
   const monitorElement = document.getElementById('monitor');
   if (monitorElement && hasClass(monitorElement, 'js-hidden')) return;
 
-  const midiDataText = formatMessageToHtmlAndCollectSysex(midiMessage.data, port);
+  const midiDataText = formatMidiMessageToHtml(midiMessage.data, port);
   showMidiMessageAsText(midiMessage, midiDataText, port);
 }
 // ###########################################
@@ -114,38 +114,61 @@ function reducedClockAndActiveSensingMessages(midiData, port) {
   return true; // Block message (throttled)
 }
 // #####################################################
-// Check for MIDI feedback loop (duplicate messages)
-function isMidiLoop(outPort, midiMessage) {
+// Check for potential MIDI feedback loop (duplicate messages in short time)
+// Note: Relative controllers (MCU protocol) intentionally send identical messages!
+// This function only WARNS, does NOT filter messages or block execution.
+function checkMidiLoop(outPort, midiMessage) {
   const portProps = getPortProperties(outPort);
   const midiData = midiMessage.data;
 
-  // Early exit: Nur 3-Byte Messages prüfen (Note, CC, etc.)
-  if (midiData.length !== 3) return false;
+  // Early exit: Only check 3-byte messages (Note, CC, etc.)
+  if (midiData.length !== 3) return;
 
+  const now = Date.now();
   const formerData = portProps.lastData;
+  const formerTimestamp = portProps.lastDataTimestamp || 0;
 
-  // Schneller Vergleich: Alle 3 Bytes auf einmal
-  const isLoop =
+  // Fast comparison: All 3 bytes at once
+  const isDuplicate =
     formerData &&
     formerData.length === 3 &&
     formerData[0] === midiData[0] &&
     formerData[1] === midiData[1] &&
     formerData[2] === midiData[2];
 
-  // lastData nur bei 3-Byte Messages aktualisieren
+  // Update tracking data
   portProps.lastData = midiData;
+  portProps.lastDataTimestamp = now;
 
-  if (isLoop) {
-    midiBay.msgMonitor.isLoop = true;
-    midiMessage.isFiltered = true;
-    const midiDataText = getLoopMessageHtml(midiMessage);
-    showMidiMessageAsText(midiMessage, midiDataText, outPort);
-    midiBay.msgMonitor.isLoop = false;
-    logger.warn('!!! Double Midi Message!!! -> ', outPort.name, outPort.type);
-    return true;
+  // Check if duplicate arrived suspiciously fast (< 10ms = likely loop)
+  // But allow legitimate duplicates after 10ms+ (MCU relative controllers)
+  if (isDuplicate && now - formerTimestamp < 10) {
+    // Throttle warnings: max 1 per second per port
+    const lastWarning = portProps.lastLoopWarning || 0;
+    if (now - lastWarning > 1000) {
+      portProps.lastLoopWarning = now;
+
+      // Visual warning on port tag
+      sendTemporaryTextToTag(portProps.tag, '⚠️ Possible MIDI Loop!');
+      updateLayout(true); // Layout-Update nach Warnung
+
+      // Show warning in monitor if open
+      const monitorElement = document.getElementById('monitor');
+      if (monitorElement && !hasClass(monitorElement, 'js-hidden')) {
+        const loopWarningText = `⚠️ Possible MIDI loop: duplicate within ${
+          now - formerTimestamp
+        }ms`;
+        const warningMessage = `<span class="loop_warning">${loopWarningText}</span>`;
+        showMidiMessageAsText({ isFiltered: false, data: midiData }, warningMessage, outPort);
+      }
+
+      logger.warn(
+        `⚠️ Possible MIDI loop detected: ${outPort.name} received duplicate message within ${
+          now - formerTimestamp
+        }ms`
+      );
+    }
   }
-
-  return false;
 }
 // ###########################################
 // EOF

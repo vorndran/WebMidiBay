@@ -8,7 +8,7 @@ import {
   setMsgMonitor_showPorts,
   setMsgMonitor_maxVisibleLines,
   setMsgMonitor_messageStringDisplay,
-} from '../html/htmlMessage.js';
+} from '../message/messageSettings.js';
 import { renamePortAlias, resetAllAlias } from '../ports/portAlias.js';
 import { resetAllRouting } from '../routing/routingPorts.js';
 import { clickedFilter, resetAllFilter } from '../filter/filter.js';
@@ -54,7 +54,7 @@ const clickEvents = {
   '.menu.sysex_menu a': clickMenu,
   '.menu.settings_menu a': clickMenu,
   '.portmenu a': clickedPortMenu,
-  '.clock a': toggleVisibleClock,
+  '.toggle_clock_message': toggleVisibleClock,
   '#settings_file_rename': renameSettingsFile,
   '.clear_settings': clearAllStorage,
   '.clear_routing': resetAllRouting,

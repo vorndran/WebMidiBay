@@ -1,3 +1,8 @@
+/**
+ * Port Visual Signals & Clock Warning Management
+ * Handles temporary signal flashes, permanent clock icons, and multiple clock source detection
+ */
+
 export {
   setPortTagSignal,
   setPortTagAndRoutingLineSignal,
@@ -117,18 +122,14 @@ function trackClockSourceForOutput(portProbs, inPort) {
   // Start timer in input port that updates all connected outputs
   startRecurringTimer(inPortProbs, 'clockTimestamp', 'inputClockTimer', () => {
     // Callback: Remove input from all connected output activeClockSourceSets
-    if (inPortProbs.outPortSet) {
-      inPortProbs.outPortSet.forEach((outPort) => {
-        const outPortProbs = getPortProperties(outPort);
-        if (outPortProbs.activeClockSourceSet) {
-          outPortProbs.activeClockSourceSet.delete(inPort);
-          trackOutputClockSources(outPortProbs);
-          logger.debug(
-            `Removed inactive clock source ${inPortProbs.tagId} from ${outPortProbs.tagId}`
-          );
-        }
-      });
-    }
+    // outPortSet und activeClockSourceSet sind garantiert vorhanden
+    inPortProbs.outPortSet.forEach((outPort) => {
+      const outPortProbs = getPortProperties(outPort);
+      outPortProbs.activeClockSourceSet.delete(inPort);
+      trackOutputClockSources(outPortProbs);
+      logger.debug(`Removed inactive clock source ${inPortProbs.tagId} from ${outPortProbs.tagId}`);
+    });
+    updateLayout(true); // Layout-Update nach Clock-Source-Änderungen
   });
 }
 // #########################################################
@@ -142,6 +143,7 @@ function trackClockSourceForOutput(portProbs, inPort) {
  * @param {Function} onTimeout - Callback on timeout (after 1s without update)
  */
 function startRecurringTimer(targetObj, timestampKey, timerKey, onTimeout) {
+  const timeToWait = 400; // ms
   // Update timestamp
   targetObj[timestampKey] = Date.now();
 
@@ -151,18 +153,18 @@ function startRecurringTimer(targetObj, timestampKey, timerKey, onTimeout) {
   logger.debug(`Starting timer ${timerKey}`);
 
   const checkActive = () => {
-    if (Date.now() - targetObj[timestampKey] >= 1000) {
+    if (Date.now() - targetObj[timestampKey] >= timeToWait) {
       // Timeout → Cleanup and execute callback
       targetObj[timerKey] = null;
       onTimeout();
       logger.debug(`Timer ${timerKey} expired`);
     } else {
       // Still active → Check again in 1s
-      targetObj[timerKey] = setTimeout(checkActive, 1000);
+      targetObj[timerKey] = setTimeout(checkActive, timeToWait);
     }
   };
 
-  targetObj[timerKey] = setTimeout(checkActive, 1000);
+  targetObj[timerKey] = setTimeout(checkActive, timeToWait);
 }
 
 // #########################################################
@@ -173,7 +175,8 @@ function startRecurringTimer(targetObj, timestampKey, timerKey, onTimeout) {
 function updateAllOutputPortClockWarnings() {
   midiBay.portByTagIdMap.forEach((port) => {
     const portProbs = getPortProperties(port);
-    if (portProbs.type === 'output' && portProbs.activeClockSourceSet) {
+    // activeClockSourceSet ist garantiert bei allen Output-Ports vorhanden
+    if (portProbs.type === 'output') {
       trackOutputClockSources(portProbs);
     }
   });
@@ -187,8 +190,7 @@ function updateAllOutputPortClockWarnings() {
  * @param {Object} outPortProbs - Port-Properties des Output-Ports
  */
 function trackOutputClockSources(outPortProbs) {
-  if (!outPortProbs.activeClockSourceSet) return;
-
+  // activeClockSourceSet ist garantiert vorhanden bei Output-Ports (siehe PortPortProperties constructor)
   const hasClockFilter = outPortProbs?.filterSet?.has(MIDI_TIMING_CLOCK) || false;
   const globalClockFilter = midiBay?.globalFilterSet?.has(MIDI_TIMING_CLOCK) || false;
 
@@ -197,6 +199,7 @@ function trackOutputClockSources(outPortProbs) {
     // Only removeClass if class exists (performance optimization)
     if (hasClass(outPortProbs.tag, 'multiple_clock_sources')) {
       removeClass(outPortProbs.tag, 'multiple_clock_sources');
+      updateLayout(true); // Layout-Update nach Clock-Source-Änderungen
     }
     return;
   }
@@ -206,8 +209,10 @@ function trackOutputClockSources(outPortProbs) {
   const shouldWarn = checkActiveClockSourcesForOutputPorts(outPortProbs);
   if (shouldWarn && !hasWarning) {
     addClass(outPortProbs.tag, 'multiple_clock_sources');
+    updateLayout(true); // Layout-Update nach Clock-Source-Änderungen
   } else if (!shouldWarn && hasWarning) {
     removeClass(outPortProbs.tag, 'multiple_clock_sources');
+    updateLayout(true); // Layout-Update nach Clock-Source-Änderungen
   }
 }
 

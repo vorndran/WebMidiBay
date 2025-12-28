@@ -62,14 +62,30 @@
             💡 <strong>Signal Visualization</strong>: Visual indicators for MIDI activity, Clock,
             and Active Sensing
           </li>
-          <li>🎛️ <strong>Channel Filtering</strong>: Filter messages by MIDI channel</li>
-          <li>📝 <strong>SysEx Support</strong>: View and export, upload an send System Exclusive messages</li>
+          <li>
+            ⚠️ <strong>Multiple Clock Warning</strong>: Detects when an output receives Clock
+            signals from multiple sources
+          </li>
+          <li>
+            🔍 <strong>MIDI Loop Detection</strong>: Identifies and filters immediate MIDI feedback
+            loops
+          </li>
+          <li>
+            🎛️ <strong>Message Filtering</strong>: Filter messages by MIDI channel and / or event
+            type
+          </li>
+          <li>
+            📝 <strong>SysEx Support</strong>: Auto-collect, view, export and send System Exclusive
+            messages
+          </li>
           <li>
             💾 <strong>Storage</strong>: Save and restore routing configurations, filters, and
             website settings
           </li>
           <li>🎨 <strong>Port Aliases</strong>: Customize port names for better organization</li>
+          <li>🚫 <strong>Port Blacklist</strong>: Hide unwanted MIDI ports from the interface</li>
           <li>⚡ <strong>Performance</strong>: Optimizable for low latency and high throughput</li>
+          <li>⌨️ <strong>Keyboard Shortcuts</strong>: Quick access to main sections (keys 1-4)</li>
         </ul>
 
         <h2 class="browser">Browser Support</h2>
@@ -84,8 +100,8 @@
           <li>Firefox (Desktop only, version 108+)</li>
         </ul>
         <div class="note">
-          <strong>Note:</strong> Safari and Firefox on mobile devices (Android/iOS) do not currently
-          support the <a href="https://www.w3.org/TR/webmidi/" target="_blank">Web MIDI API</a>.
+          <strong>Note:</strong> Mobile devices (Android/iOS) are not supported at the current stage
+          of development.
         </div>
 
         <h2 class="usage">Usage</h2>
@@ -121,10 +137,9 @@
           connections directly from input ports to output ports.
         </p>
 
-        <p>
-          <h3 class="signals">Signals:</h3><br />
-          Click the lightbulb icon in the routing menu to toggle MIDI event visibility:
-        </p>
+        <h3 class="signals">Signals:</h3>
+        <br />
+        <p>Click the lightbulb icon in the routing menu to toggle MIDI event visibility:</p>
         <ul class="routing">
           <li><strong>Blink Signals</strong>: Brief flashes indicate MIDI activity</li>
           <li>
@@ -132,11 +147,7 @@
           </li>
           <li>
             <strong>Multiple Clock Sources</strong>: Warning when an output receives Clock from
-            multiple inputs (output ports show red background)
-          </li>
-          <li>
-            <strong>Clock Display</strong>: Show/hide MIDI Clock and Active Sensing messages (click
-            the clock icon on the right in the routing menu when MIDI event visibility is active)
+            multiple inputs (output ports show red background - potential timing conflicts)
           </li>
         </ul>
 
@@ -152,22 +163,60 @@
         <h3 class="monitor">Monitor</h3>
         <ul class="monitor">
           <li>
-            <strong>Channel Filter</strong>: Display messages from specific sources (inputs only,
+            <strong>Port Filter</strong>: Display messages from specific sources (inputs only,
             outputs only, selected channel, or all)
           </li>
           <li>
             <strong>Message Filter</strong>: Toggle visibility of message types (filtered/unfiltered
             messages, text format, raw data, or both)
           </li>
+          <li>
+            <strong>Clock Display Toggle</strong>: Show/hide MIDI Clock and Active Sensing messages
+            (click the clock icon on the right in the routing menu when MIDI event visibility is
+            active)
+          </li>
+          <li>
+            <strong>Loop Detection</strong>: Automatically detects and marks MIDI messages that are
+            immediately sent back (feedback loops)
+          </li>
+          <li><strong>Pause/Clear</strong>: Pause message stream or clear monitor display</li>
         </ul>
 
         <h3 class="sysex">SysEx</h3>
         <ul class="sysex">
           <li>
+            <strong>Auto-Collect</strong>: Toggle automatic SysEx collection (independent of monitor
+            visibility)
+          </li>
+          <li>
             <strong>Capture</strong>: Incoming SysEx data is captured and displayed in real-time
           </li>
-          <li><strong>Export</strong>: Download captured SysEx data as <code>.syx</code> files</li>
+          <li>
+            <strong>Save/Export</strong>: Download captured/received SysEx data as
+            <code>.syx</code> files
+          </li>
           <li><strong>Import</strong>: Upload SysEx files and send them via the selected output</li>
+          <li>
+            <strong>Auto-Download</strong>: Automatically download received SysEx messages (requires
+            Auto-Collect)
+          </li>
+        </ul>
+
+        <h3 class="settings">Settings</h3>
+        <ul class="settings">
+          <li>
+            <strong>Port Blacklist</strong>: Hide specific MIDI ports from the interface (useful for
+            virtual ports or unused devices)
+          </li>
+          <li>
+            <strong>Export/Import Settings</strong>: Save and load complete configurations as JSON
+            files
+          </li>
+          <li><strong>View Modes</strong>: Toggle between different display layouts</li>
+          <li>
+            <strong>Message Line Count</strong>: Adjust how many lines are displayed in the monitor
+            (30-200)
+          </li>
         </ul>
 
         <h3 class="performance">Performance Optimization</h3>

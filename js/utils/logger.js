@@ -8,7 +8,8 @@
  */
 
 // ⚠️ Vor Publish auf false setzen!
-export const DEVELOPER_MODE = false;
+export const DEVELOPER_MODE = true;
+// export const DEVELOPER_MODE = false;
 
 // Noop-Funktionen für deaktiviertes Logging
 const noop = () => {};

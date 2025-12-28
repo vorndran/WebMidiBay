@@ -18,7 +18,7 @@ import { storePortMap, restorePortMap } from '../storage/storagePort.js';
 import { logger } from '../utils/logger.js';
 import { preventAndStop } from '../html/domUtils.js';
 import { initChannel, setChannelClass, resetAllChannels } from './filterChannel.js';
-import { updateAllOutputPortClockWarnings } from '../core/midiMessageSignal.js';
+import { updateAllOutputPortClockWarnings } from '../ports/portSignals.js';
 import { MIDI_TIMING_CLOCK } from '../constants/midiConstants.js';
 import {
   initFilterCss,
@@ -42,7 +42,7 @@ function initFilter() {
 // ###########################################
 function clickedFilter(eClick) {
   logger.debug('clickedFilter');
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
   toggleFilter(eClick.target);
   storeFilter();
   setFilterCss(); // filterCss.js
@@ -81,7 +81,7 @@ function toggleFilter(clickedFilterTag) {
 // ###########################################
 function resetAllFilter(eClick) {
   logger.debug('resetAllFilter');
-  preventAndStop(eClick);
+  preventAndStop(eClick, true, false);
 
   forEachPortWithPortProperties(midiBay.portByTagIdMap, (port, portProbs) => {
     portProbs.filterSet = new Set();

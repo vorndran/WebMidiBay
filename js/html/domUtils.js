@@ -20,7 +20,7 @@ export {
  */
 function setStyles(elementOrSelector, styles) {
   const el = getElement(elementOrSelector);
-  if (!el || !el.style || !styles) return;
+  if (!el || !styles) return;
 
   Object.entries(styles).forEach(([prop, val]) => {
     el.style.setProperty(prop, val);
